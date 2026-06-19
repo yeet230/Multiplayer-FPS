@@ -1,6 +1,7 @@
 extends CharacterBody3D
-const BALL = preload("uid://b0s1t7orvau07")
+signal spawnBall(pos : Vector3)
 
+const BALL = preload("uid://b0s1t7orvau07")
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
@@ -40,12 +41,12 @@ func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
 	if event is InputEventMouseMotion:
 		look_around(event.relative)
-	if event.is_action("ui_cancel"):
-		spawn_ball()
+	if event.is_action_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func spawn_ball() -> void:
-	var balls = BALL.instantiate()
-	get_tree().call_deferred("add_child", balls)
+	spawnBall.emit(global_position)
+	
 
 func look_around(relative : Vector2) -> void:
 	rotate_y(-relative.x * SENS)
