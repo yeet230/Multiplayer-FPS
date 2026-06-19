@@ -1,4 +1,5 @@
 extends CharacterBody3D
+const BALL = preload("uid://b0s1t7orvau07")
 
 
 const SPEED = 5.0
@@ -39,6 +40,12 @@ func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
 	if event is InputEventMouseMotion:
 		look_around(event.relative)
+	if event.is_action("ui_cancel"):
+		spawn_ball()
+
+func spawn_ball() -> void:
+	var balls = BALL.instantiate()
+	get_tree().call_deferred("add_child", balls)
 
 func look_around(relative : Vector2) -> void:
 	rotate_y(-relative.x * SENS)
