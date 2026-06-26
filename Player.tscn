@@ -1,16 +1,19 @@
-[gd_scene format=3 uid="uid://bqecp1rvb0dh6"]
+[gd_scene format=3 uid="uid://n35vdpnpkxsb"]
 
-[ext_resource type="Script" uid="uid://n105w62bj5dw" path="res://Player.gd" id="1_xhfnw"]
+[ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://playerController.gd" id="1_kpjcp"]
+[ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="3_kne1u"]
+[ext_resource type="PackedScene" uid="uid://tvkoysscumlj" path="res://vision_manager.tscn" id="4_e80uo"]
+[ext_resource type="PackedScene" uid="uid://386pcs8r0m8b" path="res://PlayerUI.tscn" id="5_cxr5p"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kpjcp"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 radius = 0.25
 height = 1.0
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_kne1u"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xhfnw"]
 radius = 0.25
 height = 1.0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xhfnw"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kpjcp"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
@@ -18,28 +21,24 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_xhfnw"]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 0.5
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=111392230]
+script = ExtResource("1_kpjcp")
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=541964560]
-collision_layer = 2
-script = ExtResource("1_xhfnw")
+[node name="PlayerMovmentController" type="Node" parent="." unique_id=1942734477]
+script = ExtResource("3_kne1u")
+metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1666334470]
+[node name="VisionManager" parent="." unique_id=982836550 instance=ExtResource("4_e80uo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7670714, -0.17193636)
+
+[node name="Control" parent="." unique_id=97011714 instance=ExtResource("5_cxr5p")]
+
+[node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("CapsuleShape3D_kpjcp")
+shape = SubResource("CapsuleShape3D_0rwas")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=475462334]
-mesh = SubResource("CapsuleMesh_kne1u")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body" unique_id=383591323]
+mesh = SubResource("CapsuleMesh_xhfnw")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1434208449]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77785146, -0.1606868)
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=2104571529]
-replication_config = SubResource("SceneReplicationConfig_xhfnw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=593776042]
-transform = Transform3D(1, 0, 0, 0, 0.0015707765, -0.99999875, 0, 0.99999875, 0.0015707765, 0, 0.7590388, -0.27422062)
-mesh = SubResource("CylinderMesh_xhfnw")
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=206311756]
+replication_config = SubResource("SceneReplicationConfig_kpjcp")

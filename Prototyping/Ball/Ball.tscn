@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b0s1t7orvau07"]
+
+[ext_resource type="Script" uid="uid://bw7oh8o72ait0" path="res://Prototyping/Ball/ball.gd" id="1_bqufp"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pa54t"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_gk6bx"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lww6v"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="RigidBody3D" type="RigidBody3D" unique_id=935327725]
+script = ExtResource("1_bqufp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1303362426]
+shape = SubResource("SphereShape3D_pa54t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D" unique_id=1926836054]
+mesh = SubResource("SphereMesh_gk6bx")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1675555907]
+replication_config = SubResource("SceneReplicationConfig_lww6v")

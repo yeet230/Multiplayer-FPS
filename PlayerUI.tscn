@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://386pcs8r0m8b"]
+
+[ext_resource type="Script" uid="uid://cihaplk2e5qom" path="res://playerUI.gd" id="1_qwd5t"]
+
+[node name="Control" type="Control" unique_id=97011714]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qwd5t")
+
+[node name="Left" type="VBoxContainer" parent="." unique_id=1699266975]
+layout_mode = 1
+offset_right = 103.0
+offset_bottom = 77.0
+
+[node name="ID" type="Label" parent="Left" unique_id=1407337198]
+layout_mode = 2
+text = "ID: "
+
+[node name="ActiveWeapon" type="Label" parent="Left" unique_id=836126993]
+layout_mode = 2
+text = "Weapon:"
+
+[node name="FPSLabel" type="Label" parent="Left" unique_id=1815153859]
+layout_mode = 2
+
+[node name="RightLabels" type="VBoxContainer" parent="." unique_id=1465379598]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_bottom = 131.0
+grow_horizontal = 0
+
+[node name="Speed" type="Label" parent="RightLabels" unique_id=939805017]
+layout_mode = 2
+text = "Speed: "
+horizontal_alignment = 2
+
+[node name="Position" type="Label" parent="RightLabels" unique_id=1736296007]
+layout_mode = 2
+text = "Position: "
+horizontal_alignment = 2
+
+[node name="Dash" type="Label" parent="RightLabels" unique_id=792125567]
+layout_mode = 2
+text = "Dash: "
+horizontal_alignment = 2
+
+[node name="Health" type="Label" parent="RightLabels" unique_id=17567791]
+layout_mode = 2
+text = "Health: "
+horizontal_alignment = 2
+
+[node name="Ammo" type="Label" parent="RightLabels" unique_id=850246410]
+layout_mode = 2
+text = "Ammo: "
+horizontal_alignment = 2

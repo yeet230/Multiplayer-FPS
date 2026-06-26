@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dmjp288tcliuk"]
+
+[ext_resource type="Script" uid="uid://cg71sxp8rerc4" path="res://Actors/Player/Spawner/playerSpawner.gd" id="1_t5f6w"]
+[ext_resource type="PackedScene" uid="uid://n35vdpnpkxsb" path="res://Player.tscn" id="2_7ty2v"]
+
+[node name="Players" type="Node3D" unique_id=1677432062]
+script = ExtResource("1_t5f6w")
+player_scene = ExtResource("2_7ty2v")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1496261371]
+spawn_path = NodePath("..")

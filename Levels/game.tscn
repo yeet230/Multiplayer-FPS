@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://wc0psj28o70n"]
+
+[ext_resource type="Script" uid="uid://cw68jo0qh1ej6" path="res://Levels/Main.gd" id="1_uxjsv"]
+[ext_resource type="PackedScene" uid="uid://c0cnfmlp2dhkd" path="res://Multiplayer/Menu/MultiplayerMenu.tscn" id="2_6isyr"]
+
+[node name="Game" type="Node3D" unique_id=1117734858]
+script = ExtResource("1_uxjsv")
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="." unique_id=1899468467]
+_spawnable_scenes = PackedStringArray("uid://bapqs3cu7phex")
+spawn_path = NodePath("../LevelContainer")
+
+[node name="LevelContainer" type="Node" parent="." unique_id=464994538]
+unique_name_in_owner = true
+
+[node name="multiplayerMenu" parent="." unique_id=1433022567 instance=ExtResource("2_6isyr")]

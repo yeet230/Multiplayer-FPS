@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://c0cnfmlp2dhkd"]
+
+[ext_resource type="Script" uid="uid://clmn0ppoyubj8" path="res://Multiplayer/Menu/MultiplayerMenu.gd" id="1_huwya"]
+
+[node name="MultiplayerMenu" type="Control" unique_id=1433022567]
+custom_minimum_size = Vector2(43.83, 58.48)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_huwya")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1249461564]
+layout_mode = 0
+offset_left = 594.0
+offset_top = 206.0
+offset_right = 807.0
+offset_bottom = 294.0
+
+[node name="IP" type="Label" parent="VBoxContainer" unique_id=1855296974]
+layout_mode = 2
+text = "IP Address:"
+
+[node name="IPTextEdit" type="TextEdit" parent="VBoxContainer" unique_id=227247721]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 41.67)
+layout_mode = 2
+text = "127.0.0.1"
+
+[node name="Container" type="HBoxContainer" parent="." unique_id=1854871020]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -179.25
+offset_top = -22.0
+offset_right = 179.25
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 148
+alignment = 1
+
+[node name="Host" type="Button" parent="Container" unique_id=1287816487]
+layout_mode = 2
+text = "Host Server"
+
+[node name="Join" type="Button" parent="Container" unique_id=916344888]
+layout_mode = 2
+text = "Join Server"
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1466615292]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.5
+offset_top = -214.5
+offset_right = 72.5
+offset_bottom = -177.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="TextEdit" unique_id=1744654856]
+layout_mode = 0
+offset_top = -23.0
+offset_right = 85.0
+text = "Username:"
+
+[connection signal="pressed" from="Container/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="Container/Join" to="." method="_on_join_pressed"]
