@@ -1,6 +1,7 @@
 extends Node
 
 signal serverCreated
+signal ChatRecived(text : String)
 
 const bulletDecalScene = preload("uid://6gbftdo4m7nj")
 
@@ -22,7 +23,7 @@ func join_server(ip : String) -> void:
 @rpc("any_peer", "call_local")
 func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
 	var decal = bulletDecalScene.instantiate() as Node3D
-	
+	print("hello")
 	get_tree().get_first_node_in_group("balls").add_child(decal, true)
 	decal.global_position = pos
 	decal.rotation = norm
@@ -55,14 +56,15 @@ func register_player(_username: String = "") -> void:
 	}
 	push_warning(players)
 
-@rpc("any_peer")
+@rpc("any_peer", "call_remote", "reliable")
 func send_chat(text : String) -> void:
 	if !multiplayer.is_server(): return
 	
-	
-	
-	if text.begins_with("/"):
-		print(text)
-	else:
-		var senderID = multiplayer.get_remote_sender_id()
-		print(players[senderID]["username"], ": ", text)
+	var senderID: int = multiplayer.get_remote_sender_id()
+	var username: String = str(players[senderID]["username"])
+	_server_send_chat.rpc(username, text)
+
+@rpc("authority", "call_local", "reliable")
+func _server_send_chat(username : String, text : String) -> void:
+	var chat: String = str(username, ": ", text)
+	ChatRecived.emit(chat)

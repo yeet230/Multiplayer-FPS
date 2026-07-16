@@ -25,17 +25,16 @@ func _ready() -> void:
 	Globals.ActiveWeapon.connect(_weapon_changed)
 	idLabel.text = str(get_parent().multiplayer.get_unique_id())
 	
-	
+	MultiplayerManager.ChatRecived.connect(_update_chatlog)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle chat") and !$ChatConsole.visible:
+	if event.is_action_pressed("toggle chat") and !chatInput.is_editing():
 		$ChatConsole.visible = !$ChatConsole.visible
 	elif event.is_action_pressed("ui_accept"):
 		_handle_chat()
 
 func _process(_delta: float) -> void:
 	if !is_multiplayer_authority(): return
-	
 	fpsLabel.text = str("FPS: ", Engine.get_frames_per_second())
 
 #region Signal Commands
@@ -64,6 +63,12 @@ func _update_health(health : float, maxHealth : int):
 #func _update_kill_count(amnt : int) -> void:
 	#Globals.killCount += amnt
 	#killCountLabel.text = str("Kill Count: ", Globals.killCount)
+
+func _update_chatlog(chat : String) -> void:
+	chatOutput.text = str(chatOutput.text + chat + "\n")
+	print(chat)
+	
+
 #endregion
 
 func _handle_chat() -> void:
@@ -71,9 +76,4 @@ func _handle_chat() -> void:
 	MultiplayerManager.send_chat.rpc(chat)
 	chatInput.clear()
 	#chatInput.edit(true)
-	chatOutput.text = str(chatOutput.text + chat + "\n")
-	
-	
-	
-	
-	
+	#chatOutput.text = str(chatOutput.text + chat + "\n")

@@ -126,4 +126,3 @@ drag_and_drop_selection_enabled = false
 custom_minimum_size = Vector2(400, 32)
 layout_mode = 2
 placeholder_text = "Type Message Here"
-keep_editing_on_text_submit = true
