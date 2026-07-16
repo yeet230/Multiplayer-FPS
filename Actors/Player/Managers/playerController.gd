@@ -15,7 +15,7 @@ func _ready() -> void:
 	
 	curHealth = maxHealth
 	
-	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var username: String = Globals.username
 	if !multiplayer.is_server():
 		MultiplayerManager.rpc_id(1, "register_player", username)
