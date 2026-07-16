@@ -1,7 +1,7 @@
 extends Control
 
 func _ready() -> void:
-	_mode()
+	_auto_mode_set()
 
 func _get_username() -> String:
 	var arguments: Dictionary = {}
@@ -15,19 +15,16 @@ func _get_username() -> String:
 	if "username" in arguments:
 		u = arguments.username
 	push_warning(u)
-	DisplayServer.window_set_title(u + str(" : ", multiplayer.get_unique_id()))
+	DisplayServer.window_set_title(u)
 	return u
 
 
-func _mode() -> void:
+func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):
 		print("Starting Dedicated Server Automaticlly")
 		_on_host_pressed.call_deferred()
 	else:
 		_on_join_pressed.call_deferred()
-
-
-
 
 func _on_host_pressed() -> void:
 	MultiplayerManager.start_server()

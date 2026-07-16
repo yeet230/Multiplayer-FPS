@@ -1,0 +1,90 @@
+class_name WeaponManager extends Node3D
+
+enum weaponOptions {
+	Pistol,
+	SubMachine,
+	Shotgun,
+	fr_f2,
+	PeaShooter,
+	GodsGum,
+}
+
+@export var primary : weaponOptions
+@export var secondary : weaponOptions
+
+var weapons : Array = [
+	Pistol,
+	SubMachine,
+	Shotgun,
+	FR_F2,
+	PeaShooter,
+	GodsGum,
+]
+
+var weaponAmount = 2 if !Globals.debug else weapons.size()
+
+var equippedWeapon : WeaponBase
+var activeWeapon: int = 0
+
+var playerCamera : Camera3D = get_parent()
+@onready var bulletHitScanRayCast: RayCast3D = $BulletHitScanRay
+
+func _ready() -> void:
+	if !is_multiplayer_authority(): return
+	
+	print(
+	"Peer:", multiplayer.get_unique_id(),
+	" Authority:", get_multiplayer_authority()
+	)
+	_equip_new_weapon(weapons[primary].new())
+	#playerCamera.get_parent()
+
+func _input(event: InputEvent) -> void:
+	if !is_multiplayer_authority(): return
+	if event.is_action_pressed("cycle weapon"):
+		cycle_weapon()
+
+func _equip_new_weapon(newWeapon : WeaponBase) -> void:
+	if equippedWeapon and equippedWeapon != newWeapon:
+		equippedWeapon.queue_free()
+	
+	equippedWeapon = newWeapon
+	equippedWeapon.set_multiplayer_authority(get_multiplayer_authority())
+	add_child(equippedWeapon)
+
+func player_trigger_pressed() -> void:
+	if equippedWeapon:
+		equippedWeapon.trigger_pressed(self)
+
+func player_trigger_released() -> void:
+	if equippedWeapon:
+		equippedWeapon.trigger_released()
+
+func perform_hitscan(distance : int, dmg : float = 1, spread : float = 100) -> Node3D:
+	var accuracy: float = (100.0 - spread)
+	var xAccuracy: float = randf_range(-accuracy, accuracy)
+	var yAccuracy: float = randf_range(-accuracy, accuracy)
+	var targetPos: Vector3 = Vector3(xAccuracy, yAccuracy, -distance)
+	
+	bulletHitScanRayCast.target_position = targetPos
+	bulletHitScanRayCast.force_raycast_update()
+	
+	if bulletHitScanRayCast.is_colliding():
+		var collidingInstance = bulletHitScanRayCast.get_collider()
+		
+		if collidingInstance.has_method("take_damage"):
+			collidingInstance.take_damage.rpc_id(collidingInstance.get_multiplayer_authority(), dmg)
+			return collidingInstance #Retrun Colliding instance
+		
+		_spawn_bullet_decal()
+	return null #Return since bullet did not hit any preffered Instances (they have function "take_damage()")
+
+func _spawn_bullet_decal() -> void:
+	var pos: Vector3 = bulletHitScanRayCast.get_collision_point()
+	var norm: Vector3 = bulletHitScanRayCast.get_collision_normal()
+	MultiplayerManager.spawn_bullet_decal.rpc(pos, norm)
+	
+
+func cycle_weapon() -> void:
+	activeWeapon = (activeWeapon + 1) % weaponAmount
+	_equip_new_weapon(weapons[activeWeapon].new())

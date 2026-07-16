@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://tvkoysscumlj"]
 
 [ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="1_yakg2"]
-[ext_resource type="Script" uid="uid://dmu8g4kieutf2" path="res://WeaponSystem/WeaponManager.gd" id="2_givbu"]
+[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="2_8fi44"]
 
 [node name="VisionManager" type="Node3D" unique_id=982836550 node_paths=PackedStringArray("camerasList")]
 script = ExtResource("1_yakg2")
@@ -14,6 +14,4 @@ metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Head/Camera3D" unique_id=656089829]
 
-[node name="WeaponManager" type="Node3D" parent="Head/Camera3D" unique_id=41773543]
-script = ExtResource("2_givbu")
-metadata/_custom_type_script = "uid://dmu8g4kieutf2"
+[node name="WeaponManager" parent="Head/Camera3D" unique_id=1351833858 instance=ExtResource("2_8fi44")]

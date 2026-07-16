@@ -17,5 +17,4 @@ func _on_timer_timeout() -> void:
 
 @rpc("authority", "call_local")
 func _destroy() -> void:
-	print("Delete: ", multiplayer.get_unique_id())
 	self.queue_free()

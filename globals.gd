@@ -8,9 +8,21 @@ signal UpdateAmmo(loadedCount: int, magSize : int)
 signal UpdateKillCount(amount : int)
 signal ActiveWeapon(newWeapon : String)
 
+var ammo : Dictionary[String, int] = {
+	"Pistol" : 21,
+	"Submachine" : 31,
+	"Shotgun" : 6,
+	"FR F2" : 24,
+	"PeaShooter" : 1001,
+	"GodsGum" : 10000
+}
+
 var mouseSens: float = 0.002
 
+var debug: bool = true
+
 var username: String = ""
+
 func _ready() -> void:
 	if !is_multiplayer_authority():
 		Position.emit(Vector3.ZERO)

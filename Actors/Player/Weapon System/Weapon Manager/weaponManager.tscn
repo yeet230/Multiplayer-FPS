@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cuxbiwagi387h"]
+
+[ext_resource type="Script" uid="uid://dmu8g4kieutf2" path="res://Actors/Player/Weapon System/Weapon Manager/WeaponManager.gd" id="1_rxo8l"]
+
+[node name="WeaponManager" type="Node3D" unique_id=1351833858]
+script = ExtResource("1_rxo8l")
+
+[node name="BulletHitScanRay" type="RayCast3D" parent="." unique_id=1460647487]
+target_position = Vector3(0, 7.61, 0)
+collision_mask = 7

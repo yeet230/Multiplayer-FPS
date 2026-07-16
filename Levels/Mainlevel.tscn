@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://bapqs3cu7phex"]
 
 [ext_resource type="PackedScene" uid="uid://dmjp288tcliuk" path="res://Actors/Player/Spawner/PlayerSpawner.tscn" id="1_01cmo"]
-[ext_resource type="PackedScene" uid="uid://6gbftdo4m7nj" path="res://bulletDecal.tscn" id="2_nqor8"]
-[ext_resource type="PackedScene" uid="uid://b0s1t7orvau07" path="res://Prototyping/Ball/Ball.tscn" id="3_7unof"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ja5sp"]
 
@@ -44,6 +42,7 @@ mesh = SubResource("PlaneMesh_c7p05")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=384516057]
 visible = false
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=618066302]
 shape = SubResource("ConvexPolygonShape3D_cet32")
@@ -56,19 +55,18 @@ environment = SubResource("Environment_fx8ex")
 [node name="Players" parent="." unique_id=1677432062 instance=ExtResource("1_01cmo")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=508694926]
-_spawnable_scenes = PackedStringArray("uid://b0s1t7orvau07", "uid://6gbftdo4m7nj")
+_spawnable_scenes = PackedStringArray("uid://b0s1t7orvau07")
 spawn_path = NodePath("../Balls")
 
 [node name="Balls" type="Node3D" parent="." unique_id=1776443108 groups=["balls"]]
 
-[node name="MeshInstance3D" parent="Balls" unique_id=1195485291 instance=ExtResource("2_nqor8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.640795, 0.005, -15.721987)
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=282978997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5429764, 5.489918)
+use_collision = true
+collision_mask = 0
 
-[node name="MeshInstance3D2" parent="Balls" unique_id=1905959167 instance=ExtResource("2_nqor8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.256737, 0.005, -12.54384)
-
-[node name="RigidBody3D" parent="Balls" unique_id=935327725 instance=ExtResource("3_7unof")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5396497, 0)
-
-[node name="RigidBody3D2" parent="Balls" unique_id=800331256 instance=ExtResource("3_7unof")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.044198, 2.2868319, 0)
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1470865056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4647827, 1.5789605, 9.947435)
+use_collision = true
+collision_mask = 0
+size = Vector3(12.264526, 0.06542969, 7.2299805)

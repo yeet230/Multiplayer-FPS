@@ -1,17 +1,12 @@
 [gd_scene format=3 uid="uid://n35vdpnpkxsb"]
 
-[ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://playerController.gd" id="1_kpjcp"]
-[ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="3_kne1u"]
-[ext_resource type="PackedScene" uid="uid://tvkoysscumlj" path="res://vision_manager.tscn" id="4_e80uo"]
-[ext_resource type="PackedScene" uid="uid://386pcs8r0m8b" path="res://PlayerUI.tscn" id="5_cxr5p"]
+[ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_yqfyh"]
+[ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_vywg6"]
+[ext_resource type="PackedScene" uid="uid://tvkoysscumlj" path="res://Actors/Player/Managers/vision_manager.tscn" id="3_l6vkj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
-radius = 0.25
-height = 1.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xhfnw"]
-radius = 0.25
-height = 1.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kpjcp"]
 properties/0/path = NodePath(".:position")
@@ -22,22 +17,28 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=111392230]
-script = ExtResource("1_kpjcp")
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1_yqfyh")
 
 [node name="PlayerMovmentController" type="Node" parent="." unique_id=1942734477]
-script = ExtResource("3_kne1u")
+unique_name_in_owner = true
+script = ExtResource("2_vywg6")
+airMoveSpd = 10.0
 metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 
-[node name="VisionManager" parent="." unique_id=982836550 instance=ExtResource("4_e80uo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7670714, -0.17193636)
-
-[node name="Control" parent="." unique_id=97011714 instance=ExtResource("5_cxr5p")]
+[node name="VisionManager" parent="." unique_id=982836550 instance=ExtResource("3_l6vkj")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5408523, -0.15517175)
 
 [node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_0rwas")
+debug_color = Color(0, 0.6, 0.69803923, 1)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Body" unique_id=383591323]
+[node name="BodyMesh" type="MeshInstance3D" parent="Body" unique_id=383591323]
+unique_name_in_owner = true
 mesh = SubResource("CapsuleMesh_xhfnw")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=206311756]
