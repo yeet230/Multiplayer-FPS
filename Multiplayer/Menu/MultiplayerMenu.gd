@@ -23,8 +23,8 @@ func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):
 		print("Starting Dedicated Server Automaticlly")
 		_on_host_pressed.call_deferred()
-	else:
-		_on_join_pressed.call_deferred()
+	#else:
+		#_on_join_pressed.call_deferred()
 
 func _on_host_pressed() -> void:
 	MultiplayerManager.start_server()
