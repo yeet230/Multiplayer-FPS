@@ -1,5 +1,8 @@
 extends Control
 
+var fade_tween: Tween
+var chatInputVisible: bool
+
 @onready var spdLabel: Label = $Labels/RightLabels/Speed
 @onready var posLabel: Label = $Labels/RightLabels/Position
 @onready var dashLabel: Label = $Labels/RightLabels/Dash
@@ -15,7 +18,7 @@ extends Control
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	#visible = is_multiplayer_authority()
+	
 	Globals.Position.connect(_update_position)
 	Globals.Dash.connect(_update_dash)
 	Globals.Speed.connect(_update_speed)
@@ -26,10 +29,13 @@ func _ready() -> void:
 	idLabel.text = str(get_parent().multiplayer.get_unique_id())
 	
 	MultiplayerManager.ChatRecived.connect(_update_chatlog)
+	fade_out()
+	chatInputVisible = chatInput.visible
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle chat") and !chatInput.is_editing():
-		$ChatConsole.visible = !$ChatConsole.visible
+		_handle_chat_toggle()
+		chatInput.grab_focus()
 	elif event.is_action_pressed("ui_accept"):
 		_handle_chat()
 
@@ -65,15 +71,43 @@ func _update_health(health : float, maxHealth : int):
 	#killCountLabel.text = str("Kill Count: ", Globals.killCount)
 
 func _update_chatlog(chat : String) -> void:
+	fade_in()
 	chatOutput.text = str(chatOutput.text + chat + "\n")
-	print(chat)
+	await get_tree().create_timer(10).timeout
+	fade_out()
 	
 
 #endregion
 
 func _handle_chat() -> void:
 	var chat: String = chatInput.text
-	MultiplayerManager.send_chat.rpc(chat)
-	chatInput.clear()
-	#chatInput.edit(true)
-	#chatOutput.text = str(chatOutput.text + chat + "\n")
+	if !chat.is_empty():
+		MultiplayerManager.server_verify_chat.rpc_id(1, chat)
+		chatInput.clear()
+
+func _handle_chat_toggle() -> void:
+	chatInput.visible = !chatInputVisible
+	chatInputVisible = chatInput.visible
+	
+	if chatInputVisible:
+		fade_in(0)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		fade_out()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func fade_in(time : float = 0.2) -> void:
+	if fade_tween:
+		fade_tween.kill()
+	
+	fade_tween = create_tween()
+	fade_tween.tween_property(chatOutput, "modulate:a", 1, time)
+
+func fade_out() -> void:
+	if chatInput.visible: return
+	
+	if fade_tween:
+		fade_tween.kill()
+	
+	fade_tween = create_tween()
+	fade_tween.tween_property(chatOutput, "modulate:a", 0, 2)

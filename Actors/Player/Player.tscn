@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_yqfyh"]
 [ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_vywg6"]
-[ext_resource type="PackedScene" uid="uid://tvkoysscumlj" path="res://Actors/Player/Managers/vision_manager.tscn" id="3_l6vkj"]
+[ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="3_yqfyh"]
+[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="4_vywg6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
@@ -16,7 +17,72 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=111392230]
+[sub_resource type="Animation" id="Animation_yqfyh"]
+resource_name = "Crouch"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/BodyMesh:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.001),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.2]
+}
+
+[sub_resource type="Animation" id="Animation_l6vkj"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_vywg6"]
+resource_name = "Stand"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:shape:height")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body/BodyMesh:mesh:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l6vkj"]
+_data = {
+&"Crouch": SubResource("Animation_yqfyh"),
+&"RESET": SubResource("Animation_l6vkj"),
+&"Stand": SubResource("Animation_vywg6")
+}
+
+[node name="Player" type="CharacterBody3D" unique_id=111392230 groups=["Players"]]
 collision_layer = 2
 collision_mask = 7
 script = ExtResource("1_yqfyh")
@@ -27,9 +93,24 @@ script = ExtResource("2_vywg6")
 airMoveSpd = 10.0
 metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 
-[node name="VisionManager" parent="." unique_id=982836550 instance=ExtResource("3_l6vkj")]
+[node name="VisionManager" type="Node3D" parent="." unique_id=982836550 node_paths=PackedStringArray("camerasList", "player")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5408523, -0.15517175)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+script = ExtResource("3_yqfyh")
+camerasList = [NodePath("Head/Camera3D")]
+player = NodePath("..")
+metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
+
+[node name="Head" type="Node3D" parent="VisionManager" unique_id=515021475]
+
+[node name="Camera3D" type="Camera3D" parent="VisionManager/Head" unique_id=338101799]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="VisionManager/Head/Camera3D" unique_id=656089829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.061629295)
+spot_range = 33.951313
+spot_angle = 49.54401
+
+[node name="WeaponManager" parent="VisionManager/Head/Camera3D" unique_id=1351833858 instance=ExtResource("4_vywg6")]
 
 [node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
 unique_name_in_owner = true
@@ -43,3 +124,7 @@ mesh = SubResource("CapsuleMesh_xhfnw")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=206311756]
 replication_config = SubResource("SceneReplicationConfig_kpjcp")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1170951095]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_l6vkj")

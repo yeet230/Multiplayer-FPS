@@ -3,6 +3,17 @@ extends Node3D
 ## Spawns player objects upon client connect, renames them, and sets their authority to the client the belong to.
 
 @export var player_scene : PackedScene
+@export var spawnLocations: Array[Vector3] = [
+	Vector3(0, 0, 9),
+	Vector3(23, 0, 9),
+	Vector3(-23, 0, 9),
+	Vector3(47, 0, 9),
+	Vector3(-47, 0, 9),
+	Vector3(95, 0, 9),
+	Vector3(-95, 0, 9),
+	Vector3(5, 0, -10),
+	Vector3(-5, 0, -10)
+]
 
 enum NAME_FORMAT {
 	MULTIPLAYER_ID
@@ -32,13 +43,17 @@ func _ready():
 			add_player(peer)
 
 func _custom_spawn_func(data : Variant) -> Node:
-	var player = player_scene.instantiate()
+	var player = player_scene.instantiate() as Player
 	player.name = str(data.multiplayer_id)
 	player.set_multiplayer_authority(data.multiplayer_id)
-	if data.multiplayer_id == 1:
-		player.position.x -= 2
+	player.position = random_player_spawn()
 	set_camera_current_if_necessary(player)
 	return player
+
+func random_player_spawn() -> Vector3:
+	var randomLocation = randi_range(0, spawnLocations.size() - 1)
+	return spawnLocations[randomLocation]
+	#return Vector3.ZERO
 
 func set_camera_current_if_necessary(player : Node):
 	if set_camera_as_current_on_spawn and multiplayer.get_unique_id() == player.name.to_int():

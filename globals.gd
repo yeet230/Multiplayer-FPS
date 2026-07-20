@@ -8,6 +8,14 @@ signal UpdateAmmo(loadedCount: int, magSize : int)
 signal UpdateKillCount(amount : int)
 signal ActiveWeapon(newWeapon : String)
 
+enum PLAYERSTATE {
+	DEAD,
+	DOWNED,
+	ALIVE,
+	DEBUG,
+	SPECTATE
+}
+
 var ammo : Dictionary[String, int] = {
 	"Pistol" : 21,
 	"Submachine" : 31,

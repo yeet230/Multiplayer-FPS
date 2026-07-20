@@ -6,6 +6,8 @@
 [sub_resource type="LabelSettings" id="LabelSettings_icp3m"]
 font_color = Color(0.69803923, 0, 0, 1)
 
+[sub_resource type="Theme" id="Theme_icp3m"]
+
 [node name="Control" type="Control" unique_id=97011714]
 layout_mode = 3
 anchors_preset = 15
@@ -83,9 +85,18 @@ label_settings = SubResource("LabelSettings_icp3m")
 horizontal_alignment = 1
 
 [node name="HudElements" type="Control" parent="." unique_id=2031115318]
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Crosshair" type="TextureRect" parent="HudElements" unique_id=760536231]
 custom_minimum_size = Vector2(4, 4)
@@ -117,12 +128,16 @@ alignment = 2
 [node name="ChatOutput" type="RichTextLabel" parent="ChatConsole" unique_id=1187575322]
 custom_minimum_size = Vector2(0, 175)
 layout_mode = 2
+theme = SubResource("Theme_icp3m")
+text = "System: Please be respectful of others
+"
 scroll_following = true
 shortcut_keys_enabled = false
 vertical_alignment = 2
 drag_and_drop_selection_enabled = false
 
 [node name="ChatInput" type="LineEdit" parent="ChatConsole" unique_id=842665085]
+visible = false
 custom_minimum_size = Vector2(400, 32)
 layout_mode = 2
 placeholder_text = "Type Message Here"

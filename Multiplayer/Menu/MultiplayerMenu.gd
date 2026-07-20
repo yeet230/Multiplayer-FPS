@@ -2,6 +2,7 @@ extends Control
 
 func _ready() -> void:
 	_auto_mode_set()
+	
 
 func _get_username() -> String:
 	var arguments: Dictionary = {}
@@ -23,8 +24,8 @@ func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):
 		print("Starting Dedicated Server Automaticlly")
 		_on_host_pressed.call_deferred()
-	#else:
-		#_on_join_pressed.call_deferred()
+	else:
+		_on_join_pressed.call_deferred()
 
 func _on_host_pressed() -> void:
 	MultiplayerManager.start_server()
@@ -44,7 +45,7 @@ func _destroy() -> void:
 
 func _set_player_username() -> void:
 	var username: String = $TextEdit.text
-	if username.is_empty():
+	if OS.has_feature("debug"):
 		username = _get_username()
 	Globals.username = username
 	
