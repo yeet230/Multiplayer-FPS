@@ -12,13 +12,17 @@ config_version=5
 
 config/name="Multiplayer-FPS"
 run/main_scene="uid://wc0psj28o70n"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://Other/icon.svg"
 
 [autoload]
 
 MultiplayerManager="*uid://bicdpd65gba0u"
 Globals="*uid://cj6lu36ygvjl4"
+
+[dotnet]
+
+project/assembly_name="Multiplayer-FPS"
 
 [file_customization]
 

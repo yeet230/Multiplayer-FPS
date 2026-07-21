@@ -105,11 +105,11 @@ use_collision = true
 collision_mask = 0
 size = Vector3(18, 2.7088623, 0.25)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="House" unique_id=1058083925]
-transform = Transform3D(0.67093503, -0.35318744, 0.6520007, 0.034825835, 0.8933191, 0.44807184, -0.7406981, -0.27792063, 0.6116591, 8.767355, 4.6639514, 5.2305846)
-visible = false
+[node name="SpotLight3D" type="OmniLight3D" parent="House" unique_id=1275579356]
+transform = Transform3D(0.670935, -0.35318747, 0.6520008, 0.03482583, 0.8933191, 0.44807184, -0.74069804, -0.2779206, 0.61165893, -0.7747574, 1.6514654, -4.010157)
 light_color = Color(0.32036313, 0, 0.0016071219, 1)
-spot_range = 61.9519
+light_energy = 8.0
+omni_range = 19.398304
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1410571881]
 environment = SubResource("Environment_nqor8")

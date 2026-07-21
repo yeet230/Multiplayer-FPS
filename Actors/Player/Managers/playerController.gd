@@ -10,8 +10,6 @@ var curHealth: float = 0
 @onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/SpotLight3D
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 
-
-
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
 	
@@ -23,7 +21,6 @@ func _ready() -> void:
 	
 	_instantiate_UI()
 	
-
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
@@ -46,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	_update_hud()
 
 func _instantiate_UI() -> void:
-	var uiScene = preload("res://Actors/Player/playerUI.tscn")
+	var uiScene = preload("res://Actors/Player/PlayerUI.tscn")
 	var UI = uiScene.instantiate()
 	UI.set_multiplayer_authority(get_multiplayer_authority())
 	self.add_child(UI)

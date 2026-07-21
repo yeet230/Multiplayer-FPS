@@ -2,7 +2,7 @@ extends Control
 
 func _ready() -> void:
 	_auto_mode_set()
-	
+	print(IP.get_local_addresses())
 
 func _get_username() -> String:
 	var arguments: Dictionary = {}
