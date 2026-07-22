@@ -3,6 +3,7 @@ class_name Player extends CharacterBody3D
 @export var maxHealth: int = 100
 
 var curHealth: float = 0
+var ui: PlayerUI
 
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
 @onready var visionManager: VisionManager = $VisionManager
@@ -39,28 +40,32 @@ func _physics_process(delta: float) -> void:
 	
 	movementController.tick(delta)
 	visionManager.tick(delta)
+	ui.tick()
 	
 	_update_hud()
 
 func _instantiate_UI() -> void:
 	var uiScene = preload("res://Actors/Player/PlayerUI.tscn")
-	var UI = uiScene.instantiate()
-	UI.set_multiplayer_authority(get_multiplayer_authority())
-	self.add_child(UI)
+	ui = uiScene.instantiate()
+	ui.set_multiplayer_authority(get_multiplayer_authority())
+	self.add_child(ui)
 
 func _update_hud() -> void:
 	Globals.Speed.emit(self.velocity.length())
 	Globals.Position.emit(global_position)
 	Globals.Dash.emit(movementController.usedDashCount, movementController.maxDashCount)
 
-@rpc("any_peer", "call_remote")
+@rpc("any_peer", "call_local", "unreliable_ordered")
 func take_damage(dmg : float) -> void:
-	print("Ouch that hurt ", dmg)
+	#print("Ouch that hurt ", dmg)
 	curHealth -= dmg
-	Globals.Health.emit(curHealth, maxHealth)
-	if curHealth <= 0:
+	
+	if curHealth <= 0.0:
 		position = get_parent().random_player_spawn()
 		curHealth = maxHealth
+		
+	Globals.Health.emit(curHealth, maxHealth)
+	
 
 @rpc("any_peer", "call_local", "unreliable")
 func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:

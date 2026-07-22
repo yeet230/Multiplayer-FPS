@@ -12,7 +12,7 @@ var triggerHeld: bool = false
 var canShoot: bool= true
 var isReloading: bool = false
 
-var gunInDictionary: String
+var weaponName: String
 var mesh
 var meshPositionOffSet: Vector3 = Vector3(.462, -.307, -.458)
 var meshScale: Vector3 = Vector3(.5, .5, .5)
@@ -46,7 +46,7 @@ func _ready() -> void:
 func fire(manager : WeaponManager):
 	canShoot = false
 	if loadedCount > 0:
-		manager.perform_hitscan(distance, bulletDamage, spread)
+		manager.perform_hitscan(distance, weaponName, bulletDamage, spread)
 	
 	await get_tree().create_timer(fireRate).timeout
 	canShoot = true
@@ -64,7 +64,7 @@ func _process(_delta: float) -> void:
 	
 	mag_update()
 	if is_queued_for_deletion():
-		Globals.ammo[gunInDictionary] = loadedCount
+		Globals.ammo[weaponName] = loadedCount
 
 func _reload() -> void:
 	isReloading = true
@@ -86,7 +86,7 @@ func mag_update():
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
 	Globals.UpdateAmmo.emit(loadedCount, magSize)
 	
-	Globals.ammo[gunInDictionary] = loadedCount
+	Globals.ammo[weaponName] = loadedCount
 
 func trigger_pressed(manager : WeaponManager) -> void:
 	triggerHeld = true
@@ -127,5 +127,9 @@ func _shotgun_fire(manager : WeaponManager) -> void:
 	loadedCount -= 1
 
 func _setup() -> void:
-	Globals.ActiveWeapon.emit(gunInDictionary)
+	loadedCount = Globals.ammo.get(weaponName)
+	bulletDamage = Globals.weaponDamage.get(weaponName)
+	
+	Globals.ActiveWeapon.emit(weaponName)
 	Globals.UpdateAmmo.emit(loadedCount, magSize)
+	

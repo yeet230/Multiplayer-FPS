@@ -24,10 +24,10 @@ func change_camera() -> void:
 func tick(delta : float) -> void:
 	if !is_multiplayer_authority(): return
 	_handle_weapons()
-	_handle_crouch(delta)
+	#_handle_crouch(delta)
 
 var prevState: bool
-func _handle_crouch(delta : float) -> void:
+func _handle_crouch(_delta : float) -> void:
 	isCrouched = _decide_crouch()
 	
 	#var _headMoveSpd: int = 7 ##How fast head of the player will move in m/s

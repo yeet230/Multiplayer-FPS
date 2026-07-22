@@ -12,7 +12,12 @@ extends Node3D
 	Vector3(95, 0, 9),
 	Vector3(-95, 0, 9),
 	Vector3(5, 0, -10),
-	Vector3(-5, 0, -10)
+	Vector3(-5, 0, -10),
+	Vector3(19, 0, -18),
+	Vector3(-9, 0, -18),
+	Vector3(-24, 0, -9),
+	Vector3(-16, 0, 0),
+	Vector3(31.5, 0, -6),
 ]
 
 enum NAME_FORMAT {

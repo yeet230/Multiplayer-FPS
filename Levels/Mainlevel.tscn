@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dmjp288tcliuk" path="res://Actors/Player/Spawner/PlayerSpawner.tscn" id="1_01cmo"]
 [ext_resource type="Texture2D" uid="uid://b04xfarxskkgu" path="res://Assets/2D/kenney-dark-grey-checkerboard.png" id="1_nqor8"]
+[ext_resource type="PackedScene" uid="uid://ba3tnwxnwp04t" path="res://Snoawman.glb" id="3_7unof"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7unof"]
 albedo_texture = ExtResource("1_nqor8")
@@ -17,7 +18,7 @@ points = PackedVector3Array(-200, 0, -200, -200, 0, 200, 200, 0, -200, 200, 0, 2
 [sub_resource type="Environment" id="Environment_nqor8"]
 background_mode = 1
 
-[node name="Node3D" type="Node3D" unique_id=866574015]
+[node name="Level" type="Node3D" unique_id=866574015]
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=75622003]
 material_override = SubResource("StandardMaterial3D_7unof")
@@ -38,18 +39,40 @@ spawn_path = NodePath("../Balls")
 
 [node name="House" type="Node" parent="." unique_id=1176866686]
 
+[node name="Backyard" type="Node" parent="House" unique_id=511797835]
+
+[node name="Wall5" type="CSGBox3D" parent="House/Backyard" unique_id=1804933935]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -35, 2.5, -8)
+use_collision = true
+collision_mask = 0
+size = Vector3(27, 5, 0.25)
+
+[node name="Wall3" type="CSGBox3D" parent="House/Backyard" unique_id=1218849553]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 0, 2.5, -18)
+use_collision = true
+collision_mask = 0
+size = Vector3(7, 5, 0.25)
+
+[node name="Snowman" parent="House/Backyard" unique_id=178132742 instance=ExtResource("3_7unof")]
+transform = Transform3D(-9.3542376e-08, 0, 2.14, 0, 2.14, 0, -2.14, 0, -9.3542376e-08, -41.546, 0, -5.746)
+
 [node name="Hallway" type="Node" parent="House" unique_id=971521446]
 
 [node name="Wall1" type="CSGBox3D" parent="House/Hallway" unique_id=282978997]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 5.5)
 use_collision = true
 collision_mask = 0
-size = Vector3(200, 3, 0.25)
+size = Vector3(200, 5, 0.25)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="House/Hallway/Wall1" unique_id=637976611]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4, 0)
 operation = 2
 size = Vector3(2, 2.2, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="House/Hallway/Wall1" unique_id=902260505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, -1.3, 0)
+operation = 2
+size = Vector3(2, 2.4, 1)
 
 [node name="Roof" type="CSGBox3D" parent="House/Hallway" unique_id=1470865056]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 9)
@@ -75,41 +98,83 @@ use_collision = true
 collision_mask = 0
 size = Vector3(7, 3, 0.25)
 
-[node name="Wall1" type="CSGBox3D" parent="House" unique_id=896527344]
+[node name="Room1" type="Node" parent="House" unique_id=1222750578]
+
+[node name="Wall1" type="CSGBox3D" parent="House/Room1" unique_id=896527344]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 9, 2.5, -4.5)
 use_collision = true
 collision_mask = 0
 size = Vector3(20, 5, 0.25)
 
-[node name="Wall2" type="CSGBox3D" parent="House" unique_id=1796543308]
+[node name="Wall2" type="CSGBox3D" parent="House/Room1" unique_id=1796543308]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -9, 2.5, -4.5)
 use_collision = true
 collision_mask = 0
 size = Vector3(20, 5, 0.25)
 
-[node name="Wall3" type="CSGBox3D" parent="House" unique_id=565349337]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -0.014, 2.5, -14.5)
+[node name="Wall3" type="CSGBox3D" parent="House/Room1" unique_id=565349337]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 2.5, -14.5)
 use_collision = true
 collision_mask = 0
 size = Vector3(18, 5, 0.25)
 
-[node name="Roof" type="CSGBox3D" parent="House" unique_id=1911171697]
+[node name="CSGBox3D" type="CSGBox3D" parent="House/Room1/Wall3" unique_id=2131194113]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 4.5, -1.3, 0)
+operation = 2
+size = Vector3(2, 2.4, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="House/Room1/Wall3" unique_id=2017487167]
+transform = Transform3D(0.9999998, 0, 0, 0, 1, 0, 0, 0, 0.9999998, -4.5, -1.3, 0)
+operation = 2
+size = Vector3(2, 2.4, 1)
+
+[node name="Roof" type="CSGBox3D" parent="House/Room1" unique_id=1911171697]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.917, -4.53)
 use_collision = true
 collision_mask = 0
 size = Vector3(18, 0.1, 20)
 
-[node name="Wall4" type="CSGBox3D" parent="House" unique_id=1757297773]
+[node name="Wall4" type="CSGBox3D" parent="House/Room1" unique_id=1757297773]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -0.014, 3.67, 5.5)
 use_collision = true
 collision_mask = 0
 size = Vector3(18, 2.7088623, 0.25)
 
-[node name="SpotLight3D" type="OmniLight3D" parent="House" unique_id=1275579356]
+[node name="SpotLight3D" type="OmniLight3D" parent="House/Room1" unique_id=1275579356]
 transform = Transform3D(0.670935, -0.35318747, 0.6520008, 0.03482583, 0.8933191, 0.44807184, -0.74069804, -0.2779206, 0.61165893, -0.7747574, 1.6514654, -4.010157)
 light_color = Color(0.32036313, 0, 0.0016071219, 1)
 light_energy = 8.0
 omni_range = 19.398304
+
+[node name="Wall4" type="CSGBox3D" parent="House" unique_id=538371232]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 2.5, -21.5)
+use_collision = true
+collision_mask = 0
+size = Vector3(70, 5, 0.25)
+
+[node name="Wall5" type="CSGBox3D" parent="House" unique_id=943673937]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 35, 2.5, -8.08)
+use_collision = true
+collision_mask = 0
+size = Vector3(27, 5, 0.25)
+
+[node name="Wall6" type="CSGBox3D" parent="House" unique_id=1911579499]
+transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, 28, 2.5, -4.5)
+use_collision = true
+collision_mask = 0
+size = Vector3(20, 5, 0.25)
+
+[node name="Wall7" type="CSGBox3D" parent="House" unique_id=223085344]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 18.375, 2.5, -14.5)
+use_collision = true
+collision_mask = 0
+size = Vector3(19.5, 5, 0.25)
+
+[node name="Roof" type="CSGBox3D" parent="House" unique_id=493794699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.586071, 4.917, -7.9784865)
+use_collision = true
+collision_mask = 0
+size = Vector3(34.95703, 0.1, 26.896973)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1410571881]
 environment = SubResource("Environment_nqor8")

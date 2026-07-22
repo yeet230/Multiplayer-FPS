@@ -51,12 +51,27 @@ func get_player_from_name(nameID : String) -> Player:
 			return plyer
 	return null
 
+func verify_damage(dmg : float, weapon : String) -> float:
+	return dmg if Globals.weaponDamage[weapon] == dmg else 0.0
+	
+
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
 	var decal = bulletDecalScene.instantiate() as Node3D
 	get_tree().get_first_node_in_group("balls").add_child(decal, true)
 	decal.global_position = pos
 	decal.rotation = norm
+
+@rpc("any_peer", "call_remote", "unreliable_ordered")
+func damage_player(nameID : String, dmg : float, weapon : String) -> void:
+	
+	damage_player_client.rpc_id(int(nameID), verify_damage(dmg, weapon), nameID)
+
+@rpc("authority", "call_remote", "unreliable_ordered")
+func damage_player_client(dmg : float, nameID : String) -> void:
+	var plyer: Player = get_player_from_name(nameID)
+	plyer.curHealth -= dmg
+	plyer.take_damage(0)
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func register_player(_username: String = "",) -> void:

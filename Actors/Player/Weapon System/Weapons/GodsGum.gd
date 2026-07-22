@@ -1,6 +1,7 @@
 class_name GodsGum extends WeaponBase
 
 func _init() -> void:
+	weaponName = "GodsGum"
 	magSize = 2147483648
 	loadedCount = 2147483648
 	reloadTime = 0.00000000000000000001

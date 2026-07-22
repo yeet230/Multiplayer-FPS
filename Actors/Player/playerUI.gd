@@ -1,4 +1,4 @@
-extends Control
+class_name PlayerUI extends Control
 
 var fade_tween: Tween
 var chatInputVisible: bool
@@ -16,19 +16,13 @@ var chatInputVisible: bool
 @onready var chatInput: LineEdit = $ChatConsole/ChatInput
 @onready var chatOutput: RichTextLabel = $ChatConsole/ChatOutput
 
+#region Built in function Overides
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	
-	Globals.Position.connect(_update_position)
-	Globals.Dash.connect(_update_dash)
-	Globals.Speed.connect(_update_speed)
-	Globals.Health.connect(_update_health)
-	Globals.UpdateAmmo.connect(_update_bullet_count)
-	#Globals.UpdateKillCount.connect(_update_)
-	Globals.ActiveWeapon.connect(_weapon_changed)
 	idLabel.text = str(get_parent().multiplayer.get_unique_id())
 	
 	MultiplayerManager.ChatRecived.connect(_update_chatlog)
+	
 	fade_out()
 	chatInputVisible = chatInput.visible
 
@@ -40,31 +34,45 @@ func _input(event: InputEvent) -> void:
 		_handle_chat()
 
 func _process(_delta: float) -> void:
+#endregion
 	if !is_multiplayer_authority(): return
 	fpsLabel.text = str("FPS: ", Engine.get_frames_per_second())
 
-#region Signal Commands
-func _weapon_changed(newWeapon : String) -> void:
-	activeWeaponLabel.text = str("Weapon: ", newWeapon)
+#region Custom Local functions 
+func _update_weapon_equipped() -> void:
+	var weaponName: String = player.visionManager.weaponManager.equippedWeapon.weaponName
+	activeWeaponLabel.text = str("Weapon: ", weaponName)
 
-func _update_dash(dCount : int, dAmount) -> void:
+func _update_dash() -> void:
+	var dCount: int = player.movementController.usedDashCount
+	var dAmount: int = player.movementController.maxDashCount
+	
 	dashLabel.text = str("Dashes Used: ", dCount, "/", dAmount)
 
-func _update_speed(Spd: float):
-	spdLabel.text = str("Speed: ", "%0.2f" % Spd, "m/s")
+func _update_speed() -> void:
+	var spd: float = player.velocity.length()
+	
+	spdLabel.text = str("Speed: ", "%0.2f" % spd, "m/s")
 
-func _update_position(pos : Vector3):
+func _update_position() -> void:
+	var pos : Vector3 = player.position
+	
 	posLabel.text = str(
 	"x: ", "%0.2f" % pos.x, 
 	"  y: ", "%0.2f" % pos.y, 
 	"  z: ", "%0.2f" % pos.z )
 
-func _update_bullet_count(loadedCount: int, magSize : int) -> void:
-	ammoCountLabel.text = str("Ammo: ", loadedCount, "/", (magSize+1))
+func _update_bullet_count() -> void:
+	var loadedCount = player.visionManager.weaponManager.equippedWeapon.loadedCount
+	var magSize = player.visionManager.weaponManager.equippedWeapon.magSize
+	
+	ammoCountLabel.text = str("Ammo: ", loadedCount, "/", magSize)
 	noAmmoLabel.visible = false if loadedCount > 0 else true
 
-func _update_health(health : float, maxHealth : int):
-	healthLabel.text = str(health, "/", maxHealth)
+func _update_health() -> void:
+	var playerHealth: float = player.curHealth
+	var playerMaxHealth: int = player.maxHealth
+	healthLabel.text = str(playerHealth, "/", playerMaxHealth)
 
 #func _update_kill_count(amnt : int) -> void:
 	#Globals.killCount += amnt
@@ -75,9 +83,6 @@ func _update_chatlog(chat : String) -> void:
 	chatOutput.text = str(chatOutput.text + chat + "\n")
 	await get_tree().create_timer(10).timeout
 	fade_out()
-	
-
-#endregion
 
 func _handle_chat() -> void:
 	var chat: String = chatInput.text
@@ -96,6 +101,16 @@ func _handle_chat_toggle() -> void:
 		fade_out()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
+#endregion
+
+func tick() -> void:
+	_update_health()
+	_update_dash()
+	_update_position()
+	_update_speed()
+	_update_weapon_equipped()
+	_update_bullet_count()
+
 func fade_in(time : float = 0.2) -> void:
 	if fade_tween:
 		fade_tween.kill()
@@ -110,4 +125,4 @@ func fade_out() -> void:
 		fade_tween.kill()
 	
 	fade_tween = create_tween()
-	fade_tween.tween_property(chatOutput, "modulate:a", 0, 2)
+	fade_tween.tween_property(chatOutput, "modulate:a", 0, 5)

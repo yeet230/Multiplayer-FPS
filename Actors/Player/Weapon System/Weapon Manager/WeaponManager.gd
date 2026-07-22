@@ -60,7 +60,7 @@ func player_trigger_released() -> void:
 	if equippedWeapon:
 		equippedWeapon.trigger_released()
 
-func perform_hitscan(distance : int, dmg : float = 1, spread : float = 100) -> Node3D:
+func perform_hitscan(distance : int, weapon : String, dmg : float = 1, spread : float = 100) -> Node3D:
 	var accuracy: float = (100.0 - spread)
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
 	var yAccuracy: float = randf_range(-accuracy, accuracy)
@@ -68,15 +68,13 @@ func perform_hitscan(distance : int, dmg : float = 1, spread : float = 100) -> N
 	
 	bulletHitScanRayCast.target_position = targetPos
 	bulletHitScanRayCast.force_raycast_update()
+	var collidingInstance = bulletHitScanRayCast.get_collider()
 	
-	if bulletHitScanRayCast.is_colliding():
-		var collidingInstance = bulletHitScanRayCast.get_collider()
+	if collidingInstance is Player:
+		MultiplayerManager.damage_player.rpc_id(1, collidingInstance.name, dmg, weapon)
+		return collidingInstance #Retrun Colliding instance
 		
-		if collidingInstance.has_method("take_damage"):
-			collidingInstance.take_damage.rpc_id(collidingInstance.get_multiplayer_authority(), dmg)
-			return collidingInstance #Retrun Colliding instance
-		
-		_spawn_bullet_decal()
+	_spawn_bullet_decal()
 	return null #Return since bullet did not hit any preffered Instances (they have function "take_damage()")
 
 func _spawn_bullet_decal() -> void:

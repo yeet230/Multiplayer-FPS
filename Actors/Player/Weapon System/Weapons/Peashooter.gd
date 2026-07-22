@@ -5,3 +5,4 @@ func _init() -> void:
 	fireMode = shootingTypes.SEMI_FIRE
 	magSize = 10000
 	loadedCount = Globals.ammo.get("PeaShooter")
+	weaponName = "PeaShooter"

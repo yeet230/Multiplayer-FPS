@@ -25,6 +25,15 @@ var ammo : Dictionary[String, int] = {
 	"GodsGum" : 10000
 }
 
+var weaponDamage : Dictionary[String, float] = {
+	"Pistol" : 25,
+	"Submachine" : 12.5,
+	"Shotgun" : 8,
+	"FR F2" : 15,
+	"PeaShooter" : 1,
+	"GodsGum" : 10
+}
+
 var mouseSens: float = 0.002
 
 var debug: bool = true
