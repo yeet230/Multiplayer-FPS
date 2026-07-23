@@ -78,7 +78,9 @@ func damage_player_client(dmg : float, nameID : String) -> void:
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func register_player(_username: String = "",) -> void:
 	if !multiplayer.is_server(): return
-	
+
+	_username = _profanity_check_string(_username)
+
 	if _username.containsn("theo") or _username.containsn("Nergigante"):
 		_username = "Short Gay Thing"
 	elif _username.containsn("hayden") or _username.containsn("Awaremez"):
