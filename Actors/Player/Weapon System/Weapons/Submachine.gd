@@ -1,4 +1,4 @@
-class_name SubMachine extends WeaponBase
+class_name Submachine extends WeaponBase
 
 func _init() -> void:
 	weaponName = "Submachine"
@@ -10,4 +10,3 @@ func _init() -> void:
 	mesh = null
 	spread = 97.5
 	fireRate = 60.0 / 800.0
-	loadedCount = Globals.ammo.get(weaponName)

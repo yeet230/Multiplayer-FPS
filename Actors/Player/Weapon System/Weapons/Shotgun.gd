@@ -10,4 +10,3 @@ func _init() -> void:
 	bulletDamage = 12.0
 	fireMode = shootingTypes.SHOTGUN_FIRE
 	magSize = 6
-	loadedCount = Globals.ammo.get(weaponName)

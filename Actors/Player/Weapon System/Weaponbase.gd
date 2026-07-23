@@ -86,7 +86,7 @@ func mag_update():
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
 	Globals.UpdateAmmo.emit(loadedCount, magSize)
 	
-	Globals.ammo[weaponName] = loadedCount
+	Globals.weaponDictionary[weaponName]["ammo"] = loadedCount
 
 func trigger_pressed(manager : WeaponManager) -> void:
 	triggerHeld = true
@@ -127,8 +127,8 @@ func _shotgun_fire(manager : WeaponManager) -> void:
 	loadedCount -= 1
 
 func _setup() -> void:
-	loadedCount = Globals.ammo.get(weaponName)
-	bulletDamage = Globals.weaponDamage.get(weaponName)
+	loadedCount = Globals.weaponDictionary[weaponName]["ammo"]
+	bulletDamage = Globals.weaponDictionary[weaponName]["weaponDamage"]
 	
 	Globals.ActiveWeapon.emit(weaponName)
 	Globals.UpdateAmmo.emit(loadedCount, magSize)

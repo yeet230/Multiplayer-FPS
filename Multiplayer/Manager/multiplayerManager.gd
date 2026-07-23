@@ -53,7 +53,9 @@ func get_player_from_name(nameID : String) -> Player:
 
 func verify_damage(dmg : float, weapon : String) -> float:
 	return dmg if Globals.weaponDamage[weapon] == dmg else 0.0
-	
+
+func _handle_command(text : String, senderID : int) -> void:
+	pass
 
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
@@ -96,8 +98,12 @@ func register_player(_username: String = "",) -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func server_verify_chat(text : String) -> void:
 	if !multiplayer.is_server(): return
-	
 	var senderID: int = multiplayer.get_remote_sender_id()
+	
+	
+	if text.contains("/*-"):
+		_handle_command(text, senderID)
+	
 	var chat: String = _profanity_check_string(text)
 	var username: String = str(players[senderID]["username"])
 	

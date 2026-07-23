@@ -14,14 +14,14 @@ enum weaponOptions {
 
 var weapons : Array = [
 	Pistol,
-	SubMachine,
+	Submachine,
 	Shotgun,
 	FR_F2,
 	PeaShooter,
 	GodsGum,
 ]
 
-var weaponAmount = 2 if !Globals.debug else weapons.size()
+var weaponAmount = weapons.size() #2 if !Globals.debug else 
 
 var equippedWeapon : WeaponBase
 var activeWeapon: int = 0
@@ -31,13 +31,7 @@ var playerCamera : Camera3D = get_parent()
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	
-	print(
-	"Peer:", multiplayer.get_unique_id(),
-	" Authority:", get_multiplayer_authority()
-	)
 	_equip_new_weapon(weapons[primary].new())
-	#playerCamera.get_parent()
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return

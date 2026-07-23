@@ -16,22 +16,36 @@ enum PLAYERSTATE {
 	SPECTATE
 }
 
-var ammo : Dictionary[String, int] = {
-	"Pistol" : 21,
-	"Submachine" : 31,
-	"Shotgun" : 6,
-	"FR F2" : 24,
-	"PeaShooter" : 1001,
-	"GodsGum" : 10000
-}
-
-var weaponDamage : Dictionary[String, float] = {
-	"Pistol" : 25,
-	"Submachine" : 12.5,
-	"Shotgun" : 8,
-	"FR F2" : 15,
-	"PeaShooter" : 1,
-	"GodsGum" : 10
+var weaponDictionary : Dictionary[String, Dictionary] = {
+	"Pistol" : {
+		"ammo" : 21,
+		"weaponDamage" : 25,
+		
+	},
+	"Submachine" : {
+		"ammo" : 31,
+		"weaponDamage" : 12.
+		
+	},
+	"Shotgun" : {
+		"ammo" : 6,
+		"weaponDamage" : 8
+		
+	},
+	"FR F2" : {
+		"ammo" : 24,
+		"weaponDamage" : 15
+		
+	},
+	"PeaShooter" : {
+		"ammo" : 1000,
+		"weaponDamage" : 1,
+		
+	},
+	"GodsGum" : {
+		"ammo" : 1000,
+		"weaponDamage" : 10,
+	}
 }
 
 var mouseSens: float = 0.002
