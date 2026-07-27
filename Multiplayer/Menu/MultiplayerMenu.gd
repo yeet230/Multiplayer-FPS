@@ -44,7 +44,7 @@ func _destroy() -> void:
 	self.queue_free()
 
 func _set_player_username() -> void:
-	var username: String
+	var username: String 
 	if OS.has_feature("debug"):
 		username = _get_username()
 	username = $TextEdit.text

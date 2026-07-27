@@ -30,7 +30,7 @@ func _random_username_gen() -> String:
 		"The Great Tweaker",
 		"Homeless Banana Lover",
 		"Homeless Tweaker",
-		"Theo but is actully straight",
+		"Gay Theo",
 		"Homeless Schitzo",
 		"Nameless Tweaker"
 	]
@@ -52,7 +52,7 @@ func get_player_from_name(nameID : String) -> Player:
 	return null
 
 func verify_damage(dmg : float, weapon : String) -> float:
-	return dmg if Globals.weaponDamage[weapon] == dmg else 0.0
+	return dmg if Globals.get_weapon_damage(weapon)== dmg else 0.0
 
 func _handle_command(text : String, senderID : int) -> void:
 	pass
@@ -66,14 +66,15 @@ func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func damage_player(nameID : String, dmg : float, weapon : String) -> void:
+	var damage: float = verify_damage(dmg, weapon)
 	
-	damage_player_client.rpc_id(int(nameID), verify_damage(dmg, weapon), nameID)
+	if damage == dmg:
+		damage_player_client.rpc_id(int(nameID), damage, nameID)
 
 @rpc("authority", "call_remote", "unreliable_ordered")
 func damage_player_client(dmg : float, nameID : String) -> void:
 	var plyer: Player = get_player_from_name(nameID)
 	plyer.curHealth -= dmg
-	plyer.take_damage(0)
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func register_player(_username: String = "",) -> void:
@@ -101,8 +102,9 @@ func server_verify_chat(text : String) -> void:
 	var senderID: int = multiplayer.get_remote_sender_id()
 	
 	
-	if text.contains("/*-"):
+	if text.begins_with("-/"):
 		_handle_command(text, senderID)
+		return
 	
 	var chat: String = _profanity_check_string(text)
 	var username: String = str(players[senderID]["username"])

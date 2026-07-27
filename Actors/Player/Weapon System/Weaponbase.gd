@@ -64,7 +64,7 @@ func _process(_delta: float) -> void:
 	
 	mag_update()
 	if is_queued_for_deletion():
-		Globals.ammo[weaponName] = loadedCount
+		Globals.weaponDictionary[weaponName]["ammo"] = loadedCount
 
 func _reload() -> void:
 	isReloading = true
@@ -84,7 +84,6 @@ func mag_update():
 		_reload()
 	
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
-	Globals.UpdateAmmo.emit(loadedCount, magSize)
 	
 	Globals.weaponDictionary[weaponName]["ammo"] = loadedCount
 
@@ -129,7 +128,3 @@ func _shotgun_fire(manager : WeaponManager) -> void:
 func _setup() -> void:
 	loadedCount = Globals.weaponDictionary[weaponName]["ammo"]
 	bulletDamage = Globals.weaponDictionary[weaponName]["weaponDamage"]
-	
-	Globals.ActiveWeapon.emit(weaponName)
-	Globals.UpdateAmmo.emit(loadedCount, magSize)
-	

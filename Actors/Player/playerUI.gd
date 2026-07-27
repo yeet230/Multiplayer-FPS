@@ -11,7 +11,7 @@ var chatInputVisible: bool
 @onready var idLabel: Label = $Labels/Left/ID
 @onready var activeWeaponLabel: Label = $Labels/Left/ActiveWeapon
 @onready var fpsLabel: Label = $Labels/Left/FPSLabel
-@onready var player: Player = get_parent()
+@onready var player: = get_parent().get_parent()
 @onready var noAmmoLabel: Label = $Labels/NoAmmo
 @onready var chatInput: LineEdit = $ChatConsole/ChatInput
 @onready var chatOutput: RichTextLabel = $ChatConsole/ChatOutput

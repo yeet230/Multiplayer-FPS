@@ -8,7 +8,7 @@ var ui: PlayerUI
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
 @onready var visionManager: VisionManager = $VisionManager
 @onready var collisionShape: CollisionShape3D = $Body
-@onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/SpotLight3D
+@onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
@@ -42,18 +42,12 @@ func _physics_process(delta: float) -> void:
 	visionManager.tick(delta)
 	ui.tick()
 	
-	_update_hud()
 
 func _instantiate_UI() -> void:
 	var uiScene = preload("res://Actors/Player/PlayerUI.tscn")
 	ui = uiScene.instantiate()
 	ui.set_multiplayer_authority(get_multiplayer_authority())
-	self.add_child(ui)
-
-func _update_hud() -> void:
-	Globals.Speed.emit(self.velocity.length())
-	Globals.Position.emit(global_position)
-	Globals.Dash.emit(movementController.usedDashCount, movementController.maxDashCount)
+	$PlayerUI.add_child(ui)
 
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func take_damage(dmg : float) -> void:
@@ -64,8 +58,6 @@ func take_damage(dmg : float) -> void:
 		position = get_parent().random_player_spawn()
 		curHealth = maxHealth
 		
-	Globals.Health.emit(curHealth, maxHealth)
-	
 
 @rpc("any_peer", "call_local", "unreliable")
 func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:
