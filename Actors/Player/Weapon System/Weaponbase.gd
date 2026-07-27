@@ -5,8 +5,17 @@ enum shootingTypes {
 	SEMI_FIRE,
 	BURST_FIRE,
 	AUTOMATIC_FIRE,
-	SHOTGUN_FIRE
+	SHOTGUN_FIRE,
+	CHARGED_SHOT
 }
+
+enum reloadStyle {
+	Mag,
+	Slug,
+	N_A,
+}
+
+var timer: Timer
 
 var triggerHeld: bool = false
 var canShoot: bool= true
@@ -18,6 +27,7 @@ var meshPositionOffSet: Vector3 = Vector3(.462, -.307, -.458)
 var meshScale: Vector3 = Vector3(.5, .5, .5)
 
 var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
+var reloadMode: reloadStyle
 
 var distance: int = 100 ##How far the weapon can shoot
 var magSize: int = 69 ##The amount to add when reloading/its mag size
@@ -48,7 +58,7 @@ func fire(manager : WeaponManager):
 	if loadedCount > 0:
 		manager.perform_hitscan(distance, weaponName, bulletDamage, spread)
 	
-	await get_tree().create_timer(fireRate).timeout
+	await timer.create_timer(fireRate).timeout
 	canShoot = true
 	
 	match fireMode:
@@ -71,8 +81,8 @@ func _reload() -> void:
 	await get_tree().create_timer(reloadTime).timeout
 	isReloading = false
 	
-	match fireMode:
-		shootingTypes.SHOTGUN_FIRE:
+	match reloadMode:
+		reloadStyle.Slug:
 			loadedCount += 1
 			if loadedCount < magSize + 1:
 				_reload()

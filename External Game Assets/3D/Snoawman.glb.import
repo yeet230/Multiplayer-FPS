@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ba3tnwxnwp04t"
-path="res://.godot/imported/Snoawman.glb-1244cd4491f7859d1da3485c244bb84c.scn"
+path="res://.godot/imported/Snoawman.glb-c6e42cbf5a1e8c53e0208aba5cb4acaf.scn"
 
 [deps]
 
-source_file="res://Snoawman.glb"
-dest_files=["res://.godot/imported/Snoawman.glb-1244cd4491f7859d1da3485c244bb84c.scn"]
+source_file="res://External Game Assets/3D/Snoawman.glb"
+dest_files=["res://.godot/imported/Snoawman.glb-c6e42cbf5a1e8c53e0208aba5cb4acaf.scn"]
 
 [params]
 

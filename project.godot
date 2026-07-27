@@ -24,12 +24,16 @@ Globals="*uid://cj6lu36ygvjl4"
 
 project/assembly_name="Multiplayer-FPS"
 
+[editor]
+
+movie_writer/movie_file="D:/Game Dev/Godot/Godot Projects/Own Projects/multiplayer-fps/.avi"
+
 [file_customization]
 
 folder_colors={
 "res://Actors/": "red",
 "res://Actors/Player/Weapon System/": "red",
-"res://Assets/": "green",
+"res://External Game Assets/": "green",
 "res://Levels/": "blue",
 "res://Multiplayer/": "teal",
 "res://Other/": "purple",

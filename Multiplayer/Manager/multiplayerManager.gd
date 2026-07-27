@@ -6,7 +6,6 @@ signal ChatRecived(text : String)
 # Replace this with your own server port number between 1024 and 65535.
 const SERVER_PORT = 3928
 
-
 const bulletDecalScene = preload("uid://6gbftdo4m7nj")
 
 var players:= {}
@@ -57,6 +56,11 @@ func verify_damage(dmg : float, weapon : String) -> float:
 func _handle_command(text : String, senderID : int) -> void:
 	pass
 
+func _check_username_for_duplicates(username : String) -> String:
+	print(players.size())
+	return "    "
+	
+
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
 	var decal = bulletDecalScene.instantiate() as Node3D
@@ -77,26 +81,24 @@ func damage_player_client(dmg : float, nameID : String) -> void:
 	plyer.curHealth -= dmg
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func register_player(_username: String = "",) -> void:
+func register_player(username: String = "",) -> void:
 	if !multiplayer.is_server(): return
-
-	_username = _profanity_check_string(_username)
-
-	if _username.containsn("theo") or _username.containsn("Nergigante"):
-		_username = "Short Gay Thing"
-	elif _username.containsn("hayden") or _username.containsn("Awaremez"):
-		_username = "Israels Most Loyal Soldier"
-	elif _username.is_empty():
-		_username = _random_username_gen()
+	
+	username = _profanity_check_string(username)
+	username = _check_username_for_duplicates(username)
+	
+	if username.is_empty() or username.begins_with(" "):
+		username = _random_username_gen()
+	
 		
 	var senderID = multiplayer.get_remote_sender_id() 
 	if senderID == 0:
 		senderID = 1
 		
 	players[senderID] = {
-		"username": _username,
+		"username": username,
 	}
-	push_warning(players)
+	#push_warning(players)
 
 @rpc("any_peer", "call_remote", "reliable")
 func server_verify_chat(text : String) -> void:

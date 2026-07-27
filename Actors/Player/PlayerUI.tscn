@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://woaehha02ikr"]
 
-[ext_resource type="Script" uid="uid://cihaplk2e5qom" path="res://Actors/Player/playerUI.gd" id="1_qwd5t"]
-[ext_resource type="Texture2D" uid="uid://bofknxo8qvmpy" path="res://Assets/2D/Crosshair.png" id="2_icp3m"]
+[ext_resource type="Script" uid="uid://cihaplk2e5qom" path="res://Actors/Player/Player/playerUI.gd" id="1_qwd5t"]
+[ext_resource type="Texture2D" uid="uid://bofknxo8qvmpy" path="res://External Game Assets/2D/Crosshair.png" id="2_icp3m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_icp3m"]
 font_color = Color(0.69803923, 0, 0, 1)

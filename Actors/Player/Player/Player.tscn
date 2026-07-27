@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://n35vdpnpkxsb"]
 
-[ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_yqfyh"]
-[ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_vywg6"]
-[ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="3_yqfyh"]
-[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="4_vywg6"]
+[ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_7sxp2"]
+[ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_lottw"]
+[ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="3_cm46x"]
+[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
@@ -85,18 +85,18 @@ _data = {
 [node name="Player" type="CharacterBody3D" unique_id=111392230 groups=["Players"]]
 collision_layer = 2
 collision_mask = 7
-script = ExtResource("1_yqfyh")
+script = ExtResource("1_7sxp2")
 
 [node name="PlayerMovmentController" type="Node" parent="." unique_id=1942734477]
 unique_name_in_owner = true
-script = ExtResource("2_vywg6")
+script = ExtResource("2_lottw")
 airMoveSpd = 10.0
 metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 
 [node name="VisionManager" type="Node3D" parent="." unique_id=982836550 node_paths=PackedStringArray("camerasList", "player")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-script = ExtResource("3_yqfyh")
+script = ExtResource("3_cm46x")
 camerasList = [NodePath("Head/Camera3D")]
 player = NodePath("..")
 metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
@@ -115,7 +115,7 @@ light_energy = 5.875
 spot_range = 2.8868287
 spot_angle = 23.978899
 
-[node name="WeaponManager" parent="VisionManager/Head/Camera3D" unique_id=1351833858 instance=ExtResource("4_vywg6")]
+[node name="WeaponManager" parent="VisionManager/Head/Camera3D" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
 
 [node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
 unique_name_in_owner = true

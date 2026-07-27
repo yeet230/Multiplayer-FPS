@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bapqs3cu7phex"]
 
 [ext_resource type="PackedScene" uid="uid://dmjp288tcliuk" path="res://Actors/Player/Spawner/PlayerSpawner.tscn" id="1_01cmo"]
-[ext_resource type="Texture2D" uid="uid://b04xfarxskkgu" path="res://Assets/2D/kenney-dark-grey-checkerboard.png" id="1_nqor8"]
-[ext_resource type="PackedScene" uid="uid://ba3tnwxnwp04t" path="res://Snoawman.glb" id="3_7unof"]
+[ext_resource type="Texture2D" uid="uid://b04xfarxskkgu" path="res://External Game Assets/2D/kenney-dark-grey-checkerboard.png" id="1_nqor8"]
+[ext_resource type="PackedScene" uid="uid://ba3tnwxnwp04t" path="res://External Game Assets/3D/Snoawman.glb" id="3_7unof"]
 [ext_resource type="PackedScene" uid="uid://lubu4uvta2vb" path="res://FlickeringLight.tscn" id="4_d70mn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7unof"]
