@@ -44,20 +44,10 @@ func _physics_process(delta: float) -> void:
 	
 
 func _instantiate_UI() -> void:
-	var uiScene = preload("res://Actors/Player/PlayerUI.tscn")
+	var uiScene = preload("res://Actors/Player/playerUI.tscn")
 	ui = uiScene.instantiate()
 	ui.set_multiplayer_authority(get_multiplayer_authority())
 	$PlayerUI.add_child(ui)
-
-@rpc("any_peer", "call_local", "unreliable_ordered")
-func take_damage(dmg : float) -> void:
-	#print("Ouch that hurt ", dmg)
-	curHealth -= dmg
-	
-	if curHealth <= 0.0:
-		position = get_parent().random_player_spawn()
-		curHealth = maxHealth
-		
 
 @rpc("any_peer", "call_local", "unreliable")
 func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:

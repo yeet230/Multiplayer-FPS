@@ -6,7 +6,8 @@ enum shootingTypes {
 	BURST_FIRE,
 	AUTOMATIC_FIRE,
 	SHOTGUN_FIRE,
-	CHARGED_SHOT
+	CHARGED_SHOT,
+	Meele
 }
 
 enum reloadStyle {
@@ -15,16 +16,15 @@ enum reloadStyle {
 	N_A,
 }
 
-var timer: Timer
-
 var triggerHeld: bool = false
 var canShoot: bool= true
 var isReloading: bool = false
 
 var weaponName: String
+
 var mesh
-var meshPositionOffSet: Vector3 = Vector3(.462, -.307, -.458)
-var meshScale: Vector3 = Vector3(.5, .5, .5)
+var meshPositionOffSet: Vector3
+var meshScale: Vector3
 
 var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
 var reloadMode: reloadStyle
@@ -58,7 +58,7 @@ func fire(manager : WeaponManager):
 	if loadedCount > 0:
 		manager.perform_hitscan(distance, weaponName, bulletDamage, spread)
 	
-	await timer.create_timer(fireRate).timeout
+	await get_tree().create_timer(fireRate).timeout
 	canShoot = true
 	
 	match fireMode:

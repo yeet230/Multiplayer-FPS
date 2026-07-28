@@ -2,15 +2,21 @@ class_name WeaponManager extends Node3D
 
 enum weaponOptions {
 	Pistol,
-	SubMachine,
+	Submachine,
 	Shotgun,
 	fr_f2,
 	PeaShooter,
 	GodsGum,
+	Knife,
 }
 
-@export var primary : weaponOptions
-@export var secondary : weaponOptions
+var weaponUpgrades: Array = [
+	Pistol,
+	Submachine,
+	FR_F2,
+	Shotgun,
+	Knife
+]
 
 var weapons : Array = [
 	Pistol,
@@ -19,6 +25,7 @@ var weapons : Array = [
 	FR_F2,
 	PeaShooter,
 	GodsGum,
+	Knife,
 ]
 
 var weaponAmount = weapons.size() #2 if !Globals.debug else 
@@ -31,7 +38,7 @@ var playerCamera : Camera3D = get_parent()
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	_equip_new_weapon(weapons[primary].new())
+	_equip_new_weapon(weaponUpgrades[activeWeapon].new())
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
@@ -78,5 +85,6 @@ func _spawn_bullet_decal() -> void:
 	
 
 func cycle_weapon() -> void:
-	activeWeapon = (activeWeapon + 1) % weaponAmount
-	_equip_new_weapon(weapons[activeWeapon].new())
+	if Globals.debug:
+		activeWeapon = (activeWeapon + 1) % weaponAmount
+		_equip_new_weapon(weapons[activeWeapon].new())

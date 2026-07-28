@@ -97,7 +97,7 @@ metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 script = ExtResource("3_cm46x")
-camerasList = [NodePath("Head/Camera3D")]
+camerasList = [NodePath("Head/Camera3D"), NodePath("Head/Camera3D2"), NodePath("Head/Camera3D3")]
 player = NodePath("..")
 metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
 
@@ -117,9 +117,16 @@ spot_angle = 23.978899
 
 [node name="WeaponManager" parent="VisionManager/Head/Camera3D" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
 
+[node name="Camera3D2" type="Camera3D" parent="VisionManager/Head" unique_id=1731746499]
+transform = Transform3D(1, 0, 0, 0, 0.94278723, 0.33339489, 0, -0.33339489, 0.94278723, 0, 1.0064216, 2.3763356)
+
+[node name="Camera3D3" type="Camera3D" parent="VisionManager/Head" unique_id=1947500759]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1794257, -0.09698033, -1.834208)
+
 [node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 shape = SubResource("CapsuleShape3D_0rwas")
 debug_color = Color(0, 0.6, 0.69803923, 1)
 

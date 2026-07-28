@@ -37,6 +37,10 @@ var weaponDictionary : Dictionary[String, Dictionary] = {
 	"GodsGum" : {
 		"ammo" : 1000,
 		"weaponDamage" : 10,
+	},
+	"Kitchen Knife" : {
+		"ammo" : 1,
+		"weaponDamage" : 50,
 	}
 }
 
