@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c0cnfmlp2dhkd"]
 
+[ext_resource type="Theme" uid="uid://d3knqsqu2fo06" path="res://Prototyping/UI/Main.tres" id="1_bkn5d"]
 [ext_resource type="Script" uid="uid://clmn0ppoyubj8" path="res://Multiplayer/Menu/MultiplayerMenu.gd" id="1_huwya"]
 
 [node name="MultiplayerMenu" type="Control" unique_id=1433022567]
@@ -12,66 +13,147 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_huwya")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1249461564]
-layout_mode = 0
-offset_left = 594.0
-offset_top = 206.0
-offset_right = 807.0
-offset_bottom = 294.0
+[node name="ColorRect" type="ColorRect" parent="." unique_id=335171231]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.25565878, 0.25565878, 0.25565878, 1)
 
-[node name="IP" type="Label" parent="VBoxContainer" unique_id=1855296974]
-layout_mode = 2
-text = "IP Address:"
-
-[node name="IPTextEdit" type="TextEdit" parent="VBoxContainer" unique_id=227247721]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 41.67)
-layout_mode = 2
-text = "127.0.0.1"
-
-[node name="Container" type="HBoxContainer" parent="." unique_id=1854871020]
+[node name="PlayTabContainer" type="TabContainer" parent="." unique_id=217495007]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -179.25
-offset_top = -22.0
-offset_right = 179.25
-offset_bottom = 22.0
+offset_left = -518.4
+offset_top = -291.6
+offset_right = 518.4
+offset_bottom = 291.6
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 148
-alignment = 1
+current_tab = 1
+tab_0/title = "Host Server"
+tab_1/title = "Join Server"
+metadata/_edit_use_anchors_ = true
 
-[node name="Host" type="Button" parent="Container" unique_id=1287816487]
+[node name="HostServer" type="Label" parent="PlayTabContainer" unique_id=1183455683]
+visible = false
 layout_mode = 2
-text = "Host Server"
+metadata/_tab_index = 0
+metadata/_tab_name = "Host Server"
 
-[node name="Join" type="Button" parent="Container" unique_id=916344888]
-layout_mode = 2
-text = "Join Server"
-
-[node name="TextEdit" type="TextEdit" parent="." unique_id=1466615292]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -72.5
-offset_top = -214.5
-offset_right = 72.5
-offset_bottom = -177.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="TextEdit" unique_id=1744654856]
+[node name="Host" type="Button" parent="PlayTabContainer/HostServer" unique_id=1287816487]
 layout_mode = 0
-offset_top = -23.0
-offset_right = 85.0
+offset_left = 342.15002
+offset_top = 238.6
+offset_right = 455.15002
+offset_bottom = 282.6
+text = "Create Server"
+
+[node name="JoinServer" type="Label" parent="PlayTabContainer" unique_id=1791217066]
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "Join Server"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayTabContainer/JoinServer" unique_id=1802303015]
+layout_mode = 0
+offset_left = 380.4
+offset_top = 182.09998
+offset_right = 655.4
+offset_bottom = 369.09998
+theme_override_constants/separation = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayTabContainer/JoinServer/VBoxContainer" unique_id=1188559056]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+theme_override_constants/separation = 34
+
+[node name="TextEdit" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
+layout_mode = 2
+
+[node name="Username" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/TextEdit" unique_id=1744654856]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -24.0
+offset_right = 88.0
+offset_bottom = -1.0
+size_flags_horizontal = 4
 text = "Username:"
 
-[connection signal="pressed" from="Container/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="Container/Join" to="." method="_on_join_pressed"]
+[node name="IPTextEdit" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=1157240537]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_bkn5d")
+text = "127.0.0.1"
+
+[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPTextEdit" unique_id=1855296974]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -24.0
+offset_right = 88.0
+offset_bottom = -0.99996567
+size_flags_horizontal = 4
+text = "IP Address:"
+
+[node name="Join" type="Button" parent="PlayTabContainer/JoinServer/VBoxContainer" unique_id=916344888]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Join Server"
+
+[node name="SettingsTabContainer" type="TabContainer" parent="." unique_id=1299573455]
+visible = false
+layout_mode = 0
+offset_left = 437.0
+offset_top = 223.0
+offset_right = 563.0
+offset_bottom = 277.0
+current_tab = 0
+
+[node name="Window" type="Label" parent="SettingsTabContainer" unique_id=539265246]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Controls" type="Label" parent="SettingsTabContainer" unique_id=1310895910]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Label" type="Label" parent="SettingsTabContainer" unique_id=446324625]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="CentreContainer" type="CenterContainer" parent="." unique_id=1305093597]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenu" type="VBoxContainer" parent="CentreContainer" unique_id=1811945703]
+custom_minimum_size = Vector2(92.555, 0)
+layout_mode = 2
+
+[node name="Play" type="Button" parent="CentreContainer/MainMenu" unique_id=470684254]
+layout_mode = 2
+text = "Play"
+
+[node name="Settings" type="Button" parent="CentreContainer/MainMenu" unique_id=1723380005]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="CentreContainer/MainMenu" unique_id=62930227]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="CentreContainer/MainMenu/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CentreContainer/MainMenu/Settings" to="." method="_on_settings_pressed"]

@@ -86,5 +86,6 @@ func _spawn_bullet_decal() -> void:
 
 func cycle_weapon() -> void:
 	if Globals.debug:
+		print("hello")
 		activeWeapon = (activeWeapon + 1) % weaponAmount
 		_equip_new_weapon(weapons[activeWeapon].new())

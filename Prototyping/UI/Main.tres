@@ -1,0 +1,5 @@
+[gd_resource type="Theme" format=3 uid="uid://d3knqsqu2fo06"]
+
+[resource]
+/colors/named = Color(0.7806944, 1.9492954e-06, 3.85046e-07, 1)
+Button/icons/icon = null

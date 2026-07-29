@@ -1,5 +1,10 @@
 extends Control
 
+@onready var usernameInput: LineEdit = $TabContainer/JoinServer/CentreContainer/VBoxContainer/VBoxContainer/TextEdit
+@onready var playMenu: TabContainer = $CentreContainer/PlayTabContainer
+@onready var mainMenu: VBoxContainer = $CentreContainer/MainMenu
+@onready var settingsMenu: TabContainer = $SettingsTabContainer
+
 func _ready() -> void:
 	_auto_mode_set()
 	print(IP.get_local_addresses())
@@ -30,7 +35,6 @@ func _auto_mode_set() -> void:
 func _on_host_pressed() -> void:
 	MultiplayerManager.start_server()
 	_destroy()
-	
 
 func _on_join_pressed() -> void:
 	var ip = %IPTextEdit.text
@@ -39,7 +43,6 @@ func _on_join_pressed() -> void:
 	MultiplayerManager.join_server(ip)
 	_destroy()
 
-
 func _destroy() -> void:
 	self.queue_free()
 
@@ -47,6 +50,13 @@ func _set_player_username() -> void:
 	var username: String 
 	if OS.has_feature("debug"):
 		username = _get_username()
-	username = $TextEdit.text
+	username = usernameInput.text
 	Globals.username = username
-	
+
+func _on_play_pressed() -> void:
+	playMenu.show()
+	mainMenu.hide()
+
+func _on_settings_pressed() -> void:
+	settingsMenu.show()
+	mainMenu.hide()

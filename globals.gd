@@ -46,7 +46,7 @@ var weaponDictionary : Dictionary[String, Dictionary] = {
 
 var mouseSens: float = 0.002
 
-var debug: bool = true
+var debug: bool = false
 
 var username: String = ""
 
@@ -55,6 +55,9 @@ func _ready() -> void:
 		
 		
 		pass
+
+func string_to_bool(string : String) -> bool:
+	return string.strip_edges().to_lower() == "true"
 
 func get_weapon_damage(weaponName : String) -> float:
 	return weaponDictionary[weaponName]["weaponDamage"]
