@@ -11,7 +11,7 @@ enum PLAYERSTATE {
 var weaponDictionary : Dictionary[String, Dictionary] = {
 	"Pistol" : {
 		"ammo" : 21,
-		"weaponDamage" : 25,
+		"weaponDamage" : 5000,
 		
 	},
 	"Submachine" : {

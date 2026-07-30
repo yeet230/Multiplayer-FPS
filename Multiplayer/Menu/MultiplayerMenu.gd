@@ -1,8 +1,9 @@
 extends Control
 
-@onready var usernameInput: LineEdit = $TabContainer/JoinServer/CentreContainer/VBoxContainer/VBoxContainer/TextEdit
-@onready var playMenu: TabContainer = $CentreContainer/PlayTabContainer
-@onready var mainMenu: VBoxContainer = $CentreContainer/MainMenu
+@onready var usernameInput: LineEdit = %UsernameInput
+@onready var ipInput: LineEdit = %IPInput
+@onready var playMenu: TabContainer = $PlayTabContainer
+@onready var mainMenu: CenterContainer = $CentreContainer
 @onready var settingsMenu: TabContainer = $SettingsTabContainer
 
 func _ready() -> void:
@@ -24,10 +25,16 @@ func _get_username() -> String:
 	DisplayServer.window_set_title(u)
 	return u
 
+func _input(event: InputEvent) -> void:
+	if event.is_action("ballTest"):
+		print("Returning to MainMenu")
+		mainMenu.show()
+		playMenu.hide()
+		settingsMenu.hide()
 
 func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):
-		print("Starting Dedicated Server Automaticlly")
+		print("Starting Dedicated Server Automaticllyaurhsafif")
 		_on_host_pressed.call_deferred()
 	#else:
 		#_on_join_pressed.call_deferred()
@@ -37,7 +44,7 @@ func _on_host_pressed() -> void:
 	_destroy()
 
 func _on_join_pressed() -> void:
-	var ip = %IPTextEdit.text
+	var ip = ipInput.text
 	_set_player_username()
 	
 	MultiplayerManager.join_server(ip)
@@ -55,8 +62,17 @@ func _set_player_username() -> void:
 
 func _on_play_pressed() -> void:
 	playMenu.show()
+	playMenu.grab_focus()
 	mainMenu.hide()
 
 func _on_settings_pressed() -> void:
 	settingsMenu.show()
 	mainMenu.hide()
+
+
+func _on_join_mouse_entered() -> void:
+	print("About to Join")
+
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()

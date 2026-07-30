@@ -51,7 +51,7 @@ func get_player_from_name(nameID : String) -> Player:
 	return null
 
 func verify_damage(dmg : float, weapon : String) -> float:
-	return dmg if Globals.get_weapon_damage(weapon)== dmg else 0.0
+	return dmg if Globals.get_weapon_damage(weapon) == dmg else -10.0
 
 func _handle_command(text : String, senderID : int) -> void:
 	var splitCommand: PackedStringArray = text.split(" ")
@@ -83,8 +83,9 @@ func _check_username_for_duplicates(username : String) -> String:
 #region Server Side Network Functions
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func damage_player(nameID : String, dmg : float, weapon : String) -> void:
-	var damage: float = verify_damage(dmg, weapon)
+	if !multiplayer.is_server(): return
 	
+	var damage: float = verify_damage(dmg, weapon)
 	if damage == dmg:
 		damage_player_client.rpc_id(int(nameID), damage, nameID)
 
@@ -97,7 +98,6 @@ func register_player(username: String = "",) -> void:
 	
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
-	
 		
 	var senderID = multiplayer.get_remote_sender_id() 
 	if senderID == 0:

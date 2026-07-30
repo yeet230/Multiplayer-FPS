@@ -22,7 +22,32 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25565878, 0.25565878, 0.25565878, 1)
 
+[node name="CentreContainer" type="CenterContainer" parent="." unique_id=1305093597]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenu" type="VBoxContainer" parent="CentreContainer" unique_id=1811945703]
+custom_minimum_size = Vector2(92.555, 0)
+layout_mode = 2
+
+[node name="Play" type="Button" parent="CentreContainer/MainMenu" unique_id=470684254]
+layout_mode = 2
+text = "Play"
+
+[node name="Settings" type="Button" parent="CentreContainer/MainMenu" unique_id=1723380005]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="CentreContainer/MainMenu" unique_id=62930227]
+layout_mode = 2
+text = "Quit"
+
 [node name="PlayTabContainer" type="TabContainer" parent="." unique_id=217495007]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -72,10 +97,11 @@ custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 theme_override_constants/separation = 34
 
-[node name="TextEdit" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
+[node name="UsernameInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Username" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/TextEdit" unique_id=1744654856]
+[node name="Username" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/UsernameInput" unique_id=1744654856]
 layout_mode = 0
 offset_left = 3.0
 offset_top = -24.0
@@ -84,13 +110,27 @@ offset_bottom = -1.0
 size_flags_horizontal = 4
 text = "Username:"
 
-[node name="IPTextEdit" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=1157240537]
+[node name="IPInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=1157240537]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_bkn5d")
 text = "127.0.0.1"
 
-[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPTextEdit" unique_id=1855296974]
+[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1855296974]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -24.0
+offset_right = 88.0
+offset_bottom = -0.99996567
+size_flags_horizontal = 4
+text = "IP Address:"
+
+[node name="IPInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1812678060]
+layout_mode = 0
+theme = ExtResource("1_bkn5d")
+text = "127.0.0.1"
+
+[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput/IPInput" unique_id=383548390]
 layout_mode = 0
 offset_left = 2.0
 offset_top = -24.0
@@ -128,32 +168,9 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="CentreContainer" type="CenterContainer" parent="." unique_id=1305093597]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MainMenu" type="VBoxContainer" parent="CentreContainer" unique_id=1811945703]
-custom_minimum_size = Vector2(92.555, 0)
-layout_mode = 2
-
-[node name="Play" type="Button" parent="CentreContainer/MainMenu" unique_id=470684254]
-layout_mode = 2
-text = "Play"
-
-[node name="Settings" type="Button" parent="CentreContainer/MainMenu" unique_id=1723380005]
-layout_mode = 2
-text = "Settings"
-
-[node name="Quit" type="Button" parent="CentreContainer/MainMenu" unique_id=62930227]
-layout_mode = 2
-text = "Quit"
-
-[connection signal="pressed" from="PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="CentreContainer/MainMenu/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="CentreContainer/MainMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CentreContainer/MainMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
+[connection signal="mouse_entered" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_mouse_entered"]
+[connection signal="pressed" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
