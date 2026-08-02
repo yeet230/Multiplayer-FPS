@@ -3,7 +3,7 @@ extends Control
 @onready var usernameInput: LineEdit = %UsernameInput
 @onready var ipInput: LineEdit = %IPInput
 @onready var playMenu: TabContainer = $PlayTabContainer
-@onready var mainMenu: CenterContainer = $CentreContainer
+@onready var mainMenu: VBoxContainer = $MainMenu
 @onready var settingsMenu: TabContainer = $SettingsTabContainer
 
 func _ready() -> void:
@@ -69,10 +69,16 @@ func _on_settings_pressed() -> void:
 	settingsMenu.show()
 	mainMenu.hide()
 
-
-func _on_join_mouse_entered() -> void:
-	print("About to Join")
-
-
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+func _on_option_button_item_selected(index: int) -> void:
+	match index:
+		0:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		1:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
+		2:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		3:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)

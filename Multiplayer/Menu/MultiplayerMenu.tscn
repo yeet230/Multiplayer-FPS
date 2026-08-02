@@ -11,9 +11,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_bkn5d")
 script = ExtResource("1_huwya")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=335171231]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,48 +24,50 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25565878, 0.25565878, 0.25565878, 1)
 
-[node name="CentreContainer" type="CenterContainer" parent="." unique_id=1305093597]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MainMenu" type="VBoxContainer" parent="CentreContainer" unique_id=1811945703]
-custom_minimum_size = Vector2(92.555, 0)
-layout_mode = 2
-
-[node name="Play" type="Button" parent="CentreContainer/MainMenu" unique_id=470684254]
-layout_mode = 2
-text = "Play"
-
-[node name="Settings" type="Button" parent="CentreContainer/MainMenu" unique_id=1723380005]
-layout_mode = 2
-text = "Settings"
-
-[node name="Quit" type="Button" parent="CentreContainer/MainMenu" unique_id=62930227]
-layout_mode = 2
-text = "Quit"
-
-[node name="PlayTabContainer" type="TabContainer" parent="." unique_id=217495007]
+[node name="MainMenu" type="VBoxContainer" parent="." unique_id=1811945703]
 visible = false
+custom_minimum_size = Vector2(92.555, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -518.4
-offset_top = -291.6
-offset_right = 518.4
-offset_bottom = 291.6
+offset_left = -46.2775
+offset_top = -50.5
+offset_right = 46.2775
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Play" type="Button" parent="MainMenu" unique_id=470684254]
+layout_mode = 2
+text = "Play"
+
+[node name="Settings" type="Button" parent="MainMenu" unique_id=1723380005]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="MainMenu" unique_id=62930227]
+layout_mode = 2
+text = "Quit"
+
+[node name="PlayTabContainer" type="TabContainer" parent="." unique_id=217495007]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -519.3
+offset_top = -289.8
+offset_right = 519.30005
+offset_bottom = 289.8
 grow_horizontal = 2
 grow_vertical = 2
 current_tab = 1
 tab_0/title = "Host Server"
 tab_1/title = "Join Server"
-metadata/_edit_use_anchors_ = true
 
 [node name="HostServer" type="Label" parent="PlayTabContainer" unique_id=1183455683]
 visible = false
@@ -125,20 +129,6 @@ offset_bottom = -0.99996567
 size_flags_horizontal = 4
 text = "IP Address:"
 
-[node name="IPInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1812678060]
-layout_mode = 0
-theme = ExtResource("1_bkn5d")
-text = "127.0.0.1"
-
-[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput/IPInput" unique_id=383548390]
-layout_mode = 0
-offset_left = 2.0
-offset_top = -24.0
-offset_right = 88.0
-offset_bottom = -0.99996567
-size_flags_horizontal = 4
-text = "IP Address:"
-
 [node name="Join" type="Button" parent="PlayTabContainer/JoinServer/VBoxContainer" unique_id=916344888]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -147,16 +137,59 @@ text = "Join Server"
 
 [node name="SettingsTabContainer" type="TabContainer" parent="." unique_id=1299573455]
 visible = false
-layout_mode = 0
-offset_left = 437.0
-offset_top = 223.0
-offset_right = 563.0
-offset_bottom = 277.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -519.3
+offset_top = -289.8
+offset_right = 519.3
+offset_bottom = 289.8
+grow_horizontal = 2
+grow_vertical = 2
 current_tab = 0
 
 [node name="Window" type="Label" parent="SettingsTabContainer" unique_id=539265246]
 layout_mode = 2
 metadata/_tab_index = 0
+
+[node name="OptionButton" type="OptionButton" parent="SettingsTabContainer/Window" unique_id=1794253762]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 20.0
+selected = 1
+item_count = 4
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "maximised"
+popup/item_1/id = 1
+popup/item_2/text = "FullScreem"
+popup/item_2/id = 2
+popup/item_3/text = "Exclusive Fullscreen"
+popup/item_3/id = 3
+
+[node name="Vsync" type="Label" parent="SettingsTabContainer/Window" unique_id=2051179172]
+layout_mode = 0
+offset_left = 9.299988
+offset_top = 39.799988
+offset_right = 62.299988
+offset_bottom = 62.799988
+text = "Vsync: "
+
+[node name="CheckButton" type="CheckButton" parent="SettingsTabContainer/Window/Vsync" unique_id=194683480]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -12.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="Controls" type="Label" parent="SettingsTabContainer" unique_id=1310895910]
 visible = false
@@ -168,9 +201,9 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[connection signal="pressed" from="CentreContainer/MainMenu/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="CentreContainer/MainMenu/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="CentreContainer/MainMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="MainMenu/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
-[connection signal="mouse_entered" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_mouse_entered"]
 [connection signal="pressed" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="item_selected" from="SettingsTabContainer/Window/OptionButton" to="." method="_on_option_button_item_selected"]

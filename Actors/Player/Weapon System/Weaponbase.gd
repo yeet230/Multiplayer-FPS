@@ -1,4 +1,8 @@
 class_name WeaponBase extends Node
+##All weapons should inherit this node 
+##
+##Change values as desired
+
 
 ##The style of shooting the gun will have
 enum shootingTypes {

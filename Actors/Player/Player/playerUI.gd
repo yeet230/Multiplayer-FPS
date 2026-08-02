@@ -33,10 +33,12 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_accept"):
 		_handle_chat()
 
+
 func _process(_delta: float) -> void:
-#endregion
 	if !is_multiplayer_authority(): return
 	fpsLabel.text = str("FPS: ", Engine.get_frames_per_second())
+
+#endregion
 
 #region Custom Local functions 
 func _update_weapon_equipped() -> void:
@@ -65,6 +67,8 @@ func _update_position() -> void:
 func _update_bullet_count() -> void:
 	var loadedCount = player.visionManager.weaponManager.equippedWeapon.loadedCount
 	var magSize = player.visionManager.weaponManager.equippedWeapon.magSize
+	
+	loadedCount = clampi(loadedCount, 0, magSize + 1)
 	
 	ammoCountLabel.text = str("Ammo: ", loadedCount, "/", magSize)
 	noAmmoLabel.visible = false if loadedCount > 0 else true

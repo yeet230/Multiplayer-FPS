@@ -134,6 +134,7 @@ func _server_send_chat(username : String, text : String) -> void:
 func damage_player_client(dmg : float, nameID : String) -> void:
 	var plyer: Player = get_player_from_name(nameID)
 	plyer.curHealth -= dmg
+	
 
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
