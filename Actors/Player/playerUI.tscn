@@ -141,3 +141,17 @@ visible = false
 custom_minimum_size = Vector2(400, 32)
 layout_mode = 2
 placeholder_text = "Type Message Here"
+
+[node name="Label" type="Label" parent="." unique_id=568819244]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(0.9609521, 0.16694164, 0, 1)
+theme_override_font_sizes/font_size = 120
+text = "Give Me INPUT!!!!"
+horizontal_alignment = 1
+vertical_alignment = 1

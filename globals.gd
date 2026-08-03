@@ -69,4 +69,4 @@ func set_weapon_ammo(weaponName : String, newAmmoCount : int) -> void:
 	weaponDictionary[weaponName]["ammo"] = newAmmoCount
 
 func verify_damage(dmg : float, weapon : String) -> float:
-	return dmg if Globals.get_weapon_damage(weapon) == dmg else -10.0
+	return dmg if Globals.get_weapon_damage(weapon) == dmg else 0.0

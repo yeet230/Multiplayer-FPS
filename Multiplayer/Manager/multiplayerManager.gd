@@ -84,7 +84,7 @@ func _check_username_for_duplicates(username : String) -> String:
 func damage_player(nameID : String, dmg : float, weapon : String) -> void:
 	if !multiplayer.is_server(): return
 	
-	var damage: float = verify_damage(dmg, weapon)
+	var damage: float = Globals.verify_damage(dmg, weapon)
 	if damage == dmg:
 		damage_player_client.rpc_id(int(nameID), damage, nameID)
 
