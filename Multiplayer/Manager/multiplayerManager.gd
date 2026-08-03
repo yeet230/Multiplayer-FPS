@@ -50,8 +50,7 @@ func get_player_from_name(nameID : String) -> Player:
 			return plyer
 	return null
 
-func verify_damage(dmg : float, weapon : String) -> float:
-	return dmg if Globals.get_weapon_damage(weapon) == dmg else -10.0
+
 
 func _handle_command(text : String, senderID : int) -> void:
 	var splitCommand: PackedStringArray = text.split(" ")

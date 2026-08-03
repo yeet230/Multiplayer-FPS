@@ -10,5 +10,3 @@ func _init() -> void:
 	magSize = 10000000000000
 	spread = 100.0
 	distance = 2
-	
-	
