@@ -59,6 +59,7 @@ func _ready() -> void:
 func string_to_bool(string : String) -> bool:
 	return string.strip_edges().to_lower() == "true"
 
+
 func get_weapon_damage(weaponName : String) -> float:
 	return weaponDictionary[weaponName]["weaponDamage"]
 
