@@ -1,7 +1,7 @@
-class_name Submachine extends WeaponBase
+class_name MP_5 extends WeaponBase
 
 func _init() -> void:
-	weaponName = "Submachine"
+	weaponName = "MP5"
 	
 	fireMode = shootingTypes.AUTOMATIC_FIRE
 	magSize = 30

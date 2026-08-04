@@ -1,8 +1,4 @@
 class_name WeaponBase extends Node
-##All weapons should inherit this node 
-##
-##Change values as desired
-
 
 ##The style of shooting the gun will have
 enum shootingTypes {
@@ -20,18 +16,19 @@ enum reloadStyle {
 	N_A,
 }
 
+var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
+var reloadMode: reloadStyle
+var weaponID: Globals.WeaponID
+
+var weaponName: String
+
 var triggerHeld: bool = false
 var canShoot: bool= true
 var isReloading: bool = false
 
-var weaponName: String
-
 var mesh
 var meshPositionOffSet: Vector3
 var meshScale: Vector3
-
-var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
-var reloadMode: reloadStyle
 
 var distance: int = 100 ##How far the weapon can shoot
 var magSize: int = 69 ##The amount to add when reloading/its mag size
@@ -60,7 +57,7 @@ func _ready() -> void:
 func fire(manager : WeaponManager):
 	canShoot = false
 	if loadedCount > 0:
-		manager.perform_hitscan(distance, weaponName, bulletDamage, spread)
+		manager.perform_hitscan(distance, weaponID, bulletDamage, spread)
 	
 	await get_tree().create_timer(fireRate).timeout
 	canShoot = true
@@ -75,10 +72,11 @@ func fire(manager : WeaponManager):
 func _process(_delta: float) -> void:
 	if !is_multiplayer_authority(): return
 	
-	
 	mag_update()
-	if is_queued_for_deletion():
-		Globals.weaponDictionary[weaponName]["ammo"] = loadedCount
+	
+	#if is_queued_for_deletion(): #is redundant as weapon ammo is set in mag update
+		#Globals.set_weapon_ammo(weaponID, loadedCount)
+
 
 func _reload() -> void:
 	isReloading = true
@@ -99,7 +97,7 @@ func mag_update():
 	
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
 	
-	Globals.weaponDictionary[weaponName]["ammo"] = loadedCount
+	Globals.set_weapon_ammo(weaponID, loadedCount)
 
 func trigger_pressed(manager : WeaponManager) -> void:
 	triggerHeld = true
@@ -140,5 +138,5 @@ func _shotgun_fire(manager : WeaponManager) -> void:
 	loadedCount -= 1
 
 func _setup() -> void:
-	loadedCount = Globals.weaponDictionary[weaponName]["ammo"]
-	bulletDamage = Globals.weaponDictionary[weaponName]["weaponDamage"]
+	loadedCount = Globals.get_weapon_ammo(weaponID)
+	bulletDamage = Globals.get_weapon_damage(weaponID)

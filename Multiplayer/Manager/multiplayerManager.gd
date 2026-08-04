@@ -8,7 +8,15 @@ const SERVER_PORT = 3928
 
 const bulletDecalScene = preload("uid://6gbftdo4m7nj")
 
-var players:= {}
+var players : Dictionary[int, Dictionary] = {
+	-1 : {
+		"username" : "",
+		"health" : NAN,
+		"weaponLevel" : NAN,
+	},
+}
+
+var commandStarter: String
 
 #region Server/Client Setup
 func start_server() -> void:
@@ -16,6 +24,8 @@ func start_server() -> void:
 	peer.create_server(SERVER_PORT)
 	multiplayer.multiplayer_peer = peer
 	serverCreated.emit()
+	commandStarter = Globals.create_command_starter()
+	print(commandStarter)
 
 func join_server(ip : String) -> void:
 	var peer = ENetMultiplayerPeer.new()
@@ -25,15 +35,21 @@ func join_server(ip : String) -> void:
 
 func _random_username_gen() -> String:
 	var randGenUsername: String = ""
-	var possibleNames: Array[String] = [
-		"The Great Tweaker",
-		"Homeless Banana Lover",
-		"Homeless Tweaker",
-		"Gay Theo",
-		"Homeless Schitzo",
-		"Nameless Tweaker"
+	var nameStarter: Array[String] = [
+		"The Great ",
+		"The Homeless ",
+		"Short ",
+		"Schizophrenic ",
+		"Nameless "
 	]
-	randGenUsername = possibleNames[randi_range(0, possibleNames.size() - 1)]
+	var nameEnds: Array[String] = [
+		"Tweaker",
+		"Banana Lover",
+		"King",
+		"Schitzo"
+		
+	]
+	randGenUsername = nameStarter.pick_random() + nameEnds.pick_random()
 	return randGenUsername
 
 func _profanity_check_string(text : String) -> String:
@@ -50,11 +66,9 @@ func get_player_from_name(nameID : String) -> Player:
 			return plyer
 	return null
 
-
-
 func _handle_command(text : String, senderID : int) -> void:
 	var splitCommand: PackedStringArray = text.split(" ")
-	if text.contains("-/debug"):
+	if text.contains("debug"):
 		if splitCommand.size() < 3:
 			push_error("Invalid Command: expected -/debug = <val = !current> ; But got ", text)
 			return
@@ -62,7 +76,7 @@ func _handle_command(text : String, senderID : int) -> void:
 		var newVal: bool = Globals.string_to_bool(splitCommand[2])
 		update_debug_mode.rpc_id(int(senderID), newVal)
 	
-	elif text.contains("-/tp"):
+	elif text.contains("tp"):
 		if splitCommand.size() < 4:
 			push_error("Invalid Command: extpected -/tp <x> <y> <z> ; But got", text)
 			return
@@ -74,14 +88,17 @@ func _handle_command(text : String, senderID : int) -> void:
 		teleport_player.rpc_id(int(senderID), newPos, senderID)
 		
 
-func _check_username_for_duplicates(username : String) -> String:
-	print(players.size())
-	return "    "
+func _check_username_for_duplicates(_username : String) -> String:
+	for peer in players:
+		if players[peer]["username"] == _username:
+			return _random_username_gen()
+	return _username
 	
+
 
 #region Server Side Network Functions
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func damage_player(nameID : String, dmg : float, weapon : String) -> void:
+func damage_player(nameID : String, dmg : float, weapon : Globals.WeaponID) -> void:
 	if !multiplayer.is_server(): return
 	
 	var damage: float = Globals.verify_damage(dmg, weapon)
@@ -114,7 +131,7 @@ func server_verify_chat(text : String) -> void:
 	var senderID: int = multiplayer.get_remote_sender_id()
 	
 	
-	if text.begins_with("-/"):
+	if text.begins_with(commandStarter):
 		_handle_command(text, senderID)
 		return
 	

@@ -1,55 +1,25 @@
 class_name WeaponManager extends Node3D
 
-enum weaponOptions {
-	Pistol,
-	Submachine,
-	Shotgun,
-	fr_f2,
-	PeaShooter,
-	GodsGum,
-	Knife,
-}
-
-var weaponUpgrades: Array = [
-	Pistol,
-	Submachine,
-	FR_F2,
-	Shotgun,
-	Knife
-]
-
-var weapons : Array = [
-	Pistol,
-	Submachine,
-	Shotgun,
-	FR_F2,
-	PeaShooter,
-	GodsGum,
-	Knife,
-]
-
-var weaponAmount = weapons.size() #2 if !Globals.debug else 
-
 var equippedWeapon : WeaponBase
-var activeWeapon: int = 0
+var activeWeapon: int = Globals.weaponLevel
 
 var playerCamera : Camera3D = get_parent()
 @onready var bulletHitScanRayCast: RayCast3D = $BulletHitScanRay
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	_equip_new_weapon(weaponUpgrades[activeWeapon].new())
+	_equip_new_weapon()
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
 	if event.is_action_pressed("cycle weapon"):
 		cycle_weapon()
 
-func _equip_new_weapon(newWeapon : WeaponBase) -> void:
-	if equippedWeapon and equippedWeapon != newWeapon:
+func _equip_new_weapon(newWeapon : Globals.WeaponID) -> void:
+	if equippedWeapon:
 		equippedWeapon.queue_free()
 	
-	equippedWeapon = newWeapon
+	equippedWeapon = Globals.get_weapon_script(newWeapon)
 	equippedWeapon.set_multiplayer_authority(get_multiplayer_authority())
 	add_child(equippedWeapon)
 
@@ -61,7 +31,7 @@ func player_trigger_released() -> void:
 	if equippedWeapon:
 		equippedWeapon.trigger_released()
 
-func perform_hitscan(distance : int, weapon : String, dmg : float = 1, spread : float = 100) -> Node3D:
+func perform_hitscan(distance : int, weapon : Globals.WeaponID, dmg : float = 1, spread : float = 100) -> Node3D:
 	var accuracy: float = (100.0 - spread)
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
 	var yAccuracy: float = randf_range(-accuracy, accuracy)
@@ -84,9 +54,11 @@ func _spawn_bullet_decal() -> void:
 	MultiplayerManager.spawn_bullet_decal.rpc(pos, norm)
 	
 
+func update_weapon_level(levelChange: int) -> void:
+	activeWeapon += levelChange
+	_equip_new_weapon()
+
 func cycle_weapon() -> void:
 	if Globals.debug:
-		print("hello")
-		
 		activeWeapon = (activeWeapon + 1) % weaponAmount
-		_equip_new_weapon(weapons[activeWeapon].new())
+		_equip_new_weapon()
