@@ -112,8 +112,9 @@ func tick() -> void:
 	_update_dash()
 	_update_position()
 	_update_speed()
-	_update_weapon_equipped()
-	_update_bullet_count()
+	if player.visionManager.weaponManager.equippedWeapon:
+		_update_weapon_equipped()
+		_update_bullet_count()
 
 func fade_in(time : float = 0.2) -> void:
 	if fade_tween:

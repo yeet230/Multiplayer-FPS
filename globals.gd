@@ -95,6 +95,7 @@ var weaponOrder: Array[WeaponID] = [
 ]
 
 var mouseSens: float = 0.002
+var playerStartingHealth: float = 100.0
 
 var debug: bool = false
 

@@ -8,7 +8,7 @@ var playerCamera : Camera3D = get_parent()
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	_equip_new_weapon()
+	MultiplayerManager.give_weapon.rpc_id(1)
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
@@ -56,9 +56,9 @@ func _spawn_bullet_decal() -> void:
 
 func update_weapon_level(levelChange: int) -> void:
 	activeWeapon += levelChange
-	_equip_new_weapon()
+	_equip_new_weapon(101)
 
 func cycle_weapon() -> void:
 	if Globals.debug:
-		activeWeapon = (activeWeapon + 1) % weaponAmount
-		_equip_new_weapon()
+		activeWeapon = (activeWeapon + 1) % 10
+		_equip_new_weapon(101)

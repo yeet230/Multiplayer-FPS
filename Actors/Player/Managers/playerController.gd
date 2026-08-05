@@ -1,6 +1,6 @@
 class_name Player extends CharacterBody3D
 
-@export var maxHealth: int = 100
+@export var maxHealth: int = Globals.playerStartingHealth
 
 var curHealth: float = 0
 var ui: PlayerUI

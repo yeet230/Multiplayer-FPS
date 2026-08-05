@@ -106,8 +106,10 @@ func damage_player(nameID : String, dmg : float, weapon : Globals.WeaponID) -> v
 		damage_player_client.rpc_id(int(nameID), damage, nameID)
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func register_player(username: String = "",) -> void:
+func register_player(playerHealth : float, username: String = "") -> void:
 	if !multiplayer.is_server(): return
+	
+	var senderID = multiplayer.get_remote_sender_id() 
 	
 	username = _profanity_check_string(username)
 	username = _check_username_for_duplicates(username)
@@ -115,12 +117,16 @@ func register_player(username: String = "",) -> void:
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
 		
-	var senderID = multiplayer.get_remote_sender_id() 
 	if senderID == 0:
 		senderID = 1
-		
+	
+	if playerHealth != Globals.playerStartingHealth:
+		multiplayer.multiplayer_peer.disconnect_peer(senderID)
+	
 	players[senderID] = {
-		"username": username,
+		"username" : username,
+		"health" : playerHealth,
+		"weaponLevel" : 0
 	}
 	#push_warning(players)
 
@@ -167,4 +173,14 @@ func update_debug_mode(newVal : bool) -> void:
 func teleport_player(newPos : Vector3, playerID : int) -> void:
 	var plyer: Player = get_player_from_name(str(playerID))
 	plyer.position = newPos
+
+@rpc("any_peer", "call_remote", )
+func give_weapon() -> void:
+	if !multiplayer.is_server(): return
+	
+	var peer: int = multiplayer.get_remote_sender_id()
+	
+	
+	
+	
 #endregion
