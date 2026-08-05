@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://6gbftdo4m7nj"]
 
-[ext_resource type="Script" uid="uid://brg3tl1rrf5ug" path="res://Actors/Player/Weapon System/Bullet Decal/BulletDecal.gd" id="1_72coh"]
+[ext_resource type="Script" uid="uid://brg3tl1rrf5ug" path="res://Weapon System/Bullet Decal/BulletDecal.gd" id="1_72coh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72coh"]
 albedo_color = Color(0, 1, 1, 1)

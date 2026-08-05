@@ -7,6 +7,7 @@ var ui: PlayerUI
 
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
 @onready var visionManager: VisionManager = $VisionManager
+@onready var weaponManager: WeaponManager = $VisionManager/Head/Camera3D/WeaponManager
 @onready var collisionShape: CollisionShape3D = $Body
 @onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
@@ -18,7 +19,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var username: String = Globals.username
 	if !multiplayer.is_server():
-		MultiplayerManager.register_player.rpc_id(1, username)
+		MultiplayerManager.register_player.rpc_id(1, curHealth, username)
 	
 	_instantiate_UI()
 	
@@ -40,6 +41,8 @@ func _physics_process(delta: float) -> void:
 	
 	movementController.tick(delta)
 	visionManager.tick(delta)
+	weaponManager.tick()
+	
 	ui.tick()
 	
 

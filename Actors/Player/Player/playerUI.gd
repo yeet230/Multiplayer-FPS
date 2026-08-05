@@ -42,7 +42,7 @@ func _process(_delta: float) -> void:
 
 #region Custom Local functions 
 func _update_weapon_equipped() -> void:
-	var weaponName: String = player.visionManager.weaponManager.equippedWeapon.weaponName
+	var weaponName: String = player.weaponManager.equippedWeapon.weaponName
 	activeWeaponLabel.text = str("Weapon: ", weaponName)
 
 func _update_dash() -> void:
@@ -65,8 +65,8 @@ func _update_position() -> void:
 	"  z: ", "%0.2f" % pos.z )
 
 func _update_bullet_count() -> void:
-	var loadedCount = player.visionManager.weaponManager.equippedWeapon.loadedCount
-	var magSize = player.visionManager.weaponManager.equippedWeapon.magSize
+	var loadedCount = player.weaponManager.equippedWeapon.loadedCount
+	var magSize = player.weaponManager.equippedWeapon.magSize
 	
 	loadedCount = clampi(loadedCount, 0, magSize + 1)
 	
@@ -112,7 +112,7 @@ func tick() -> void:
 	_update_dash()
 	_update_position()
 	_update_speed()
-	if player.visionManager.weaponManager.equippedWeapon:
+	if player.weaponManager.equippedWeapon:
 		_update_weapon_equipped()
 		_update_bullet_count()
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4xsvi08f4mt4"]
 
 [ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="1_yakg2"]
-[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="2_8fi44"]
+[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="2_8fi44"]
 
 [node name="VisionManager" type="Node3D" unique_id=982836550 node_paths=PackedStringArray("camerasList")]
 script = ExtResource("1_yakg2")

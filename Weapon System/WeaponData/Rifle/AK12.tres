@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://b2fb3ehhpruqo"]
+
+[ext_resource type="Script" uid="uid://mpnyivmmeex8" path="res://Weapon System/WeaponData/WeaponData.gd" id="1_4qrub"]
+[ext_resource type="Script" uid="uid://ca680uvocx1xn" path="res://Weapon System/Weapons/Rifle/AK_12.gd" id="2_40fwd"]
+
+[resource]
+script = ExtResource("1_4qrub")
+damage = 40
+weaponScript = ExtResource("2_40fwd")
+ammo = 30
+metadata/_custom_type_script = "uid://mpnyivmmeex8"

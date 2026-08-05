@@ -10,37 +10,40 @@ enum shootingTypes {
 	Meele
 }
 
-enum reloadStyle {
+enum ReloadStyle {
 	Mag,
 	Slug,
 	N_A,
 }
 
+var weaponData: WeaponData
+
 var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
-var reloadMode: reloadStyle
-var weaponID: Globals.WeaponID
+var reloadType: ReloadStyle
+var weaponId: Globals.WeaponID
 
 var weaponName: String
 
-var triggerHeld: bool = false
-var canShoot: bool= true
+var canFire: bool = true
+var isBarrelLoaded: bool = true ##Future rework needed for this to be used
 var isReloading: bool = false
+var isTriggerHeld: bool = false
 
 var mesh
 var meshPositionOffSet: Vector3
 var meshScale: Vector3
 
-var distance: int = 100 ##How far the weapon can shoot
-var magSize: int = 69 ##The amount to add when reloading/its mag size
-var loadedCount: int = magSize + 1 ##the amount that is loaded into the weapon
-var firedShots: int = 0
-var shootAmount: int = 3
+var maxRange: float = 100 ##How far the weapon can shoot
+var magSize: int ##The amount to add when reloading
+var loadedCount: int ##Amount of ammo loaded in the weapon at the moment
+var shotsFired: int = 0
+var projectilesPerShot: int ##How many bullets should be fired. Used for the shotgun and burst fire modes
 
-var fireRate: float = 60.0 / 900.0 ##The fire rate of the gun base of 60/900
-var bulletDamage: float = 25.0  ##How much damage a bullet should do
-var reloadTime: float = 2.0 ##How long to delay the the update of how many bullets are loaded
+var fireRate: float ##The fire rate of the weapon should be from 60/desired RPM
+var bulletDamage: float  ##How much damage a bullet should do
+var reloadSpeed: float ##How long to delay the the update of how many bullets are loaded
 var meshRotation: float = 90.0
-var spread: float = 95.0
+var spread: float
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): 
@@ -55,16 +58,16 @@ func _ready() -> void:
 		add_child(mesh)
 
 func fire(manager : WeaponManager):
-	canShoot = false
+	canFire = false
 	if loadedCount > 0:
-		manager.perform_hitscan(distance, weaponID, bulletDamage, spread)
+		manager.perform_hitscan(maxRange, weaponId, bulletDamage, spread)
 	
 	await get_tree().create_timer(fireRate).timeout
-	canShoot = true
+	canFire = true
 	
 	match fireMode:
 		shootingTypes.AUTOMATIC_FIRE:
-			if triggerHeld:
+			if isTriggerHeld:
 				_auto_fire(manager)
 		shootingTypes.BURST_FIRE:
 			_burst_fire(manager)
@@ -80,11 +83,11 @@ func _process(_delta: float) -> void:
 
 func _reload() -> void:
 	isReloading = true
-	await get_tree().create_timer(reloadTime).timeout
+	await get_tree().create_timer(reloadSpeed).timeout
 	isReloading = false
 	
-	match reloadMode:
-		reloadStyle.Slug:
+	match reloadType:
+		ReloadStyle.Slug:
 			loadedCount += 1
 			if loadedCount < magSize + 1:
 				_reload()
@@ -97,12 +100,12 @@ func mag_update():
 	
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
 	
-	Globals.set_weapon_ammo(weaponID, loadedCount)
+	Globals.set_weapon_ammo(weaponId, loadedCount)
 
 func trigger_pressed(manager : WeaponManager) -> void:
-	triggerHeld = true
-	firedShots = 0
-	if canShoot and !isReloading:
+	isTriggerHeld = true
+	shotsFired = 0
+	if canFire and !isReloading:
 		match fireMode: #Switch statment for different fireing modes
 			shootingTypes.SEMI_FIRE:
 				_try_semi_fire(manager)
@@ -114,29 +117,48 @@ func trigger_pressed(manager : WeaponManager) -> void:
 				_shotgun_fire(manager)
 
 func trigger_released() -> void:
-	triggerHeld = false
+	isTriggerHeld = false
 
 func _try_semi_fire(manager) -> void:
 	fire(manager)
 	loadedCount -= 1
 
 func _auto_fire(manager : WeaponManager) -> void:
-	if (triggerHeld or canShoot) and not isReloading: #Exit/Return if either trigger or canShoot are false
+	if (isTriggerHeld or canFire) and not isReloading: #Exit/Return if either trigger or canShoot are false
 		fire(manager)
 		loadedCount -= 1
 
 func _burst_fire(manager : WeaponManager) -> void:
-	if firedShots < shootAmount:
+	if shotsFired < projectilesPerShot:
 		fire(manager)
-		firedShots += 1
+		shotsFired += 1
 		loadedCount -= 1
 
 func _shotgun_fire(manager : WeaponManager) -> void:
-	while firedShots < shootAmount:
+	while shotsFired < projectilesPerShot:
 		fire(manager)
-		firedShots += 1
+		shotsFired += 1
 	loadedCount -= 1
 
 func _setup() -> void:
-	loadedCount = Globals.get_weapon_ammo(weaponID)
-	bulletDamage = Globals.get_weapon_damage(weaponID)
+	bulletDamage = weaponData.damage
+	loadedCount = weaponData.ammo
+	magSize = weaponData.magSize
+	weaponName = weaponData.weaponName
+	weaponId = weaponData.WeaponID
+	
+	fireMode = weaponData.fireMode
+	reloadType = weaponData.reloadType
+	maxRange = weaponData.shootDistance
+	reloadSpeed = weaponData.reloadSpeed
+	fireRate = weaponData.fireRate
+	spread = weaponData.bulletSpread
+	projectilesPerShot = weaponData.projectilesPerShot
+	
+	print(fireMode, bulletDamage, loadedCount)
+	
+	
+	
+	
+	
+	

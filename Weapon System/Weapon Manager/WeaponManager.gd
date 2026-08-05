@@ -8,26 +8,28 @@ var playerCamera : Camera3D = get_parent()
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
-	MultiplayerManager.give_weapon.rpc_id(1)
+	#MultiplayerManager.give_weapon.rpc_id(1)
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
 	if event.is_action_pressed("cycle weapon"):
 		cycle_weapon()
 
-func _equip_new_weapon(newWeapon : Globals.WeaponID) -> void:
+func _equip_new_weapon(newWeapon : GDScript) -> void:
 	if equippedWeapon:
 		equippedWeapon.queue_free()
 	
-	equippedWeapon = Globals.get_weapon_script(newWeapon)
+	#var newWeapon = Globals.get_weapon_script(newWeaponId)
+	
+	equippedWeapon = newWeapon.new()
 	equippedWeapon.set_multiplayer_authority(get_multiplayer_authority())
 	add_child(equippedWeapon)
 
-func player_trigger_pressed() -> void:
+func _player_trigger_pressed() -> void:
 	if equippedWeapon:
 		equippedWeapon.trigger_pressed(self)
 
-func player_trigger_released() -> void:
+func _player_trigger_released() -> void:
 	if equippedWeapon:
 		equippedWeapon.trigger_released()
 
@@ -52,13 +54,18 @@ func _spawn_bullet_decal() -> void:
 	var pos: Vector3 = bulletHitScanRayCast.get_collision_point()
 	var norm: Vector3 = bulletHitScanRayCast.get_collision_normal()
 	MultiplayerManager.spawn_bullet_decal.rpc(pos, norm)
-	
+
+func tick() -> void:
+	if Input.is_action_just_pressed("player_shoot"):
+		_player_trigger_pressed()
+	elif Input.is_action_just_released("player_shoot"):
+		_player_trigger_released()
 
 func update_weapon_level(levelChange: int) -> void:
 	activeWeapon += levelChange
-	_equip_new_weapon(101)
+	#_equip_new_weapon(101)
 
 func cycle_weapon() -> void:
 	if Globals.debug:
 		activeWeapon = (activeWeapon + 1) % 10
-		_equip_new_weapon(101)
+		#_equip_new_weapon(101)

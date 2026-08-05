@@ -44,6 +44,7 @@ func _on_host_pressed() -> void:
 	_destroy()
 
 func _on_join_pressed() -> void:
+	#var num = Globals.get_weapon_damage(0)
 	var ip = ipInput.text
 	_set_player_username()
 	

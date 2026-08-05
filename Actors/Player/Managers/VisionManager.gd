@@ -13,12 +13,11 @@ var lookSens: float = Globals.mouseSens
 var activeCamera: int = 0
 
 @onready var head: Node3D = $Head
-@onready var weaponManager: WeaponManager = $Head/Camera3D/WeaponManager
 
 func _input(event: InputEvent) -> void:
 	if !is_multiplayer_authority(): return
 	if event.is_action_pressed("ballTest"):
-		change_camera()
+		MultiplayerManager.server_upgrade_weapon.rpc_id(1)
 
 func get_camera() -> Camera3D:
 	return camerasList[activeCamera]
@@ -31,7 +30,6 @@ func change_camera() -> void:
 
 func tick(delta : float) -> void:
 	if !is_multiplayer_authority(): return
-	_handle_weapons()
 	#_handle_crouch(delta)
 	
 	if player.is_on_floor():
@@ -70,12 +68,6 @@ func _headbob_effect(delta : float):
 		sin(headbob_time * HEADBOB_FREQUENCY) * HEADBOB_MOVE_AMOUNT,
 		0
 	)
-
-func _handle_weapons() -> void:
-	if Input.is_action_just_pressed("player_shoot"):
-		weaponManager.player_trigger_pressed()
-	elif Input.is_action_just_released("player_shoot"):
-		weaponManager.player_trigger_released()
 
 func controller_look_around(relative : Vector2) -> void:
 	_look_around(relative, Globals.controllerSens)

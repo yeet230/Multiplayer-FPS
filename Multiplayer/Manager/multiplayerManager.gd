@@ -8,6 +8,8 @@ const SERVER_PORT = 3928
 
 const bulletDecalScene = preload("uid://6gbftdo4m7nj")
 
+var weaponsCount: int = 1
+
 var players : Dictionary[int, Dictionary] = {
 	-1 : {
 		"username" : "",
@@ -86,7 +88,6 @@ func _handle_command(text : String, senderID : int) -> void:
 		var z: float = float(splitCommand[3])
 		var newPos: Vector3 = Vector3(x, y, z)
 		teleport_player.rpc_id(int(senderID), newPos, senderID)
-		
 
 func _check_username_for_duplicates(_username : String) -> String:
 	for peer in players:
@@ -95,6 +96,8 @@ func _check_username_for_duplicates(_username : String) -> String:
 	return _username
 	
 
+func get_weapon_level(who : int) -> int:
+	return players[who]["weaponLevel"]
 
 #region Server Side Network Functions
 @rpc("any_peer", "call_remote", "unreliable_ordered")
@@ -109,33 +112,33 @@ func damage_player(nameID : String, dmg : float, weapon : Globals.WeaponID) -> v
 func register_player(playerHealth : float, username: String = "") -> void:
 	if !multiplayer.is_server(): return
 	
-	var senderID = multiplayer.get_remote_sender_id() 
+	var remoteSender = multiplayer.get_remote_sender_id() 
+	
+	var senderID = 1 if remoteSender == 0 else remoteSender
 	
 	username = _profanity_check_string(username)
 	username = _check_username_for_duplicates(username)
 	
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
-		
-	if senderID == 0:
-		senderID = 1
 	
-	if playerHealth != Globals.playerStartingHealth:
-		multiplayer.multiplayer_peer.disconnect_peer(senderID)
+	#if playerHealth != Globals.playerStartingHealth: throws a bunch of non-fatal errros aswell as being a test
+		#multiplayer.multiplayer_peer.disconnect_peer(senderID)
 	
 	players[senderID] = {
 		"username" : username,
 		"health" : playerHealth,
 		"weaponLevel" : 0
 	}
-	#push_warning(players)
+	
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]
+	give_weapon.rpc_id(senderID, senderID, newWeaponID)
 
 @rpc("any_peer", "call_remote", "reliable")
 func server_verify_chat(text : String) -> void:
 #endregion
 	if !multiplayer.is_server(): return
 	var senderID: int = multiplayer.get_remote_sender_id()
-	
 	
 	if text.begins_with(commandStarter):
 		_handle_command(text, senderID)
@@ -174,13 +177,34 @@ func teleport_player(newPos : Vector3, playerID : int) -> void:
 	var plyer: Player = get_player_from_name(str(playerID))
 	plyer.position = newPos
 
-@rpc("any_peer", "call_remote", )
-func give_weapon() -> void:
-	if !multiplayer.is_server(): return
+##Called locally on client computer
+@rpc("authority", "call_local", )
+func give_weapon(who : int, what : Globals.WeaponID) -> void:
+	if multiplayer.is_server(): return
 	
-	var peer: int = multiplayer.get_remote_sender_id()
+	var plyer: Player = get_player_from_name(str(who))
+	var newWeapon: GDScript = Globals.get_weapon_script(what)
+	plyer.weaponManager._equip_new_weapon(newWeapon)
+
+@rpc("any_peer", "call_remote")
+func server_upgrade_weapon(playerId : int = NAN) -> void:
+	var senderID: int = multiplayer.get_remote_sender_id()
+	if get_weapon_level(senderID) == weaponsCount: return
 	
+	players[senderID]["weaponLevel"] += 1
 	
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]
 	
+	give_weapon.rpc_id(senderID, senderID, newWeaponID)
 	
+
+func server_downgrade_weapon(playerId : int) -> void:
+	if get_weapon_level(playerId) == 0: return
+	
+	players[playerId]["weaponLevel"] -= 1
+	
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
+	
+	give_weapon.rpc_id(playerId, playerId, newWeaponID)
+
 #endregion

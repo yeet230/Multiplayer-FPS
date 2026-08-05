@@ -32,12 +32,12 @@ movie_writer/movie_file="D:/Game Dev/Godot/Godot Projects/Own Projects/multiplay
 
 folder_colors={
 "res://Actors/": "red",
-"res://Actors/Player/Weapon System/": "red",
 "res://External Game Assets/": "green",
 "res://Levels/": "blue",
 "res://Multiplayer/": "teal",
 "res://Other/": "purple",
-"res://Prototyping/": "yellow"
+"res://Prototyping/": "yellow",
+"res://Weapon System/": "pink"
 }
 
 [global_group]

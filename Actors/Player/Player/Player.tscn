@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_7sxp2"]
 [ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_lottw"]
 [ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="3_cm46x"]
-[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Actors/Player/Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
+[ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
