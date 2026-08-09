@@ -3,6 +3,11 @@ class_name PlayerUI extends Control
 var fade_tween: Tween
 var chatInputVisible: bool
 
+var toggleChat: bool = false
+var isEnterPressed: bool = false
+var isBackPressed: bool = false
+
+
 @onready var spdLabel: Label = $Labels/RightLabels/Speed
 @onready var posLabel: Label = $Labels/RightLabels/Position
 @onready var dashLabel: Label = $Labels/RightLabels/Dash
@@ -26,13 +31,10 @@ func _ready() -> void:
 	fade_out()
 	chatInputVisible = chatInput.visible
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle chat") and !chatInput.is_editing():
-		_handle_chat_toggle()
-		chatInput.grab_focus()
-	elif event.is_action_pressed("ui_accept"):
-		_handle_chat()
-
+func _gui(event: InputEvent) -> void:
+	if event:
+		get_viewport().set_input_as_handled()
+	print(event)
 
 func _process(_delta: float) -> void:
 	if !is_multiplayer_authority(): return
@@ -40,9 +42,29 @@ func _process(_delta: float) -> void:
 
 #endregion
 
+func tick() -> void:
+	if isBackPressed:
+		pass
+	elif isEnterPressed:
+		_handle_chat()
+	elif toggleChat and !chatInput.is_editing():
+		_handle_chat_toggle()
+	
+	_update_hud()
+	
+
+func _update_hud() -> void:
+	_update_health()
+	_update_dash()
+	_update_position()
+	_update_speed()
+	if player.weaponManager.weaponData: ##Checks to make sure that the data exist's before reading from it. will crash otherwise
+		_update_weapon_equipped()
+		_update_bullet_count()
+
 #region Custom Local functions 
 func _update_weapon_equipped() -> void:
-	var weaponName: String = player.weaponManager.equippedWeapon.weaponName
+	var weaponName: String = player.weaponManager.weaponName
 	activeWeaponLabel.text = str("Weapon: ", weaponName)
 
 func _update_dash() -> void:
@@ -65,8 +87,8 @@ func _update_position() -> void:
 	"  z: ", "%0.2f" % pos.z )
 
 func _update_bullet_count() -> void:
-	var loadedCount = player.weaponManager.equippedWeapon.loadedCount
-	var magSize = player.weaponManager.equippedWeapon.magSize
+	var loadedCount = player.weaponManager.loadedCount
+	var magSize = player.weaponManager.magSize
 	
 	loadedCount = clampi(loadedCount, 0, magSize + 1)
 	
@@ -104,17 +126,11 @@ func _handle_chat_toggle() -> void:
 	else:
 		fade_out()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	get_viewport().set_input_as_handled()
+	chatInput.grab_focus()
+	
 
 #endregion
-
-func tick() -> void:
-	_update_health()
-	_update_dash()
-	_update_position()
-	_update_speed()
-	if player.weaponManager.equippedWeapon:
-		_update_weapon_equipped()
-		_update_bullet_count()
 
 func fade_in(time : float = 0.2) -> void:
 	if fade_tween:

@@ -22,14 +22,20 @@ var wishDir: Vector3 = Vector3.ZERO
 var canDash: bool = true ##Store weather the player can dash or not
 var isCrouched: bool = false
 
+##Input control variables
+var isCrouchPressed: bool = false
+var isSprintPressed: bool = false
+var isJumpPressed: bool = false
+var isDashPressed: bool = false
+var moveDir: Vector2 = Vector2.ZERO
+
 var usedDashCount: int = 0
 
 var grav: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var player: Player = get_parent()
 
-func tick(delta: float)-> void:
-	var moveDir = Input.get_vector("left", "right", "forward", "backward")
+func tick(delta: float) -> void:
 	wishDir = player.global_transform.basis * Vector3(moveDir.x, 0.0, moveDir.y)
 	
 	if player.is_on_floor():
@@ -72,7 +78,7 @@ func _handle_air_physics(delta : float) -> void:
 		player.velocity += accelSpd * wishDir
 
 func _handle_jumping() -> void:
-	if Input.is_action_pressed("jump"):
+	if isJumpPressed:
 		player.velocity.y = JumpHeight
 
 func _handle_dash() -> void:
@@ -85,14 +91,14 @@ func _handle_dash() -> void:
 		player.velocity += dashDir * (runSpd * dashMulti) #Apply the Velocity
 
 func _get_move_speed() -> float:
-	if Input.is_action_pressed("crouch"):
+	if isCrouchPressed:
 		return walkSpd * 0.8
-	elif Input.is_action_pressed("sprint"):
+	elif isSprintPressed:
 		return runSpd
 	return walkSpd
 
 func _can_dash() -> bool:
-	return Input.is_action_just_pressed("dash") and (usedDashCount < maxDashCount)
+	return isDashPressed and (usedDashCount < maxDashCount)
 
 func _dash_reset() -> void:
 	usedDashCount = 0

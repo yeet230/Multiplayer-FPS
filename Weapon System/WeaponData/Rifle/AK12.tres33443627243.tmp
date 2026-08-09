@@ -4,10 +4,8 @@
 
 [resource]
 script = ExtResource("1_4qrub")
-damage = 40.0
+damage = 40
 ammo = 30
-weaponName = "AK 12"
-WeaponID = 200
 fireMode = 2
 shootDistance = 100.0
 reloadSpeed = 3.45

@@ -19,6 +19,7 @@ config/icon="res://Other/icon.svg"
 
 MultiplayerManager="*uid://bicdpd65gba0u"
 Globals="*uid://cj6lu36ygvjl4"
+Tools="*uid://d4jy3rgp3n50r"
 
 [dotnet]
 

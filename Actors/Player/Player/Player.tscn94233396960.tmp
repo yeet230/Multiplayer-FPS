@@ -96,7 +96,6 @@ metadata/_custom_type_script = "uid://c5nnf7phlxe6g"
 [node name="PlayerMovmentController" type="Node" parent="." unique_id=1942734477]
 unique_name_in_owner = true
 script = ExtResource("2_lottw")
-runSpd = 20.0
 airMoveSpd = 10.0
 metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 

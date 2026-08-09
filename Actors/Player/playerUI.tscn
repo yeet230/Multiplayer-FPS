@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cihaplk2e5qom" path="res://Actors/Player/Player/playerUI.gd" id="1_qwd5t"]
 [ext_resource type="Texture2D" uid="uid://bofknxo8qvmpy" path="res://External Game Assets/2D/Crosshair.png" id="2_icp3m"]
+[ext_resource type="Theme" uid="uid://b4pga3d0o1xjs" path="res://UI.tres" id="3_ie5er"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_icp3m"]
 font_color = Color(0.69803923, 0, 0, 1)
@@ -20,8 +21,10 @@ script = ExtResource("1_qwd5t")
 [node name="Labels" type="Node" parent="." unique_id=516667388]
 
 [node name="Left" type="VBoxContainer" parent="Labels" unique_id=1699266975]
-offset_right = 103.0
-offset_bottom = 77.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 106.0
+offset_bottom = 80.0
 
 [node name="ID" type="Label" parent="Labels/Left" unique_id=1407337198]
 layout_mode = 2
@@ -39,8 +42,10 @@ text = "FPS: "
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -72.0
-offset_bottom = 131.0
+offset_left = -75.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = 134.0
 grow_horizontal = 0
 
 [node name="Speed" type="Label" parent="Labels/RightLabels" unique_id=939805017]
@@ -117,12 +122,18 @@ expand_mode = 1
 
 [node name="ChatConsole" type="VBoxContainer" parent="." unique_id=1507244926]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -169.0
-offset_right = 400.0
-grow_vertical = 0
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.744
+anchor_right = 1.0
+anchor_bottom = 0.744
+offset_left = -403.0
+offset_top = -87.612
+offset_right = -3.0
+offset_bottom = 87.388
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("3_ie5er")
 alignment = 2
 
 [node name="ChatOutput" type="RichTextLabel" parent="ChatConsole" unique_id=1187575322]

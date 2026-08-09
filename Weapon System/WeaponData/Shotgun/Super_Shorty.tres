@@ -4,4 +4,16 @@
 
 [resource]
 script = ExtResource("1_wjegu")
+damage = 35.0
+ammo = 3
+weaponName = "Super Shorty"
+WeaponID = 301
+fireMode = 3
+reloadType = 1
+shootDistance = 25.0
+reloadSpeed = 1.55
+fireRate = 1.0
+bulletSpread = 94.0
+projectilesPerShot = 8
+magSize = 3
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

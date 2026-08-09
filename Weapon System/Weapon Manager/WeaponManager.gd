@@ -1,50 +1,109 @@
 class_name WeaponManager extends Node3D
 
-var equippedWeapon : WeaponBase
-var activeWeapon: int = Globals.weaponLevel
+var equippedWeapon : Globals.WeaponID
+
+##The style of shooting the gun will have
+enum shootingTypes {
+	SEMI_FIRE,
+	BURST_FIRE,
+	AUTOMATIC_FIRE,
+	SHOTGUN_FIRE,
+	CHARGED_SHOT,
+	Meele
+}
+
+enum ReloadStyle {
+	Mag,
+	Slug,
+	N_A,
+}
+
+var weaponData: WeaponData
+
+var fireMode: shootingTypes ##Choose one of the types in "shootingTypes"
+var reloadType: ReloadStyle
+var weaponId: Globals.WeaponID
+
+var weaponName: String
+
+var canFire: bool = true
+var isBarrelLoaded: bool = true ##Future rework needed for this to be used
+var isReloading: bool = false
+var isTriggerHeld: bool = false
+
+var maxRange: float = 100 ##How far the weapon can shoot
+var magSize: int ##The amount to add when reloading
+var loadedCount: int = 123013813 ##Amount of ammo loaded in the weapon at the moment
+var shotsFired: int = 0
+var projectilesPerShot: int ##How many bullets should be fired. Used for the shotgun and burst fire modes
+
+var fireRate: float ##The fire rate of the weapon should be from 60/desired RPM
+var bulletDamage: float  ##How much damage a bullet should do
+var reloadSpeed: float ##How long to delay the the update of how many bullets are loaded
+var spread: float
+
+##controls var
+var isReloadPressed: bool = false
+var isShootPressed: bool = false
+var isShootReleased: bool = false
 
 var playerCamera : Camera3D = get_parent()
 @onready var bulletHitScanRayCast: RayCast3D = $BulletHitScanRay
 
-func _ready() -> void:
-	if !is_multiplayer_authority(): return
-	#MultiplayerManager.give_weapon.rpc_id(1)
-
-func _input(event: InputEvent) -> void:
-	if !is_multiplayer_authority(): return
-	if event.is_action_pressed("cycle weapon"):
-		cycle_weapon()
-
-func _equip_new_weapon(newWeapon : GDScript) -> void:
-	if equippedWeapon:
-		equippedWeapon.queue_free()
+func _equip_new_weapon(newWeapon : Globals.WeaponID) -> void:
+	weaponData = Tools.get_weapon_data(newWeapon)
+	print("New weapon Aquired or something")
+	load_weapon_data()
 	
-	#var newWeapon = Globals.get_weapon_script(newWeaponId)
+
+func _reload() -> void:
+	isReloading = true
+	await get_tree().create_timer(reloadSpeed).timeout
+	isReloading = false
 	
-	equippedWeapon = newWeapon.new()
-	equippedWeapon.set_multiplayer_authority(get_multiplayer_authority())
-	add_child(equippedWeapon)
+	match reloadType:
+		ReloadStyle.Slug:
+			loadedCount += 1
+			if loadedCount < magSize + 1:
+				_reload()
+		_:
+			loadedCount = magSize if (loadedCount <= 0) else (loadedCount + magSize)
+
+func mag_update():
+	if isReloadPressed and !isReloading:
+		_reload()
+	
+	loadedCount = clamp(loadedCount, 0, magSize + 1)
 
 func _player_trigger_pressed() -> void:
-	if equippedWeapon:
-		equippedWeapon.trigger_pressed(self)
+	isTriggerHeld = true
+	shotsFired = 0
+	if canFire and !isReloading:
+		match fireMode: #Switch statment for different fireing modes
+			shootingTypes.SEMI_FIRE:
+				_try_semi_fire()
+			shootingTypes.AUTOMATIC_FIRE:
+				_auto_fire()
+			shootingTypes.BURST_FIRE:
+				_burst_fire()
+			shootingTypes.SHOTGUN_FIRE:
+				_shotgun_fire()
 
 func _player_trigger_released() -> void:
-	if equippedWeapon:
-		equippedWeapon.trigger_released()
+	isTriggerHeld = false
 
-func perform_hitscan(distance : int, weapon : Globals.WeaponID, dmg : float = 1, spread : float = 100) -> Node3D:
+func perform_hitscan() -> Node3D:
 	var accuracy: float = (100.0 - spread)
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
 	var yAccuracy: float = randf_range(-accuracy, accuracy)
-	var targetPos: Vector3 = Vector3(xAccuracy, yAccuracy, -distance)
+	var targetPos: Vector3 = Vector3(xAccuracy, yAccuracy, -maxRange)
 	
 	bulletHitScanRayCast.target_position = targetPos
 	bulletHitScanRayCast.force_raycast_update()
 	var collidingInstance = bulletHitScanRayCast.get_collider()
 	
 	if collidingInstance is Player:
-		MultiplayerManager.damage_player.rpc_id(1, collidingInstance.name, dmg, weapon)
+		MultiplayerManager.server_damage_player.rpc_id(1, collidingInstance.name, bulletDamage, weaponId)
 		return collidingInstance #Retrun Colliding instance
 		
 	_spawn_bullet_decal()
@@ -56,16 +115,62 @@ func _spawn_bullet_decal() -> void:
 	MultiplayerManager.spawn_bullet_decal.rpc(pos, norm)
 
 func tick() -> void:
-	if Input.is_action_just_pressed("player_shoot"):
+	if isShootPressed:
 		_player_trigger_pressed()
-	elif Input.is_action_just_released("player_shoot"):
+	elif isShootReleased:
 		_player_trigger_released()
+	
+	mag_update()
 
-func update_weapon_level(levelChange: int) -> void:
-	activeWeapon += levelChange
-	#_equip_new_weapon(101)
 
-func cycle_weapon() -> void:
-	if Globals.debug:
-		activeWeapon = (activeWeapon + 1) % 10
-		#_equip_new_weapon(101)
+func load_weapon_data() -> void:
+	bulletDamage = weaponData.damage
+	loadedCount = weaponData.ammo
+	magSize = weaponData.magSize
+	weaponName = weaponData.weaponName
+	weaponId = weaponData.WeaponID
+	
+	fireMode = weaponData.fireMode
+	reloadType = weaponData.reloadType
+	maxRange = weaponData.shootDistance
+	reloadSpeed = weaponData.reloadSpeed
+	fireRate = weaponData.fireRate
+	spread = weaponData.bulletSpread
+	projectilesPerShot = weaponData.projectilesPerShot
+
+
+func fire() -> void:
+	canFire = false
+	if loadedCount > 0:
+		perform_hitscan()
+	
+	await get_tree().create_timer(fireRate).timeout
+	canFire = true
+	
+	match fireMode:
+		shootingTypes.AUTOMATIC_FIRE:
+			if isTriggerHeld:
+				_auto_fire()
+		shootingTypes.BURST_FIRE:
+			_burst_fire()
+
+func _try_semi_fire() -> void:
+	fire()
+	loadedCount -= 1
+
+func _auto_fire() -> void:
+	if (isTriggerHeld or canFire) and not isReloading: #Exit/Return if either trigger or canShoot are false
+		fire()
+		loadedCount -= 1
+
+func _burst_fire() -> void:
+	if shotsFired < projectilesPerShot:
+		fire()
+		shotsFired += 1
+		loadedCount -= 1
+
+func _shotgun_fire() -> void:
+	while shotsFired < projectilesPerShot:
+		fire()
+		shotsFired += 1
+	loadedCount -= 1

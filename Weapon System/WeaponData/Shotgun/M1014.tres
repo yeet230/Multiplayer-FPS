@@ -4,4 +4,16 @@
 
 [resource]
 script = ExtResource("1_7jtyf")
+damage = 28.0
+ammo = 8
+weaponName = "M1014"
+WeaponID = 300
+fireMode = 3
+reloadType = 1
+shootDistance = 50.0
+reloadSpeed = 1.6
+fireRate = 0.75
+bulletSpread = 80.0
+projectilesPerShot = 8
+magSize = 8
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

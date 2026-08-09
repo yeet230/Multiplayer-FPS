@@ -1,17 +1,12 @@
 [gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://bru8qqolck4h8"]
 
 [ext_resource type="Script" uid="uid://mpnyivmmeex8" path="res://Weapon System/WeaponData/WeaponData.gd" id="1_qfr8v"]
-[ext_resource type="Script" uid="uid://n647vxhcqfxi" path="res://Weapon System/Weapons/Pistol/Pistol.gd" id="2_rp42w"]
 
 [resource]
 script = ExtResource("1_qfr8v")
-damage = 20.0
-weaponScript = ExtResource("2_rp42w")
-ammo = 20
-weaponName = "Pistol"
-WeaponID = null
-fireMode = null
-reloadType = null
+damage = 42.0
+ammo = 21
+weaponName = "5.7 USG"
 shootDistance = 75.0
 reloadSpeed = 2.4
 fireRate = 0.22

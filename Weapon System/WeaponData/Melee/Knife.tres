@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1_syfyj")
+damage = 99.99
+weaponName = "Knife"
+WeaponID = 400
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

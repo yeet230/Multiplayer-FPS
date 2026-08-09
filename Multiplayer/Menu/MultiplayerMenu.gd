@@ -52,7 +52,7 @@ func _on_join_pressed() -> void:
 	_destroy()
 
 func _destroy() -> void:
-	self.queue_free()
+	visible = false
 
 func _set_player_username() -> void:
 	var username: String 

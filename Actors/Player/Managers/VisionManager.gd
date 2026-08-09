@@ -8,16 +8,12 @@ var headbob_time: float = 0.0
 @export var camerasList: Array[Camera3D] ##An array of cameras to be used in the game for debugging purposes. Always have the first person camera be 0, the first entry in the array
 @export var player: Player
 
+var isCrouchPressed: bool = false
 var isCrouched: bool = false
 var lookSens: float = Globals.mouseSens
 var activeCamera: int = 0
 
 @onready var head: Node3D = $Head
-
-func _input(event: InputEvent) -> void:
-	if !is_multiplayer_authority(): return
-	if event.is_action_pressed("ballTest"):
-		MultiplayerManager.server_upgrade_weapon.rpc_id(1)
 
 func get_camera() -> Camera3D:
 	return camerasList[activeCamera]
@@ -50,7 +46,7 @@ func _handle_crouch(_delta : float) -> void:
 	
 
 func _decide_crouch() -> bool:
-	if Input.is_action_pressed("crouch"):
+	if isCrouchPressed: ##Done
 		return true
 	elif player.test_move(player.global_transform, Vector3(0, CROUCH_TRANSLATE, 0)) and isCrouched:
 		return true

@@ -4,4 +4,7 @@
 
 [resource]
 script = ExtResource("1_bqm1e")
+damage = 0.01
+weaponName = "Pea Shooter"
+WeaponID = -1
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

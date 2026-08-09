@@ -1,42 +1,65 @@
 extends Node
 
 signal serverCreated
-signal ChatRecived(text : String)
+signal ChatRecived(text: String)
 
-# Replace this with your own server port number between 1024 and 65535.
-const SERVER_PORT = 3928
+var damageMulti: float = 1.0
 
-const bulletDecalScene = preload("uid://6gbftdo4m7nj")
+const SERVER_PORT := 3928
+const bulletDecalScene := preload("uid://6gbftdo4m7nj")
 
-var weaponsCount: int = 1
-
-var players : Dictionary[int, Dictionary] = {
-	-1 : {
-		"username" : "",
-		"health" : NAN,
-		"weaponLevel" : NAN,
-	},
+enum PlayerData {
+	HEALTH,
+	USERNAME,
+	WEAPON_LEVEL,
+	
 }
 
+var weaponsCount: int
 var commandStarter: String
 
-#region Server/Client Setup
-func start_server() -> void:
-	var peer = ENetMultiplayerPeer.new()
-	peer.create_server(SERVER_PORT)
-	multiplayer.multiplayer_peer = peer
-	serverCreated.emit()
-	commandStarter = Globals.create_command_starter()
-	print(commandStarter)
+# peer_id -> player data
+var players: Dictionary[int, Dictionary] = {}
 
-func join_server(ip : String) -> void:
-	var peer = ENetMultiplayerPeer.new()
-	peer.create_client(ip, SERVER_PORT)
+
+func _ready() -> void:
+	weaponsCount = Globals.weaponList.size() - 1
+
+
+#region Server/Client Setup
+
+func start_server() -> void:
+	var peer := ENetMultiplayerPeer.new()
+	var err := peer.create_server(SERVER_PORT)
+	
+	if err != OK:
+		push_error("Failed to create server: %s" % err)
+		return
+	
 	multiplayer.multiplayer_peer = peer
+	commandStarter = Tools.create_command_starter()
+	
+	serverCreated.emit()
+	
+	print("Server started on port ", SERVER_PORT)
+	print("Command starter: ", commandStarter)
+
+
+func join_server(ip: String) -> void:
+	var peer := ENetMultiplayerPeer.new()
+	var err := peer.create_client(ip, SERVER_PORT)
+	
+	if err != OK:
+		push_error("Failed to connect: %s" % err)
+		return
+	
+	multiplayer.multiplayer_peer = peer
+
 #endregion
 
+#region Utility
+
 func _random_username_gen() -> String:
-	var randGenUsername: String = ""
 	var nameStarter: Array[String] = [
 		"The Great ",
 		"The Homeless ",
@@ -44,77 +67,182 @@ func _random_username_gen() -> String:
 		"Schizophrenic ",
 		"Nameless "
 	]
+	
 	var nameEnds: Array[String] = [
 		"Tweaker",
 		"Banana Lover",
 		"King",
 		"Schitzo"
-		
 	]
-	randGenUsername = nameStarter.pick_random() + nameEnds.pick_random()
-	return randGenUsername
+	
+	return nameStarter.pick_random() + nameEnds.pick_random()
 
-func _profanity_check_string(text : String) -> String:
-	var string = text
+func get_player_health(playerId : int) -> float:
+	var playerHealth: float = players[playerId][PlayerData.HEALTH]
+	return playerHealth
+
+func set_player_health(playerId : int, newHealth : float) -> void:
+	players[playerId][PlayerData.HEALTH] = newHealth
+
+func get_weapon_level(who: int) -> int:
+	if !players.has(who): return 0
+	
+	return players[who][PlayerData.WEAPON_LEVEL]
+
+func _profanity_check_string(text: String) -> String:
+	var result: String = text
 	
 	if text.containsn("nigga") or text.containsn("nigger"):
-		string = "I am a rascist"
-	return string
+		result = "I am a racist"
+	
+	return result
 
-func get_player_from_name(nameID : String) -> Player:
-	var playerArray = get_tree().get_nodes_in_group("Players")
-	for plyer in playerArray:
-		if plyer.name == nameID:
-			return plyer
+##Use this to get the player object from just their name
+func get_player_from_name(nameID: String) -> Player:
+	for player in get_tree().get_nodes_in_group("Players"):
+		if player.name == nameID:
+			return player
 	return null
 
-func _handle_command(text : String, senderID : int) -> void:
-	var splitCommand: PackedStringArray = text.split(" ")
-	if text.contains("debug"):
-		if splitCommand.size() < 3:
-			push_error("Invalid Command: expected -/debug = <val = !current> ; But got ", text)
-			return
-			
-		var newVal: bool = Globals.string_to_bool(splitCommand[2])
-		update_debug_mode.rpc_id(int(senderID), newVal)
-	
-	elif text.contains("tp"):
-		if splitCommand.size() < 4:
-			push_error("Invalid Command: extpected -/tp <x> <y> <z> ; But got", text)
-			return
-		
-		var x: float = float(splitCommand[1])
-		var y: float = float(splitCommand[2])
-		var z: float = float(splitCommand[3])
-		var newPos: Vector3 = Vector3(x, y, z)
-		teleport_player.rpc_id(int(senderID), newPos, senderID)
-
-func _check_username_for_duplicates(_username : String) -> String:
-	for peer in players:
-		if players[peer]["username"] == _username:
+func _check_username_for_duplicates(_username: String) -> String:
+	for peer_id in players:
+		if players[peer_id][PlayerData.USERNAME] == _username:
 			return _random_username_gen()
 	return _username
-	
 
-func get_weapon_level(who : int) -> int:
-	return players[who]["weaponLevel"]
+#endregion
+
+#region Server Only Logic
+
+func server_upgrade_weapon(playerId: int) -> void:
+	print("Upgrading Player weapon: ", playerId)
+	if !players.has(playerId):
+		push_error("Player does not exist: ", playerId)
+		return
+	
+	if get_weapon_level(playerId) >= weaponsCount:
+		print("Last Weapon Reached by: ", playerId)
+		return
+	
+	players[playerId][PlayerData.WEAPON_LEVEL] += 1
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
+	#_apply_settings_to_player.rpc_id(playerId, playerId, newWeaponID)
+	give_weapon.rpc_id(playerId, newWeaponID)
+
+func server_downgrade_weapon(playerId: int) -> void:
+	if !players.has(playerId):
+		return
+	
+	if get_weapon_level(playerId) <= 0:
+		return
+	
+	players[playerId][PlayerData.WEAPON_LEVEL] -= 1
+	
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
+	give_weapon.rpc_id(playerId, newWeaponID)
+
+func _handle_player_eliminated(who : int, where : Vector3) -> void:
+	if !multiplayer.is_server(): return
+	print("_handle_player_elimnated: Hello World 	", multiplayer.is_server())
+	var newHealth: float = Globals.playerStartingHealth
+	
+	server_downgrade_weapon(who)
+	set_player_health(who, newHealth)
+	
+	server_push_eliminated.rpc_id(who, who, newHealth, where)
+
+func _handle_elimination(who : int) -> void:
+	if !multiplayer.is_server(): return
+	print("_handle_elimination: Hello World 	", multiplayer.is_server())
+	
+	var curHealth: float = get_player_health(who)
+	var newHealth: float = curHealth + 25
+	
+	server_upgrade_weapon(who)
+	set_player_health(who, newHealth)
+	
+	server_push_elimination.rpc_id(who, newHealth, who)
+
+#endregion
+
+#region Commands
+
+func _handle_command(text: String, senderID: int) -> void:
+	print("Command Found")
+	var splitCommand := text.split(" ")
+	
+	if text.begins_with(commandStarter + "debug"):
+		var newVal: bool = !Globals.debug
+		if splitCommand.size() > 3:
+			push_error("Invalid command: expected ", commandStarter, "debug = <bool>")
+			return
+		elif splitCommand.size() == 3:
+			newVal = Tools.string_to_bool(splitCommand[2])
+		
+		update_debug_mode.rpc_id(senderID, newVal)
+		print("Player: ", senderID, " has Enabled Debug Mode" if newVal else " Has Disabled Debug Mode")
+	
+	elif text.begins_with(commandStarter + "tp"):
+		if splitCommand.size() < 4:
+			push_error("Invalid command: expected ", commandStarter, "tp <x> <y> <z>")
+			return
+	
+		var newPos := Vector3(
+			float(splitCommand[1]),
+			float(splitCommand[2]),
+			float(splitCommand[3])
+		)
+	
+		teleport_player.rpc_id(senderID, newPos)
+	
+	elif text.begins_with(commandStarter + "set_weapon"):
+		if splitCommand.size() != 2:
+			push_error("Invalid command: expected ", commandStarter, "set_weapon <WeaponID>")
+			return
+		
+		var newWeapon: int = int(splitCommand[1])
+		print(newWeapon)
+		give_weapon.rpc_id(senderID, newWeapon)
+		
+#endregion
+
+#RPC Functions
 
 #region Server Side Network Functions
-@rpc("any_peer", "call_remote", "unreliable_ordered")
-func damage_player(nameID : String, dmg : float, weapon : Globals.WeaponID) -> void:
-	if !multiplayer.is_server(): return
-	
-	var damage: float = Globals.verify_damage(dmg, weapon)
-	if damage == dmg:
-		damage_player_client.rpc_id(int(nameID), damage, nameID)
 
+# Client -> Server
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func register_player(playerHealth : float, username: String = "") -> void:
+func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) -> void:
 	if !multiplayer.is_server(): return
 	
-	var remoteSender = multiplayer.get_remote_sender_id() 
+	var senderID: int = multiplayer.get_remote_sender_id()
+	var damagedPlayerId: int = int(nameID)
+	var verifiedDamage: float = Tools.verify_damage(dmg, weapon)
+	var curPlayerHealth: float = get_player_health(damagedPlayerId)
+	var newHealth: float
+	print("Damage Player >:l")
 	
-	var senderID = 1 if remoteSender == 0 else remoteSender
+	if verifiedDamage != dmg: 
+		multiplayer.multiplayer_peer.disconnect_peer(senderID)
+		return
+	
+	newHealth = curPlayerHealth - (verifiedDamage * damageMulti)
+	set_player_health(damagedPlayerId, newHealth)
+	if newHealth <= 0:
+		print("Player: ", damagedPlayerId, " To: ", senderID)
+		var newPos: Vector3 = Tools.random_player_spawn()
+		_handle_elimination(senderID)
+		_handle_player_eliminated(damagedPlayerId, newPos)
+		
+	else:
+		update_player_client_health.rpc_id(damagedPlayerId, newHealth, damagedPlayerId)
+
+# Client -> Server
+@rpc("any_peer", "call_remote", "reliable")
+func server_register_player(playerHealth: float, username: String = "") -> void:
+	if !multiplayer.is_server(): return
+	
+	var senderID := multiplayer.get_remote_sender_id()
 	
 	username = _profanity_check_string(username)
 	username = _check_username_for_duplicates(username)
@@ -122,89 +250,90 @@ func register_player(playerHealth : float, username: String = "") -> void:
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
 	
-	#if playerHealth != Globals.playerStartingHealth: throws a bunch of non-fatal errros aswell as being a test
-		#multiplayer.multiplayer_peer.disconnect_peer(senderID)
-	
 	players[senderID] = {
-		"username" : username,
-		"health" : playerHealth,
-		"weaponLevel" : 0
+		PlayerData.USERNAME : username,
+		PlayerData.HEALTH : playerHealth,
+		PlayerData.WEAPON_LEVEL : 0
 	}
 	
 	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]
-	give_weapon.rpc_id(senderID, senderID, newWeaponID)
-
-@rpc("any_peer", "call_remote", "reliable")
-func server_verify_chat(text : String) -> void:
-#endregion
-	if !multiplayer.is_server(): return
-	var senderID: int = multiplayer.get_remote_sender_id()
+	give_weapon.rpc_id(senderID, newWeaponID)
 	
+	print("Registered player ", senderID, " as ", username)
+
+# Client -> Server
+@rpc("any_peer", "call_remote", "reliable")
+func server_verify_chat(text: String) -> void:
+	if !multiplayer.is_server():
+		return
+
+	var senderID := multiplayer.get_remote_sender_id()
+
 	if text.begins_with(commandStarter):
 		_handle_command(text, senderID)
 		return
-	
-	var chat: String = _profanity_check_string(text)
-	var username: String = str(players[senderID]["username"])
-	
+
+	var chat := _profanity_check_string(text)
+	var username := str(players[senderID][PlayerData.USERNAME])
+
 	_server_send_chat.rpc(username, chat)
 
+#endregion
+
 #region Client Side Network Functions
-@rpc("authority", "call_local", "reliable")
-func _server_send_chat(username : String, text : String) -> void:
-	var chat: String = str(username, ": ", text)
-	ChatRecived.emit(chat)
 
+# Server -> Clients
+@rpc("authority", "call_remote", "reliable")
+func _server_send_chat(username: String, text: String) -> void:
+	ChatRecived.emit("%s: %s" % [username, text])
+
+# Server -> Target Client
+@rpc("authority", "call_remote", "unreliable")
+func server_push_eliminated(who : int, newHealth : float, where : Vector3) -> void:
+	teleport_player(where)
+	update_player_client_health(newHealth, who)
+
+# Server -> Target Client
+@rpc("authority", "call_remote", "unreliable")
+func server_push_elimination(newHealth : float, who : int) -> void:
+	update_player_client_health(newHealth, who)
+
+# Server -> Target Client
 @rpc("authority", "call_remote", "unreliable_ordered")
-func damage_player_client(dmg : float, nameID : String) -> void:
-	var plyer: Player = get_player_from_name(nameID)
-	plyer.curHealth -= dmg
+func update_player_client_health(newHealth: float, damagedPlayerID: int) -> void:
+	var damagedPlayer := Globals.clientPlayer
 	
+	damagedPlayer.curHealth = newHealth
 
-@rpc("any_peer", "call_local", "unreliable_ordered")
-func spawn_bullet_decal(pos : Vector3, norm : Vector3) -> void:
-	var decal = bulletDecalScene.instantiate() as Node3D
-	get_tree().get_first_node_in_group("balls").add_child(decal, true)
-	decal.global_position = pos
-	decal.rotation = norm
-
-@rpc("authority", "call_local", "unreliable")
-func update_debug_mode(newVal : bool) -> void:
+# Server -> Target Client
+@rpc("authority", "call_remote", "reliable")
+func update_debug_mode(newVal: bool) -> void:
 	Globals.debug = newVal
 
-@rpc("authority", "call_local", "unreliable")
-func teleport_player(newPos : Vector3, playerID : int) -> void:
-	var plyer: Player = get_player_from_name(str(playerID))
-	plyer.position = newPos
+# Server -> Client
+@rpc("authority", "call_remote", "reliable")
+func teleport_player(newPos: Vector3) -> void:
+	var player := Globals.clientPlayer
+	player.position = newPos
 
-##Called locally on client computer
-@rpc("authority", "call_local", )
-func give_weapon(who : int, what : Globals.WeaponID) -> void:
-	if multiplayer.is_server(): return
-	
-	var plyer: Player = get_player_from_name(str(who))
-	var newWeapon: GDScript = Globals.get_weapon_script(what)
-	plyer.weaponManager._equip_new_weapon(newWeapon)
+# Server -> Target Client
+@rpc("authority", "call_remote", "reliable")
+func give_weapon(what: Globals.WeaponID) -> void:
+	var player: Player = Globals.clientPlayer
+	player.weaponManager._equip_new_weapon(what)
 
-@rpc("any_peer", "call_remote")
-func server_upgrade_weapon(playerId : int = NAN) -> void:
-	var senderID: int = multiplayer.get_remote_sender_id()
-	if get_weapon_level(senderID) == weaponsCount: return
+# Client -> Clients
+@rpc("any_peer", "call_local", "unreliable_ordered")
+func spawn_bullet_decal(pos: Vector3, norm: Vector3) -> void:
+	var decal := bulletDecalScene.instantiate() as Node3D
+	print("BulletDecal spawned ", multiplayer.get_unique_id())
+	var parent := get_tree().get_first_node_in_group("balls")
+	if parent == null:
+		return
 	
-	players[senderID]["weaponLevel"] += 1
+	parent.add_child(decal, true)
 	
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]
-	
-	give_weapon.rpc_id(senderID, senderID, newWeaponID)
-	
-
-func server_downgrade_weapon(playerId : int) -> void:
-	if get_weapon_level(playerId) == 0: return
-	
-	players[playerId]["weaponLevel"] -= 1
-	
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
-	
-	give_weapon.rpc_id(playerId, playerId, newWeaponID)
+	decal.global_position = pos
+	decal.rotation = norm
 
 #endregion
