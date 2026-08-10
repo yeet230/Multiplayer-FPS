@@ -12,7 +12,7 @@ enum PlayerData {
 	HEALTH,
 	USERNAME,
 	WEAPON_LEVEL,
-	
+	CAN_SHOOT
 }
 
 var weaponsCount: int
@@ -76,6 +76,13 @@ func _random_username_gen() -> String:
 	]
 	
 	return nameStarter.pick_random() + nameEnds.pick_random()
+
+func get_player_canShoot(playerId : int) -> bool:
+	var canShoot = players[playerId][PlayerData.CAN_SHOOT]
+	return canShoot
+
+func set_player_canShoot(playerId : int, newVal : bool) -> void:
+	players[playerId][PlayerData.CAN_SHOOT] = newVal
 
 func get_player_health(playerId : int) -> float:
 	var playerHealth: float = players[playerId][PlayerData.HEALTH]
@@ -219,7 +226,12 @@ func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) 
 	var damagedPlayerId: int = int(nameID)
 	var verifiedDamage: float = Tools.verify_damage(dmg, weapon)
 	var curPlayerHealth: float = get_player_health(damagedPlayerId)
+	var waitTime: float = Tools.get_weapon_fireRate(weapon)
+	
 	var newHealth: float
+	
+	if !get_player_canShoot(senderID): return
+	set_player_canShoot(senderID, false)
 	print("Damage Player >:l")
 	
 	if verifiedDamage != dmg: 
@@ -236,6 +248,10 @@ func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) 
 		
 	else:
 		update_player_client_health.rpc_id(damagedPlayerId, newHealth, damagedPlayerId)
+	
+	
+	await get_tree().create_timer(waitTime)
+	set_player_canShoot(senderID, true)
 
 # Client -> Server
 @rpc("any_peer", "call_remote", "reliable")
@@ -253,7 +269,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	players[senderID] = {
 		PlayerData.USERNAME : username,
 		PlayerData.HEALTH : playerHealth,
-		PlayerData.WEAPON_LEVEL : 0
+		PlayerData.WEAPON_LEVEL : 0,
+		PlayerData.CAN_SHOOT : true
 	}
 	
 	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]

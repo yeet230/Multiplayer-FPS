@@ -5,6 +5,13 @@
 [resource]
 script = ExtResource("1_bqm1e")
 damage = 0.01
+ammo = 10001
 weaponName = "Pea Shooter"
 WeaponID = -1
+shootDistance = 50.0
+reloadSpeed = 1.0
+fireRate = 0.1
+bulletSpread = 100.0
+projectilesPerShot = 1
+magSize = 10000
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

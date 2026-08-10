@@ -9,7 +9,7 @@ var ui: PlayerUI
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
 @onready var visionManager: VisionManager = $VisionManager
 @onready var weaponManager: WeaponManager = $VisionManager/Head/Camera3D/WeaponManager
-@onready var collisionShape: CollisionShape3D = $Body
+@onready var collisionShape: CollisionShape3D = $BodyCollision
 @onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 

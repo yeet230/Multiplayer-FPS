@@ -4,9 +4,12 @@
 
 [resource]
 script = ExtResource("1_eb4ca")
+damage = 32.0
 ammo = 26
 weaponName = "FR F2"
 WeaponID = 201
+fireMode = 1
+shootDistance = 50.0
 reloadSpeed = 3.09
 fireRate = 0.061
 bulletSpread = 95.0

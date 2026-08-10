@@ -75,8 +75,6 @@ var spawnLocations: Array[Vector3] = [
 	Vector3(38, 0, -17),
 ]
 
-
-
 var mouseSens: float = 0.002
 var playerStartingHealth: float = 100.0
 

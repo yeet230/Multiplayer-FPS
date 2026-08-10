@@ -4,7 +4,16 @@
 
 [resource]
 script = ExtResource("1_syfyj")
-damage = 99.99
+damage = 50.0
+ammo = 1
 weaponName = "Knife"
 WeaponID = 400
+fireMode = 5
+reloadType = 2
+shootDistance = 2.5
+reloadSpeed = 0.5
+fireRate = 1.5
+bulletSpread = 99.5
+projectilesPerShot = 1
+magSize = 1
 metadata/_custom_type_script = "uid://mpnyivmmeex8"

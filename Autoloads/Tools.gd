@@ -7,16 +7,16 @@ func random_player_spawn() -> Vector3:
 func string_to_bool(string : String) -> bool:
 	return string.strip_edges().to_lower() == "true"
 
-func get_weapon_damage(weaponID : Globals.WeaponID) -> float:
-	var weaponData: WeaponData = Globals.weaponDictionary[weaponID]
+func get_weapon_damage(weaponId : Globals.WeaponID) -> float:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.damage
 
-func get_weapon_ammo(weaponID : Globals.WeaponID) -> int:
-	var weaponData: WeaponData = Globals.weaponDictionary[weaponID]
+func get_weapon_ammo(weaponId : Globals.WeaponID) -> int:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.loadedCount
 
-func get_weapon_data(weaponID : Globals.WeaponID) -> WeaponData:
-	var weaponData: WeaponData = Globals.weaponDictionary[weaponID]
+func get_weapon_data(weaponId : Globals.WeaponID) -> WeaponData:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData
 
 func set_weapon_ammo(weaponID : Globals.WeaponID, newAmmoCount : int) -> void:
@@ -31,3 +31,7 @@ func create_command_starter() -> String:
 	for i in range(2):
 		returnVal += possibleChars.pick_random()
 	return returnVal
+
+func get_weapon_fireRate(weaponId : Globals.WeaponID) -> float:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData.fireRate

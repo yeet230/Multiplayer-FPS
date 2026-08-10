@@ -8,7 +8,11 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7unof"]
+albedo_color = Color(0.0776478, 0.19334218, 0.37033978, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xhfnw"]
+material = SubResource("StandardMaterial3D_7unof")
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kpjcp"]
 properties/0/path = NodePath(".:position")
@@ -24,7 +28,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body:shape:height")
+tracks/0/path = NodePath("BodyCollision:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -36,7 +40,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Body/BodyMesh:mesh:height")
+tracks/1/path = NodePath("BodyCollision/BodyMesh:mesh:height")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -54,7 +58,7 @@ resource_name = "Stand"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body:shape:height")
+tracks/0/path = NodePath("BodyCollision:shape:height")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -66,7 +70,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Body/BodyMesh:mesh:height")
+tracks/1/path = NodePath("BodyCollision/BodyMesh:mesh:height")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -129,13 +133,13 @@ transform = Transform3D(1, 0, 0, 0, 0.94278723, 0.33339489, 0, -0.33339489, 0.94
 [node name="Camera3D3" type="Camera3D" parent="VisionManager/Head" unique_id=1947500759]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1794257, -0.09698033, -1.834208)
 
-[node name="Body" type="CollisionShape3D" parent="." unique_id=787432299]
+[node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=787432299]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_0rwas")
 debug_color = Color(0, 0.6, 0.69803923, 1)
 
-[node name="BodyMesh" type="MeshInstance3D" parent="Body" unique_id=383591323]
+[node name="BodyMesh" type="MeshInstance3D" parent="BodyCollision" unique_id=383591323]
 unique_name_in_owner = true
 layers = 2
 mesh = SubResource("CapsuleMesh_xhfnw")
