@@ -57,20 +57,22 @@ var weaponLevel: int = 0
 var clientPlayer : Player 
 
 var spawnLocations: Array[Vector3] = [
-	Vector3(0, 0, 9),
-	Vector3(23, 0, 9),
-	Vector3(-23, 0, 9),
-	Vector3(47, 0, 9),
-	Vector3(-47, 0, 9),
-	Vector3(95, 0, 9),
-	Vector3(-95, 0, 9),
-	Vector3(5, 0, -10),
-	Vector3(-5, 0, -10),
-	Vector3(19, 0, -18),
-	Vector3(-9, 0, -18),
-	Vector3(-24, 0, -9),
-	Vector3(-16, 0, 0),
+	Vector3(-15, 0, -3),
+	Vector3(-32, 0, 4),
+	Vector3(24.5, 5, 10),
+	Vector3(24.5, 0, -4.5),
+	Vector3(31.5, 0, 2.5),
+	Vector3(96, 0, 9.5),
+	Vector3(-96, 0, 9.5),
+	Vector3(5.5, 0, 1),
+	Vector3(-5.5, 0, 1),
+	Vector3(16.5, 0, 15),
+	Vector3(5.5, 5, 2.5),
+	Vector3(4.5, 5, -17.5),
+	Vector3(60, 0, -17),
 	Vector3(31.5, 0, -6),
+	Vector3(24.5, 5, 39.5),
+	Vector3(38, 0, -17),
 ]
 
 
