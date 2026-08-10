@@ -325,6 +325,8 @@ func give_weapon(what: Globals.WeaponID) -> void:
 # Client -> Clients
 @rpc("any_peer", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos: Vector3, norm: Vector3) -> void:
+	if multiplayer.is_server(): return
+	
 	var decal := bulletDecalScene.instantiate() as Node3D
 	print("BulletDecal spawned ", multiplayer.get_unique_id())
 	var parent := get_tree().get_first_node_in_group("balls")

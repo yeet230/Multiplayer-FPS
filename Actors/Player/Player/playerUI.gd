@@ -43,8 +43,8 @@ func _process(_delta: float) -> void:
 #endregion
 
 func tick() -> void:
-	if isBackPressed:
-		pass
+	if isBackPressed and chatInput.visible:
+		_handle_chat_toggle()
 	elif isEnterPressed:
 		_handle_chat()
 	elif toggleChat and !chatInput.is_editing():
