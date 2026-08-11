@@ -202,7 +202,7 @@ func _handle_command(text: String, senderID: int) -> void:
 	
 		teleport_player.rpc_id(senderID, newPos)
 	
-	elif text.begins_with(commandStarter + "set_weapon"):
+	elif text.begins_with(commandStarter + "give"):
 		if splitCommand.size() != 2:
 			push_error("Invalid command: expected ", commandStarter, "set_weapon <WeaponID>")
 			return
@@ -250,7 +250,7 @@ func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) 
 		update_player_client_health.rpc_id(damagedPlayerId, newHealth, damagedPlayerId)
 	
 	
-	await get_tree().create_timer(waitTime)
+	await get_tree().create_timer(waitTime).timeout
 	set_player_canShoot(senderID, true)
 
 # Client -> Server

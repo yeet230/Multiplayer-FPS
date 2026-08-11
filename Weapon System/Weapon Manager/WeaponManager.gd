@@ -78,7 +78,7 @@ func mag_update():
 func _player_trigger_pressed() -> void:
 	isTriggerHeld = true
 	shotsFired = 0
-	if canFire and !isReloading:
+	if canFire and (!isReloading and reloadType != ReloadStyle.Slug):
 		match fireMode: #Switch statment for different fireing modes
 			shootingTypes.SEMI_FIRE:
 				_try_semi_fire()
@@ -87,6 +87,7 @@ func _player_trigger_pressed() -> void:
 			shootingTypes.BURST_FIRE:
 				_burst_fire()
 			shootingTypes.SHOTGUN_FIRE:
+				isReloading = false
 				_shotgun_fire()
 
 func _player_trigger_released() -> void:
