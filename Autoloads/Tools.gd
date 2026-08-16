@@ -35,3 +35,19 @@ func create_command_starter() -> String:
 func get_weapon_fireRate(weaponId : Globals.WeaponID) -> float:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.fireRate
+
+func get_value(value : String) -> String:
+	var arguments: Dictionary = {}
+	for argument in OS.get_cmdline_args():
+		if argument.contains("="):
+			var keyValue: Array = argument.split("=")
+			arguments[keyValue[0].trim_prefix("--")] = keyValue[1]
+		else:
+			arguments[argument.trim_prefix("--")] = ""
+	var u: String = ""
+	if value in arguments:
+		u = arguments.username
+	push_warning(u)
+	DisplayServer.window_set_title(u)
+	print("variable arguments printed: ", arguments, "			OS.get_args: ", OS.get_cmdline_args())
+	return u

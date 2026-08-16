@@ -40,7 +40,7 @@ func _update_input_values() -> void:
 	isDashPressed = Input.is_action_just_pressed("dash")
 	moveDir = Input.get_vector("left", "right", "forward", "backward")
 	
-	isShootPressed = Input.is_action_pressed("player_shoot")
+	isShootPressed = Input.is_action_just_pressed("player_shoot")
 	isShootReleased = Input.is_action_just_released("player_shoot")
 	isReloadPressed = Input.is_action_just_pressed("reload")
 	

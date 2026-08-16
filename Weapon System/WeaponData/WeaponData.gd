@@ -8,7 +8,7 @@ class_name WeaponData extends Resource
 @export var WeaponID: Globals.WeaponID
 
 @export_category("Weapon Settings")
-@export var fireMode: WeaponManager.shootingTypes
+@export var fireMode: WeaponManager.ShootingType
 @export var reloadType: WeaponManager.ReloadStyle
 @export var shootDistance: float
 @export var reloadSpeed: float

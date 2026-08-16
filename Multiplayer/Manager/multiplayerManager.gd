@@ -5,7 +5,7 @@ signal ChatRecived(text: String)
 
 var damageMulti: float = 1.0
 
-const SERVER_PORT := 3928
+const SERVER_PORT := 39285
 const bulletDecalScene := preload("uid://6gbftdo4m7nj")
 
 enum PlayerData {
@@ -40,6 +40,9 @@ func start_server() -> void:
 	commandStarter = Tools.create_command_starter()
 	
 	serverCreated.emit()
+	
+	damageMulti = float(Tools.get_value("damageMulti"))
+	print(damageMulti)
 	
 	print("Server started on port ", SERVER_PORT)
 	print("Command starter: ", commandStarter)
@@ -164,6 +167,7 @@ func _handle_elimination(who : int) -> void:
 	
 	var curHealth: float = get_player_health(who)
 	var newHealth: float = curHealth + 25
+	newHealth = clamp(newHealth, 0, 100)
 	
 	server_upgrade_weapon(who)
 	set_player_health(who, newHealth)
@@ -219,24 +223,19 @@ func _handle_command(text: String, senderID: int) -> void:
 
 # Client -> Server
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) -> void:
+func server_handle_hits(nameID: String, weapon: Globals.WeaponID) -> void:
 	if !multiplayer.is_server(): return
 	
 	var senderID: int = multiplayer.get_remote_sender_id()
 	var damagedPlayerId: int = int(nameID)
-	var verifiedDamage: float = Tools.verify_damage(dmg, weapon)
-	var curPlayerHealth: float = get_player_health(damagedPlayerId)
+	var verifiedDamage: float = Tools.get_weapon_damage(weapon)
 	var waitTime: float = Tools.get_weapon_fireRate(weapon)
-	
+	var curPlayerHealth: float = get_player_health(damagedPlayerId)
 	var newHealth: float
 	
 	if !get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
 	print("Damage Player >:l")
-	
-	if verifiedDamage != dmg: 
-		multiplayer.multiplayer_peer.disconnect_peer(senderID)
-		return
 	
 	newHealth = curPlayerHealth - (verifiedDamage * damageMulti)
 	set_player_health(damagedPlayerId, newHealth)
@@ -245,10 +244,8 @@ func server_damage_player(nameID: String, dmg: float, weapon: Globals.WeaponID) 
 		var newPos: Vector3 = Tools.random_player_spawn()
 		_handle_elimination(senderID)
 		_handle_player_eliminated(damagedPlayerId, newPos)
-		
 	else:
 		update_player_client_health.rpc_id(damagedPlayerId, newHealth, damagedPlayerId)
-	
 	
 	await get_tree().create_timer(waitTime).timeout
 	set_player_canShoot(senderID, true)
@@ -283,16 +280,16 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 func server_verify_chat(text: String) -> void:
 	if !multiplayer.is_server():
 		return
-
+	
 	var senderID := multiplayer.get_remote_sender_id()
-
+	
 	if text.begins_with(commandStarter):
 		_handle_command(text, senderID)
 		return
-
+	
 	var chat := _profanity_check_string(text)
 	var username := str(players[senderID][PlayerData.USERNAME])
-
+	
 	_server_send_chat.rpc(username, chat)
 
 #endregion
@@ -306,18 +303,18 @@ func _server_send_chat(username: String, text: String) -> void:
 
 # Server -> Target Client
 @rpc("authority", "call_remote", "unreliable")
-func server_push_eliminated(who : int, newHealth : float, where : Vector3) -> void:
+func server_push_eliminated(newHealth : float, where : Vector3) -> void:
 	teleport_player(where)
-	update_player_client_health(newHealth, who)
+	update_player_client_health(newHealth)
 
 # Server -> Target Client
 @rpc("authority", "call_remote", "unreliable")
-func server_push_elimination(newHealth : float, who : int) -> void:
-	update_player_client_health(newHealth, who)
+func server_push_elimination(newHealth : float) -> void:
+	update_player_client_health(newHealth)
 
 # Server -> Target Client
 @rpc("authority", "call_remote", "unreliable_ordered")
-func update_player_client_health(newHealth: float, damagedPlayerID: int) -> void:
+func update_player_client_health(newHealth: float) -> void:
 	var damagedPlayer := Globals.clientPlayer
 	
 	damagedPlayer.curHealth = newHealth

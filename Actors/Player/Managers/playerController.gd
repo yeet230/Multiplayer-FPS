@@ -8,9 +8,9 @@ var ui: PlayerUI
 @onready var playerInputHandler: PlayerInptHandler = $PlayerInptHandler
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
 @onready var visionManager: VisionManager = $VisionManager
-@onready var weaponManager: WeaponManager = $VisionManager/Head/Camera3D/WeaponManager
+@onready var weaponManager: WeaponManager = $VisionManager/Head/MainCam/WeaponManager
 @onready var collisionShape: CollisionShape3D = $BodyCollision
-@onready var flashLight: SpotLight3D = $VisionManager/Head/Camera3D/MainLight
+@onready var flashLight: SpotLight3D = $VisionManager/Head/MainCam/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:

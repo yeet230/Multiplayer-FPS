@@ -10,21 +10,6 @@ func _ready() -> void:
 	_auto_mode_set()
 	print(IP.get_local_addresses())
 
-func _get_username() -> String:
-	var arguments: Dictionary = {}
-	for argument in OS.get_cmdline_args():
-		if argument.contains("="):
-			var keyValue: Array = argument.split("=")
-			arguments[keyValue[0].trim_prefix("--")] = keyValue[1]
-		else:
-			arguments[argument.trim_prefix("--")] = ""
-	var u: String = ""
-	if "username" in arguments:
-		u = arguments.username
-	push_warning(u)
-	DisplayServer.window_set_title(u)
-	return u
-
 func _input(event: InputEvent) -> void:
 	if event.is_action("ballTest"):
 		print("Returning to MainMenu")
@@ -57,7 +42,7 @@ func _destroy() -> void:
 func _set_player_username() -> void:
 	var username: String 
 	if OS.has_feature("debug"):
-		username = _get_username()
+		username = Tools.get_value("username")
 	username = usernameInput.text
 	Globals.username = username
 

@@ -107,30 +107,32 @@ metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 script = ExtResource("3_cm46x")
-camerasList = [NodePath("Head/Camera3D"), NodePath("Head/Camera3D2"), NodePath("Head/Camera3D3")]
+camerasList = [NodePath("Head/MainCam"), NodePath("ThridPersonCam"), NodePath("DebugCam")]
 player = NodePath("..")
 metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
 
 [node name="Head" type="Node3D" parent="VisionManager" unique_id=515021475]
 
-[node name="Camera3D" type="Camera3D" parent="VisionManager/Head" unique_id=338101799]
+[node name="MainCam" type="Camera3D" parent="VisionManager/Head" unique_id=338101799]
 
-[node name="MainLight" type="SpotLight3D" parent="VisionManager/Head/Camera3D" unique_id=656089829]
+[node name="WeaponManager" parent="VisionManager/Head/MainCam" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
+
+[node name="MainLight" type="SpotLight3D" parent="VisionManager/Head/MainCam" unique_id=656089829]
+shadow_enabled = true
 spot_range = 33.951313
 spot_angle = 49.54401
 
-[node name="PlayerModelLight" type="SpotLight3D" parent="VisionManager/Head/Camera3D/MainLight" unique_id=2032068347]
+[node name="PlayerModelLight" type="SpotLight3D" parent="VisionManager/Head/MainCam/MainLight" unique_id=2032068347]
 transform = Transform3D(1, 0, 0, 0, -0.87405574, -0.48582566, 0, 0.48582566, -0.87405574, 0, -1.7, -2.2941232)
 light_energy = 5.875
+shadow_enabled = true
 spot_range = 2.8868287
 spot_angle = 23.978899
 
-[node name="WeaponManager" parent="VisionManager/Head/Camera3D" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
+[node name="ThridPersonCam" type="Camera3D" parent="VisionManager" unique_id=1731746499]
+transform = Transform3D(1, 0, 0, 0, 0.9427873, 0.3333949, 0, -0.3333949, 0.9427873, 0, 1.0064216, 2.3763356)
 
-[node name="Camera3D2" type="Camera3D" parent="VisionManager/Head" unique_id=1731746499]
-transform = Transform3D(1, 0, 0, 0, 0.94278723, 0.33339489, 0, -0.33339489, 0.94278723, 0, 1.0064216, 2.3763356)
-
-[node name="Camera3D3" type="Camera3D" parent="VisionManager/Head" unique_id=1947500759]
+[node name="DebugCam" type="Camera3D" parent="VisionManager" unique_id=1947500759]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1794257, -0.09698033, -1.834208)
 
 [node name="BodyCollision" type="CollisionShape3D" parent="." unique_id=787432299]
