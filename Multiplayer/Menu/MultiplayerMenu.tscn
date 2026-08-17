@@ -119,7 +119,8 @@ text = "Username:"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_bkn5d")
-text = "127.0.0.1"
+text = "10.177.207.89"
+placeholder_text = "IP Here:"
 
 [node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1855296974]
 layout_mode = 0

@@ -8,7 +8,7 @@ extends Control
 
 func _ready() -> void:
 	_auto_mode_set()
-	print(IP.get_local_addresses())
+	#print(IP.get_local_addresses())
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("ballTest"):
