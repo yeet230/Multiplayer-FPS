@@ -50,7 +50,10 @@ var weaponList: Array[WeaponID] = [
 ]
 
 var bannedList: Array[String] = [
+	"Server",
 	"System",
+	"Admin",
+	"theo"
 ]
 
 var weaponLevel: int = 0
@@ -66,7 +69,7 @@ var spawnLocations: Array[Vector3] = [
 	Vector3(-96, 0, 9.5),
 	Vector3(5.5, 0, 1),
 	Vector3(-5.5, 0, 1),
-	Vector3(16.5, 0, 15),
+	Vector3(16.5, 0, 9.5),
 	Vector3(5.5, 5, 2.5),
 	Vector3(4.5, 5, -17.5),
 	Vector3(60, 0, -17),

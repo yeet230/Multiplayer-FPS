@@ -221,10 +221,15 @@ func _handle_command(text: String, senderID: int) -> void:
 
 #region Server Side Network Functions
 
+func _handle_server_fire(weapon : Globals.WeaponID, who : int) -> void:
+	pass
+
+
 # Client -> Server
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func server_handle_hits(nameID: String, weapon: Globals.WeaponID) -> void:
 	if !multiplayer.is_server(): return
+	
 	
 	var senderID: int = multiplayer.get_remote_sender_id()
 	var damagedPlayerId: int = int(nameID)
@@ -232,6 +237,10 @@ func server_handle_hits(nameID: String, weapon: Globals.WeaponID) -> void:
 	var waitTime: float = Tools.get_weapon_fireRate(weapon)
 	var curPlayerHealth: float = get_player_health(damagedPlayerId)
 	var newHealth: float
+	
+	_handle_server_fire(weapon, senderID)
+	
+	
 	
 	if !get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
