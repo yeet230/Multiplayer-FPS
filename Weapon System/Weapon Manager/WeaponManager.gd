@@ -89,7 +89,7 @@ func _player_trigger_pressed() -> void:
 	isTriggerHeld = true
 	
 	# Interrupt shell-by-shell reload if we have at least one shell loaded.
-	if isReloading and reloadType == ReloadStyle.SLUG and loadedCount > 0:
+	if isReloading and loadedCount > 0:
 		cancel_reload()
 	
 	try_fire()
@@ -203,16 +203,17 @@ func perform_hitscan() -> float:
 	
 	var collider: Node3D = bulletHitScanRayCast.get_collider()
 	
+	#print("Client From: ", global_position)
+	#print("Client To: ", targetPos)
+	#print("Client HitPoint: ", bulletHitScanRayCast.get_collision_point())
+	
 	if collider is Player:
-		MultiplayerManager.server_handle_hits.rpc_id(
-			1,
-			weaponId
-		)
+		MultiplayerManager.server_handle_hit.rpc_id(1, weaponId, collider.name)
 		return 1
 	
 	if bulletHitScanRayCast.is_colliding():
 		_spawn_bullet_decal()
-
+	
 	return 0
 
 func _spawn_bullet_decal() -> void:

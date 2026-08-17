@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bocbp6xpjxbj2" path="res://Actors/Player/Managers/playerController.gd" id="1_7sxp2"]
 [ext_resource type="Script" uid="uid://c2h7v6656hbo7" path="res://Actors/Player/Managers/PlayerMovmentController.gd" id="2_lottw"]
 [ext_resource type="Script" uid="uid://dfi4sxowkt2kg" path="res://Actors/Player/Managers/VisionManager.gd" id="3_cm46x"]
+[ext_resource type="Script" uid="uid://dabr1kj3hxkuh" path="res://Actors/Player/Managers/PlayerMultiplayerSynchronizer.gd" id="4_cm46x"]
 [ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 [ext_resource type="Script" uid="uid://c5nnf7phlxe6g" path="res://Actors/Player/Managers/InputHandler.gd" id="5_lottw"]
 
@@ -13,14 +14,6 @@ albedo_color = Color(0.0776478, 0.19334218, 0.37033978, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xhfnw"]
 material = SubResource("StandardMaterial3D_7unof")
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kpjcp"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
 
 [sub_resource type="Animation" id="Animation_yqfyh"]
 resource_name = "Crouch"
@@ -103,6 +96,11 @@ script = ExtResource("2_lottw")
 airMoveSpd = 10.0
 metadata/_custom_type_script = "uid://c2h7v6656hbo7"
 
+[node name="PlayerMultiplayerSynchroniser" type="Node" parent="." unique_id=969283431 node_paths=PackedStringArray("localPlayer")]
+script = ExtResource("4_cm46x")
+localPlayer = NodePath("..")
+metadata/_custom_type_script = "uid://dabr1kj3hxkuh"
+
 [node name="VisionManager" type="Node3D" parent="." unique_id=982836550 node_paths=PackedStringArray("camerasList", "player")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -145,9 +143,6 @@ debug_color = Color(0, 0.6, 0.69803923, 1)
 unique_name_in_owner = true
 layers = 2
 mesh = SubResource("CapsuleMesh_xhfnw")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=206311756]
-replication_config = SubResource("SceneReplicationConfig_kpjcp")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1170951095]
 unique_name_in_owner = true

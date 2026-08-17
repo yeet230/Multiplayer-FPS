@@ -14,6 +14,7 @@ var lookSens: float = Globals.mouseSens
 var activeCamera: int = 0
 
 @onready var head: Node3D = $Head
+@onready var mainCam: Camera3D = $Head/MainCam
 
 func get_camera() -> Camera3D:
 	return camerasList[activeCamera]

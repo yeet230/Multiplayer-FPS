@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://wfh4bnak5bg5"]
+
+[ext_resource type="Script" uid="uid://mpnyivmmeex8" path="res://Weapon System/WeaponData/WeaponData.gd" id="1_5yyjd"]
+
+[resource]
+script = ExtResource("1_5yyjd")
+damage = 1.0
+ammo = 10000
+weaponName = "The Jacob Special"
+WeaponID = -3
+fireMode = 2
+shootDistance = 25.0
+reloadSpeed = 4.0
+fireRate = 0.01
+bulletSpread = 100.0
+projectilesPerShot = 1
+magSize = 10000
+metadata/_custom_type_script = "uid://mpnyivmmeex8"

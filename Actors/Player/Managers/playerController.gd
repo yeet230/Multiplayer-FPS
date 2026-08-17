@@ -12,6 +12,8 @@ var ui: PlayerUI
 @onready var collisionShape: CollisionShape3D = $BodyCollision
 @onready var flashLight: SpotLight3D = $VisionManager/Head/MainCam/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
+@onready var mainCam: Camera3D = $VisionManager/Head/MainCam
+@onready var playerMultiplayerSync: PlayerMultiplayerSynchroniser = $PlayerMultiplayerSynchroniser
 
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
@@ -25,6 +27,8 @@ func _ready() -> void:
 	_instantiate_UI()
 	multiplayer.peer_connected.connect(_peer_connected_sync)
 	Globals.clientPlayer = self
+	
+	#playerMultiplayerSync.setup()
 
 func _process(_delta: float) -> void:
 	if !is_multiplayer_authority(): return
@@ -39,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	movementController.tick(delta)
 	visionManager.tick(delta)
 	weaponManager.tick()
-	
+	playerMultiplayerSync.tick()
 	
 
 func _instantiate_UI() -> void:
@@ -60,3 +64,7 @@ func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> v
 	var player: Player = MultiplayerManager.get_player_from_name(nameID)
 	if !player: return
 	player.flashLight.visible = newMode
+
+func get_camera_position() -> Vector3:
+	var returnPos: Vector3 = mainCam.global_position
+	return returnPos

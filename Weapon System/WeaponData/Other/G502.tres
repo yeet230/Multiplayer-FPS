@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3 uid="uid://duyp6wwe1xpck"]
+
+[ext_resource type="Script" uid="uid://mpnyivmmeex8" path="res://Weapon System/WeaponData/WeaponData.gd" id="1_wqukx"]
+
+[resource]
+script = ExtResource("1_wqukx")
+damage = 67.0
+ammo = 3
+weaponName = "G502 Mouse"
+WeaponID = -100
+shootDistance = 10.0
+reloadSpeed = 0.1
+fireRate = 1.5
+bulletSpread = 98.0
+projectilesPerShot = 1
+magSize = 3
+metadata/_custom_type_script = "uid://mpnyivmmeex8"

@@ -19,6 +19,15 @@ func get_weapon_data(weaponId : Globals.WeaponID) -> WeaponData:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData
 
+func get_weapon_level(who: int) -> int:
+	var weaponLevel: int = MultiplayerManager.players[who][MultiplayerManager.PlayerData.WEAPON_LEVEL]
+	return weaponLevel
+
+func get_weapon(who : int) -> Globals.WeaponID:
+	var weaponLevel: int = get_weapon_level(who)
+	var weaponId: Globals.WeaponID = Globals.weaponList[weaponLevel]
+	return weaponId
+
 func set_weapon_ammo(weaponID : Globals.WeaponID, newAmmoCount : int) -> void:
 	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
 

@@ -8,7 +8,6 @@ damage = 50.0
 ammo = 1
 weaponName = "Knife"
 WeaponID = 400
-fireMode = 5
 reloadType = 2
 shootDistance = 2.5
 reloadSpeed = 0.5

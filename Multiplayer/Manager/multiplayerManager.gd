@@ -41,8 +41,8 @@ func start_server() -> void:
 	
 	serverCreated.emit()
 	
-	damageMulti = float(Tools.get_value("damageMulti"))
-	print(damageMulti)
+	#damageMulti = float(Tools.get_value("damageMulti"))
+	#print(damageMulti)
 	
 	print("Server started on port ", SERVER_PORT)
 	print("Command starter: ", commandStarter)
@@ -80,10 +80,6 @@ func _random_username_gen() -> String:
 	
 	return nameStarter.pick_random() + nameEnds.pick_random()
 
-func get_player_canShoot(playerId : int) -> bool:
-	var canShoot = players[playerId][PlayerData.CAN_SHOOT]
-	return canShoot
-
 func set_player_canShoot(playerId : int, newVal : bool) -> void:
 	players[playerId][PlayerData.CAN_SHOOT] = newVal
 
@@ -92,12 +88,11 @@ func get_player_health(playerId : int) -> float:
 	return playerHealth
 
 func set_player_health(playerId : int, newHealth : float) -> void:
+	
+	
 	players[playerId][PlayerData.HEALTH] = newHealth
 
-func get_weapon_level(who: int) -> int:
-	if !players.has(who): return 0
-	
-	return players[who][PlayerData.WEAPON_LEVEL]
+
 
 func _profanity_check_string(text: String) -> String:
 	var result: String = text
@@ -130,12 +125,12 @@ func server_upgrade_weapon(playerId: int) -> void:
 		push_error("Player does not exist: ", playerId)
 		return
 	
-	if get_weapon_level(playerId) >= weaponsCount:
+	if Tools.get_weapon_level(playerId) >= weaponsCount:
 		print("Last Weapon Reached by: ", playerId)
 		return
 	
 	players[playerId][PlayerData.WEAPON_LEVEL] += 1
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
+	var newWeaponID: Globals.WeaponID = Tools.get_weapon(playerId)
 	#_apply_settings_to_player.rpc_id(playerId, playerId, newWeaponID)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
@@ -143,12 +138,12 @@ func server_downgrade_weapon(playerId: int) -> void:
 	if !players.has(playerId):
 		return
 	
-	if get_weapon_level(playerId) <= 0:
+	if Tools.get_weapon_level(playerId) <= 0:
 		return
 	
 	players[playerId][PlayerData.WEAPON_LEVEL] -= 1
 	
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(playerId)]
+	var newWeaponID: Globals.WeaponID = Tools.get_weapon(playerId)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
 func _handle_player_eliminated(who : int, where : Vector3) -> void:
@@ -159,7 +154,7 @@ func _handle_player_eliminated(who : int, where : Vector3) -> void:
 	server_downgrade_weapon(who)
 	set_player_health(who, newHealth)
 	
-	server_push_eliminated.rpc_id(who, who, newHealth, where)
+	server_push_eliminated.rpc_id(who, newHealth, where)
 
 func _handle_elimination(who : int) -> void:
 	if !multiplayer.is_server(): return
@@ -172,7 +167,7 @@ func _handle_elimination(who : int) -> void:
 	server_upgrade_weapon(who)
 	set_player_health(who, newHealth)
 	
-	server_push_elimination.rpc_id(who, newHealth, who)
+	server_push_elimination.rpc_id(who, newHealth)
 
 #endregion
 
@@ -221,43 +216,62 @@ func _handle_command(text: String, senderID: int) -> void:
 
 #region Server Side Network Functions
 
-func _handle_server_fire(weapon : Globals.WeaponID, who : int) -> void:
-	pass
-
+func _handle_server_fire(who : int, weapon : Globals.WeaponID) -> Dictionary:
+	var player: Player = get_player_from_name(str(who))
+	var from: Vector3 = player.get_camera_position()
+	var dist: float = Tools.get_weapon_damage(weapon)
+	var to: Vector3 = from + (-player.global_transform.basis.z * dist)
+	var query: = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
+	var spaceState: = player.get_world_3d().direct_space_state
+	var results: Dictionary = spaceState.intersect_ray(query)
+	
+	print(results, "				", spaceState)
+	
+	if results.is_empty():
+		push_error("Result is Empty (Hit has been denied): ", results)
+	
+	
+	return results 
 
 # Client -> Server
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func server_handle_hits(nameID: String, weapon: Globals.WeaponID) -> void:
+func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> void:
+	
 	if !multiplayer.is_server(): return
 	
-	
 	var senderID: int = multiplayer.get_remote_sender_id()
-	var damagedPlayerId: int = int(nameID)
+	var damagedPlayerId: int = int(damagedPlayer)
 	var verifiedDamage: float = Tools.get_weapon_damage(weapon)
 	var waitTime: float = Tools.get_weapon_fireRate(weapon)
 	var curPlayerHealth: float = get_player_health(damagedPlayerId)
 	var newHealth: float
 	
-	_handle_server_fire(weapon, senderID)
+	#_handle_server_fire(weapon, senderID)
 	
 	
 	
-	if !get_player_canShoot(senderID): return
+	if !SuperMan.get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
 	print("Damage Player >:l")
 	
+	
+	print(players)
+	print("Damage: ", verifiedDamage)
+	
 	newHealth = curPlayerHealth - (verifiedDamage * damageMulti)
 	set_player_health(damagedPlayerId, newHealth)
+	
 	if newHealth <= 0:
 		print("Player: ", damagedPlayerId, " To: ", senderID)
 		var newPos: Vector3 = Tools.random_player_spawn()
 		_handle_elimination(senderID)
 		_handle_player_eliminated(damagedPlayerId, newPos)
 	else:
-		update_player_client_health.rpc_id(damagedPlayerId, newHealth, damagedPlayerId)
+		update_player_client_health.rpc_id(damagedPlayerId, newHealth)
 	
 	await get_tree().create_timer(waitTime).timeout
 	set_player_canShoot(senderID, true)
+
 
 # Client -> Server
 @rpc("any_peer", "call_remote", "reliable")
@@ -279,8 +293,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 		PlayerData.CAN_SHOOT : true
 	}
 	
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[get_weapon_level(senderID)]
-	give_weapon.rpc_id(senderID, newWeaponID)
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[Tools.get_weapon_level(senderID)]
+	give_weapon.rpc_id(senderID, 0)
 	
 	print("Registered player ", senderID, " as ", username)
 

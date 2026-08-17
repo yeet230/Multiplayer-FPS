@@ -5,15 +5,14 @@
 [resource]
 script = ExtResource("1_c1h5m")
 damage = 101.0
-ammo = 1
+ammo = 2
 weaponName = "Machete"
 WeaponID = 401
-fireMode = 5
 reloadType = 2
-shootDistance = 2.5
+shootDistance = 4.0
 reloadSpeed = 0.25
 fireRate = 0.75
 bulletSpread = 99.5
 projectilesPerShot = 1
-magSize = 1
+magSize = 2
 metadata/_custom_type_script = "uid://mpnyivmmeex8"
