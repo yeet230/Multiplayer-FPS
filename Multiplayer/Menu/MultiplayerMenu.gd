@@ -30,7 +30,7 @@ func _on_host_pressed() -> void:
 
 func _on_join_pressed() -> void:
 	#var num = Globals.get_weapon_damage(0)
-	var ip = ipInput.text
+	var ip = "10.177.207.89"#ipInput.text
 	_set_player_username()
 	
 	MultiplayerManager.join_server(ip)
