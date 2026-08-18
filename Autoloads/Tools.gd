@@ -7,9 +7,13 @@ func random_player_spawn() -> Vector3:
 func string_to_bool(string : String) -> bool:
 	return string.strip_edges().to_lower() == "true"
 
+#region WeaponData related
 func get_weapon_damage(weaponId : Globals.WeaponID) -> float:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.damage
+
+func set_weapon_ammo(weaponID : Globals.WeaponID, newAmmoCount : int) -> void:
+	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
 
 func get_weapon_ammo(weaponId : Globals.WeaponID) -> int:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
@@ -18,21 +22,17 @@ func get_weapon_ammo(weaponId : Globals.WeaponID) -> int:
 func get_weapon_data(weaponId : Globals.WeaponID) -> WeaponData:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData
+#endregion
 
 func get_weapon_level(who: int) -> int:
-	var weaponLevel: int = MultiplayerManager.players[who][MultiplayerManager.PlayerData.WEAPON_LEVEL]
+	var level: int = MultiplayerManager.PlayerData.WEAPON_LEVEL
+	var weaponLevel: int = MultiplayerManager.serverOnlyPlayerData[who][level]
 	return weaponLevel
 
 func get_weapon(who : int) -> Globals.WeaponID:
 	var weaponLevel: int = get_weapon_level(who)
 	var weaponId: Globals.WeaponID = Globals.weaponList[weaponLevel]
 	return weaponId
-
-func set_weapon_ammo(weaponID : Globals.WeaponID, newAmmoCount : int) -> void:
-	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
-
-func verify_damage(dmg : float, weaponID : Globals.WeaponID) -> float:
-	return dmg if get_weapon_damage(weaponID) == dmg else 0.0
 
 func create_command_starter() -> String:
 	var possibleChars: Array[String] = ["-", "/", "*", "_", "+", "#", "!", "%", "c"]

@@ -152,3 +152,8 @@ visible = false
 custom_minimum_size = Vector2(400, 32)
 layout_mode = 2
 placeholder_text = "Type Message Here"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1337856430]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
