@@ -32,7 +32,6 @@ func tick() -> void:
 
 @rpc("any_peer", "call_remote", "reliable")
 func _update_data(who : String, data : Dictionary) -> void:
-	print(multiplayer.get_remote_sender_id(), "  ", who)
 	
 	var player: Player = MultiplayerManager.get_player_from_name(who)
 	

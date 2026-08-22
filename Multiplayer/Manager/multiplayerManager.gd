@@ -2,6 +2,7 @@ extends Node
 
 signal serverCreated
 signal ChatRecived(text: String)
+signal SharedDataUpdated(newData : Dictionary)
 
 var damageMulti: float = 1.0
 
@@ -397,6 +398,8 @@ func _update_sharedPlayerData(newData : Variant, key : int = 0) -> void:
 	if multiplayer.is_server(): return
 	
 	sharedPlayerData = newData
+	SharedDataUpdated.emit(sharedPlayerData)
+	
 	print(Globals.username, "\n", "SharedPlayerData = ", sharedPlayerData)
 
 

@@ -4,10 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://bofknxo8qvmpy" path="res://External Game Assets/2D/Crosshair.png" id="2_icp3m"]
 [ext_resource type="Theme" uid="uid://b4pga3d0o1xjs" path="res://UI.tres" id="3_ie5er"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_icp3m"]
-font_color = Color(0.69803923, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbetb"]
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Theme" id="Theme_g7fu1"]
+Label/colors/font_color = Color(0, 0, 0, 1)
+Label/styles/focus = SubResource("StyleBoxFlat_vbetb")
 
 [sub_resource type="Theme" id="Theme_icp3m"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_icp3m"]
+font_color = Color(0.69803923, 0, 0, 1)
 
 [node name="Control" type="Control" unique_id=97011714]
 layout_mode = 3
@@ -18,27 +26,121 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qwd5t")
 
-[node name="Labels" type="Node" parent="." unique_id=516667388]
+[node name="ScoreBoardBG" type="ColorRect" parent="." unique_id=1337856430]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.22745098, 0.22745098, 0.22745098, 0.84705883)
 
-[node name="Left" type="VBoxContainer" parent="Labels" unique_id=1699266975]
+[node name="GridContainer" type="GridContainer" parent="ScoreBoardBG" unique_id=1799877348]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -87.5
+offset_right = 87.5
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_constants/h_separation = 34
+columns = 3
+
+[node name="UsernameVBox" type="VBoxContainer" parent="ScoreBoardBG/GridContainer" unique_id=962304457]
+layout_mode = 2
+
+[node name="Username" type="Label" parent="ScoreBoardBG/GridContainer/UsernameVBox" unique_id=1583096271]
+layout_mode = 2
+theme = SubResource("Theme_g7fu1")
+text = "Username"
+
+[node name="Label" type="Label" parent="ScoreBoardBG/GridContainer/UsernameVBox" unique_id=1790758557]
+layout_mode = 2
+text = "Player"
+
+[node name="KillsVBox" type="VBoxContainer" parent="ScoreBoardBG/GridContainer" unique_id=2087272359]
+layout_mode = 2
+
+[node name="Kills" type="Label" parent="ScoreBoardBG/GridContainer/KillsVBox" unique_id=1469509655]
+layout_mode = 2
+theme = SubResource("Theme_g7fu1")
+text = "Kills"
+
+[node name="Label" type="Label" parent="ScoreBoardBG/GridContainer/KillsVBox" unique_id=1969158970]
+layout_mode = 2
+text = "0"
+
+[node name="DeathsVBox" type="VBoxContainer" parent="ScoreBoardBG/GridContainer" unique_id=1964436492]
+layout_mode = 2
+
+[node name="Deaths" type="Label" parent="ScoreBoardBG/GridContainer/DeathsVBox" unique_id=444516290]
+layout_mode = 2
+theme = SubResource("Theme_g7fu1")
+text = "Deaths"
+
+[node name="Label" type="Label" parent="ScoreBoardBG/GridContainer/DeathsVBox" unique_id=47128349]
+layout_mode = 2
+text = "0"
+
+[node name="ChatElements" type="CanvasLayer" parent="." unique_id=1723678313]
+
+[node name="ChatConsole" type="VBoxContainer" parent="ChatElements" unique_id=1507244926]
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.744
+anchor_right = 1.0
+anchor_bottom = 0.744
+offset_left = -403.0
+offset_top = -87.612
+offset_right = -3.0
+offset_bottom = 87.388
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("3_ie5er")
+alignment = 2
+
+[node name="ChatOutput" type="RichTextLabel" parent="ChatElements/ChatConsole" unique_id=1187575322]
+custom_minimum_size = Vector2(0, 175)
+layout_mode = 2
+theme = SubResource("Theme_icp3m")
+text = "System: Please be respectful of others
+"
+scroll_following = true
+shortcut_keys_enabled = false
+vertical_alignment = 2
+drag_and_drop_selection_enabled = false
+
+[node name="ChatInput" type="LineEdit" parent="ChatElements/ChatConsole" unique_id=842665085]
+visible = false
+custom_minimum_size = Vector2(400, 32)
+layout_mode = 2
+placeholder_text = "Type Message Here"
+
+[node name="DebugElements" type="CanvasLayer" parent="." unique_id=31660854]
+layer = 4
+
+[node name="Labels" type="Node" parent="DebugElements" unique_id=516667388]
+
+[node name="Left" type="VBoxContainer" parent="DebugElements/Labels" unique_id=1699266975]
 offset_left = 3.0
 offset_top = 3.0
 offset_right = 106.0
 offset_bottom = 80.0
 
-[node name="ID" type="Label" parent="Labels/Left" unique_id=1407337198]
+[node name="ID" type="Label" parent="DebugElements/Labels/Left" unique_id=1407337198]
 layout_mode = 2
 text = "ID: "
 
-[node name="ActiveWeapon" type="Label" parent="Labels/Left" unique_id=836126993]
+[node name="ActiveWeapon" type="Label" parent="DebugElements/Labels/Left" unique_id=836126993]
 layout_mode = 2
 text = "Weapon:"
 
-[node name="FPSLabel" type="Label" parent="Labels/Left" unique_id=1815153859]
+[node name="FPSLabel" type="Label" parent="DebugElements/Labels/Left" unique_id=1815153859]
 layout_mode = 2
 text = "FPS: "
 
-[node name="RightLabels" type="VBoxContainer" parent="Labels" unique_id=1465379598]
+[node name="RightLabels" type="VBoxContainer" parent="DebugElements/Labels" unique_id=1465379598]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -48,32 +150,32 @@ offset_right = -3.0
 offset_bottom = 134.0
 grow_horizontal = 0
 
-[node name="Speed" type="Label" parent="Labels/RightLabels" unique_id=939805017]
+[node name="Speed" type="Label" parent="DebugElements/Labels/RightLabels" unique_id=939805017]
 layout_mode = 2
 text = "Speed: "
 horizontal_alignment = 2
 
-[node name="Position" type="Label" parent="Labels/RightLabels" unique_id=1736296007]
+[node name="Position" type="Label" parent="DebugElements/Labels/RightLabels" unique_id=1736296007]
 layout_mode = 2
 text = "Position: "
 horizontal_alignment = 2
 
-[node name="Dash" type="Label" parent="Labels/RightLabels" unique_id=792125567]
+[node name="Dash" type="Label" parent="DebugElements/Labels/RightLabels" unique_id=792125567]
 layout_mode = 2
 text = "Dash: "
 horizontal_alignment = 2
 
-[node name="Health" type="Label" parent="Labels/RightLabels" unique_id=17567791]
+[node name="Health" type="Label" parent="DebugElements/Labels/RightLabels" unique_id=17567791]
 layout_mode = 2
 text = "Health: "
 horizontal_alignment = 2
 
-[node name="Ammo" type="Label" parent="Labels/RightLabels" unique_id=850246410]
+[node name="Ammo" type="Label" parent="DebugElements/Labels/RightLabels" unique_id=850246410]
 layout_mode = 2
 text = "Ammo: "
 horizontal_alignment = 2
 
-[node name="NoAmmo" type="Label" parent="Labels" unique_id=1797868692]
+[node name="NoAmmo" type="Label" parent="DebugElements/Labels" unique_id=1797868692]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -119,41 +221,3 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_icp3m")
 expand_mode = 1
-
-[node name="ChatConsole" type="VBoxContainer" parent="." unique_id=1507244926]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_top = 0.744
-anchor_right = 1.0
-anchor_bottom = 0.744
-offset_left = -403.0
-offset_top = -87.612
-offset_right = -3.0
-offset_bottom = 87.388
-grow_horizontal = 0
-grow_vertical = 2
-theme = ExtResource("3_ie5er")
-alignment = 2
-
-[node name="ChatOutput" type="RichTextLabel" parent="ChatConsole" unique_id=1187575322]
-custom_minimum_size = Vector2(0, 175)
-layout_mode = 2
-theme = SubResource("Theme_icp3m")
-text = "System: Please be respectful of others
-"
-scroll_following = true
-shortcut_keys_enabled = false
-vertical_alignment = 2
-drag_and_drop_selection_enabled = false
-
-[node name="ChatInput" type="LineEdit" parent="ChatConsole" unique_id=842665085]
-visible = false
-custom_minimum_size = Vector2(400, 32)
-layout_mode = 2
-placeholder_text = "Type Message Here"
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1337856430]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
