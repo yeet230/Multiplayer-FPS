@@ -107,9 +107,10 @@ func _random_username_gen() -> String:
 func _check_username_for_duplicates(_username: String) -> String:
 	var uniqueUsername: String = _username
 	print("checking usernames for duplicates")
-	for i in usedUsernames:
+	for i in range 10:
 		print("here is i:", i)
-		while i == _username:
+		while 
+		if "" == _username:
 			print("username is a duplicate")
 			uniqueUsername = _random_username_gen()
 	return uniqueUsername

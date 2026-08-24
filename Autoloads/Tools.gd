@@ -58,5 +58,5 @@ func get_value(value : String) -> String:
 		u = arguments.username
 	push_warning(u)
 	DisplayServer.window_set_title(u)
-	print("variable arguments printed: ", arguments, "			OS.get_args: ", OS.get_cmdline_args())
+	#print("variable arguments printed: ", arguments, "			OS.get_args: ", OS.get_cmdline_args())
 	return u
