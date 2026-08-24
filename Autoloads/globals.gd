@@ -42,13 +42,14 @@ var weaponDictionary : Dictionary[WeaponID, WeaponData] = {
 	WeaponID.PEA_SHOOTER :preload("res://Weapon System/WeaponData/Debug/Pea_Shooter.tres"),
 	WeaponID.GODS_GUM : preload("res://Weapon System/WeaponData/Debug/Gods_Gum.tres"),
 	WeaponID.THE_JACOB_SPECIAL : preload("res://Weapon System/WeaponData/Debug/TheJacobSpecial.tres"),
+	WeaponID.G502_MOUSE : preload("res://Weapon System/WeaponData/Other/G502.tres")
 	
 }
 
 var weaponList: Array[WeaponID] = [
 	WeaponID.USG_57,
 	WeaponID.MP5,
-	#WeaponID.MACHETE,
+	WeaponID.MACHETE,
 	WeaponID.THE_JACOB_SPECIAL,
 	#WeaponID.M1014,
 	WeaponID.P90,
@@ -56,9 +57,9 @@ var weaponList: Array[WeaponID] = [
 	WeaponID.AK12,
 	WeaponID.G502_MOUSE,
 	WeaponID.FRF2,
-	WeaponID.THE_7900_GRE
+	WeaponID.THE_7900_GRE,
 	#WeaponID.SUPER_SHORTY,
-	#WeaponID.KITCHEN_KNIFE,
+	WeaponID.KITCHEN_KNIFE,
 ]
 
 var bannedList: Array[String] = [

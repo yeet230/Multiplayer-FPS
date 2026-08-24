@@ -25,6 +25,8 @@ var commandStarter: String
 # peer_id -> player data
 var serverOnlyPlayerData: Dictionary[int, Dictionary] = {}
 var sharedPlayerData: Dictionary[int, Dictionary] = {}
+var usedUsernames: Array[String]
+
 
 func _ready() -> void:
 	weaponsCount = Globals.weaponList.size() - 1
@@ -90,20 +92,27 @@ func _update_player_deaths(who : int) -> void:
 func _random_username_gen() -> String:
 	var nameStarter: Array[String] = [
 		"The Great ",
-		"The Homeless ",
-		"Short ",
-		"Schizophrenic ",
-		"Nameless "
+	
 	]
 	
 	var nameEnds: Array[String] = [
 		"Tweaker",
-		"Banana Lover",
-		"King",
-		"Schitzo"
+		
 	]
 	
-	return nameStarter.pick_random() + nameEnds.pick_random()
+	var genUsername: String = nameStarter.pick_random() + nameEnds.pick_random()
+	
+	return genUsername
+
+func _check_username_for_duplicates(_username: String) -> String:
+	var uniqueUsername: String = _username
+	print("checking usernames for duplicates")
+	for i in usedUsernames:
+		print("here is i:", i)
+		while i == _username:
+			print("username is a duplicate")
+			uniqueUsername = _random_username_gen()
+	return uniqueUsername
 
 func set_player_canShoot(playerId : int, newVal : bool) -> void:
 	serverOnlyPlayerData[playerId][PlayerData.CAN_SHOOT] = newVal
@@ -118,28 +127,12 @@ func set_player_health(who : int, newHealth : float) -> void:
 	serverOnlyPlayerData[who][PlayerData.HEALTH] = newHealth
 
 
-func _profanity_check_string(text: String) -> String:
-	var result: String = text
-	
-	if text.containsn("nigga") or text.containsn("nigger"):
-		result = "I am a racist"
-	
-	return result
-
-
 ##Use this to get the player object from just their name
 func get_player_from_name(nameID: String) -> Player:
 	for player in get_tree().get_nodes_in_group("Players"):
 		if player.name == nameID:
 			return player
 	return null
-
-
-func _check_username_for_duplicates(_username: String) -> String:
-	for peer_id in serverOnlyPlayerData:
-		if serverOnlyPlayerData[peer_id][PlayerData.USERNAME] == _username:
-			return _random_username_gen()
-	return _username
 
 #endregion
 
@@ -279,7 +272,7 @@ func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> voi
 	
 	#_handle_server_fire(weapon, senderID)
 	
-	if !SuperMan.get_player_canShoot(senderID): return
+	if !Batman.get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
 	print("Damage Player >:l")
 	
@@ -311,15 +304,18 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	
 	var senderID := multiplayer.get_remote_sender_id()
 	
-	username = _profanity_check_string(username)
-	username = _check_username_for_duplicates(username)
+	username = Batman.profanity_check_string(username)
 	
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
 	
+	username = _check_username_for_duplicates(username)
+	
 	_create_player_data(senderID, username)
 	
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[Tools.get_weapon_level(senderID)]
+	var playerWeaponlevel: int = Tools.get_weapon_level(senderID)
+	var newWeaponID: Globals.WeaponID = Globals.weaponList[playerWeaponlevel]
+	
 	give_weapon.rpc_id(senderID, 0)
 	
 	print("Registered player ", senderID, " as ", username)
@@ -331,14 +327,14 @@ func server_verify_chat(text: String) -> void:
 	if !multiplayer.is_server():
 		return
 	
-	var senderID := multiplayer.get_remote_sender_id()
+	var senderID: int = multiplayer.get_remote_sender_id()
 	
 	if text.begins_with(commandStarter):
 		_handle_command(text, senderID)
 		return
 	
-	var chat := _profanity_check_string(text)
-	var username := str(serverOnlyPlayerData[senderID][PlayerData.USERNAME])
+	var chat: String = Batman.profanity_check_string(text)
+	var username: String = str(serverOnlyPlayerData[senderID][PlayerData.USERNAME])
 	
 	_server_send_chat.rpc(username, chat)
 
@@ -399,8 +395,6 @@ func _update_sharedPlayerData(newData : Variant, key : int = 0) -> void:
 	
 	sharedPlayerData = newData
 	SharedDataUpdated.emit(sharedPlayerData)
-	
-	print(Globals.username, "\n", "SharedPlayerData = ", sharedPlayerData)
 
 
 # Client -> Clients

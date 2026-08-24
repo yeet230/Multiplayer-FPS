@@ -1,5 +1,6 @@
 extends Node
 
+
 func get_player_canShoot(playerId : int) -> bool:
 	if !multiplayer.is_server(): return false 
 	
@@ -16,3 +17,11 @@ func flag_player(who : int) -> void:
 
 func verify_damage(dmg : float, weaponID : Globals.WeaponID) -> float:
 	return dmg if Tools.get_weapon_damage(weaponID) == dmg else 0.0
+
+func profanity_check_string(text: String) -> String:
+	var result: String = text
+	
+	if text.containsn("nigga") or text.containsn("nigger"):
+		result = "I am a racist"
+	
+	return result
