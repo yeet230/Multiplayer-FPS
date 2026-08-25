@@ -35,9 +35,13 @@ var usedUsernames: Array[String] = [
 
 func _ready() -> void:
 	weaponsCount = Globals.weaponList.size() - 1
+	multiplayer.peer_connected.connect(_handle_player_joining)
 
 
 #region Server/Client Setup
+
+func _handle_player_joining(peerID : int) -> void:
+	_update_sharedPlayerData.rpc_id(peerID, sharedPlayerData)
 
 func start_server() -> void:
 	var peer := ENetMultiplayerPeer.new()

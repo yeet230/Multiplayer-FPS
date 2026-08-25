@@ -116,14 +116,12 @@ metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
 [node name="WeaponManager" parent="VisionManager/Head/MainCam" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
 
 [node name="MainLight" type="SpotLight3D" parent="VisionManager/Head/MainCam" unique_id=656089829]
-shadow_enabled = true
 spot_range = 33.951313
 spot_angle = 49.54401
 
 [node name="PlayerModelLight" type="SpotLight3D" parent="VisionManager/Head/MainCam/MainLight" unique_id=2032068347]
 transform = Transform3D(1, 0, 0, 0, -0.87405574, -0.48582566, 0, 0.48582566, -0.87405574, 0, -1.7, -2.2941232)
 light_energy = 5.875
-shadow_enabled = true
 spot_range = 2.8868287
 spot_angle = 23.978899
 
