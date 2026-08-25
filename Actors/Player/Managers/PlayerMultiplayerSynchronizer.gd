@@ -3,19 +3,17 @@ class_name PlayerMultiplayerSynchroniser extends Node
 enum DataTypes {
 	Position,
 	Rotation,
+	FlashLightState,
 	
 }
 
 @export var localPlayer: Player = get_parent()
-
 var prevPos: Vector3 = Vector3.ZERO
 var prevRot: Vector3 = Vector3.ZERO
 
-
 func tick() -> void:
-	
 	var id: String = localPlayer.name
-	var data :Dictionary= {}
+	var data : Dictionary = {}
 	
 	if prevPos != localPlayer.global_position:
 		data[DataTypes.Position] = localPlayer.global_position
@@ -27,8 +25,6 @@ func tick() -> void:
 	
 	if !data.is_empty():
 		_update_data.rpc(id, data)
-	
-	
 
 @rpc("any_peer", "call_remote", "reliable")
 func _update_data(who : String, data : Dictionary) -> void:

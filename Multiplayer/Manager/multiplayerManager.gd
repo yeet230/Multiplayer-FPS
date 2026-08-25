@@ -1,14 +1,15 @@
 extends Node
 
-signal serverCreated
-signal ChatRecived(text: String)
-signal SharedDataUpdated(newData : Dictionary)
+signal serverCreated ##Signal that is emtted when the server succsefully starts
+signal ChatRecived(text: String) ##Handlesthe broadcasting of the server verified chats back to the UI
+signal SharedDataUpdated(newData : Dictionary) ##Is emmitted fo any script that may need this data
 
-var damageMulti: float = 1.0
+var damageMulti: float = 1.0 ##How much the server should Multiply Damage by
 
-const SERVER_PORT := 39285
+const SERVER_PORT: int = 39285 ##Servers Port
 const bulletDecalScene := preload("uid://6gbftdo4m7nj")
 
+##A reference for all types of PlayerData that can exist
 enum PlayerData {
 	HEALTH,
 	USERNAME,
@@ -20,12 +21,16 @@ enum PlayerData {
 }
 
 var weaponsCount: int
-var commandStarter: String
+var commandStarter: String ##A Randomly generated string that will be outputted by the server during debugging to allow for quick Actions
 
 # peer_id -> player data
 var serverOnlyPlayerData: Dictionary[int, Dictionary] = {}
-var sharedPlayerData: Dictionary[int, Dictionary] = {}
-var usedUsernames: Array[String]
+var sharedPlayerData: Dictionary[int, Dictionary] = {} ##Data that will be broadcasted to all types of peers such as killcount, deaths and username
+##Currently in debug Process
+var usedUsernames: Array[String] = [ 
+	"",
+	"Tweaker",
+]
 
 
 func _ready() -> void:
@@ -67,6 +72,7 @@ func join_server(ip: String) -> void:
 
 #region Utility
 
+##Handles the creation of a new Players data. will add them to serverOnlyPlayerData and sharedPlayerData
 func _create_player_data(who : int, username : String) -> void:
 	serverOnlyPlayerData[who] = {
 		PlayerData.USERNAME : username,
@@ -89,6 +95,7 @@ func _update_player_kills(who : int) -> void:
 func _update_player_deaths(who : int) -> void:
 	sharedPlayerData[who][PlayerData.DEATHS] += 1
 
+##Randomly generates a username from predefined arrays
 func _random_username_gen() -> String:
 	var nameStarter: Array[String] = [
 		"The Great ",
@@ -104,15 +111,18 @@ func _random_username_gen() -> String:
 	
 	return genUsername
 
+##Work in progress: Is meant to check for when a username is a duplicate and then change it until it is not.
 func _check_username_for_duplicates(_username: String) -> String:
 	var uniqueUsername: String = _username
 	print("checking usernames for duplicates")
-	for i in range 10:
+	for i in usedUsernames:
 		print("here is i:", i)
-		while 
-		if "" == _username:
+		while i == uniqueUsername:
 			print("username is a duplicate")
 			uniqueUsername = _random_username_gen()
+			
+	usedUsernames.append(uniqueUsername)
+	
 	return uniqueUsername
 
 func set_player_canShoot(playerId : int, newVal : bool) -> void:
@@ -258,7 +268,8 @@ func _handle_server_fire(who : int, weapon : Globals.WeaponID) -> Dictionary:
 	return results 
 
 
-# Client -> Server
+## Client -> Server:
+##is called when the player locally hits another player it will confirm the hit, apply damage, call other funtions if it is a kill
 @rpc("any_peer", "call_remote", "unreliable_ordered")
 func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> void:
 	
@@ -298,7 +309,8 @@ func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> voi
 	set_player_canShoot(senderID, true)
 
 
-# Client -> Server
+## Client -> Server:
+##Is called when a player joins the server, it handles the creation of relative data, aswell as ensuring the username is valid
 @rpc("any_peer", "call_remote", "reliable")
 func server_register_player(playerHealth: float, username: String = "") -> void:
 	if !multiplayer.is_server(): return
@@ -322,7 +334,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	print("Registered player ", senderID, " as ", username)
 
 
-# Client -> Server
+## Client -> Server:
+##The server will verify the chat sent. check for profanity, make sure it is a real message, handle the command if it is one
 @rpc("any_peer", "call_remote", "reliable")
 func server_verify_chat(text: String) -> void:
 	if !multiplayer.is_server():
@@ -343,13 +356,13 @@ func server_verify_chat(text: String) -> void:
 
 #region Client Side Network Functions
 
-# Server -> Clients
+# Server -> Clients:
 @rpc("authority", "call_remote", "reliable")
 func _server_send_chat(username: String, text: String) -> void:
 	ChatRecived.emit("%s: %s" % [username, text])
 
 
-# Server -> Target Client
+# Server -> Target Client:
 @rpc("authority", "call_remote", "unreliable")
 func server_push_death(newHealth : float, where : Vector3) -> void:
 	teleport_player(where)
