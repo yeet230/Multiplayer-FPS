@@ -52,18 +52,18 @@ func _instantiate_UI() -> void:
 	ui.set_multiplayer_authority(get_multiplayer_authority())
 	$PlayerUI.add_child(ui)
 
+@rpc("any_peer", "call_local", "unreliable")
+func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:
+	var player: Player = MultiplayerManager.get_player_from_name(nameID)
+	if !player: return
+	player.flashLight.visible = newMode
+
 func handle_flashlight() -> void:
 	flashLight.visible = !flashLight.visible #Set the new flashlight state
 	_handle_multiplayer_flashlight_update.rpc(name, flashLight.visible) #update other players of the action
 
 func _peer_connected_sync(id: int) -> void:
 	_handle_multiplayer_flashlight_update.rpc_id(id, name, flashLight.visible)
-
-@rpc("any_peer", "call_local", "unreliable")
-func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:
-	var player: Player = MultiplayerManager.get_player_from_name(nameID)
-	if !player: return
-	player.flashLight.visible = newMode
 
 func get_camera_position() -> Vector3:
 	var returnPos: Vector3 = mainCam.global_position

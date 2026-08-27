@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dmjp288tcliuk" path="res://Actors/Player/Spawner/PlayerSpawner.tscn" id="1_01cmo"]
 [ext_resource type="Texture2D" uid="uid://b04xfarxskkgu" path="res://External Game Assets/2D/kenney-dark-grey-checkerboard.png" id="1_nqor8"]
 [ext_resource type="PackedScene" uid="uid://lubu4uvta2vb" path="res://Levels/Assets/FlickeringLight.tscn" id="4_d70mn"]
+[ext_resource type="Script" uid="uid://hw77fji6wp1o" path="res://Levels/node.gd" id="4_i4ldu"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7unof"]
 albedo_texture = ExtResource("1_nqor8")
@@ -67,3 +68,6 @@ mesh = SubResource("ArrayMesh_7unof")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CSGBakedMeshInstance3D/StaticBody3D" unique_id=1042233291]
 shape = SubResource("ConcavePolygonShape3D_7unof")
+
+[node name="Node" type="Node" parent="." unique_id=933349647]
+script = ExtResource("4_i4ldu")

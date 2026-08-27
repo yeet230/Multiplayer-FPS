@@ -1,5 +1,8 @@
 class_name PlayerMultiplayerSynchroniser extends Node
 
+func _ready() -> void:
+	multiplayer.peer_connected.connect(_player_joined)
+
 enum DataTypes {
 	Position,
 	Rotation,
@@ -28,10 +31,18 @@ func tick() -> void:
 
 @rpc("any_peer", "call_remote", "reliable")
 func _update_data(who : String, data : Dictionary) -> void:
-	
 	var player: Player = MultiplayerManager.get_player_from_name(who)
 	
 	if data.has(DataTypes.Position):
 		player.global_position = data[DataTypes.Position]
 	if data.has(DataTypes.Rotation):
 		player.rotation = data[DataTypes.Rotation]
+
+@rpc("any_peer", "call_local", "unreliable")
+func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:
+	var player: Player = MultiplayerManager.get_player_from_name(nameID)
+	if !player: return
+	player.flashLight.visible = newMode
+
+func _player_joined(playerId : int) -> void:
+	pass
