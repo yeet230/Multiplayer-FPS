@@ -1,4 +1,6 @@
 class_name WeaponManager extends Node3D
+##Handles the firing of weapon's within the game has multiple firing methods and requires a custom Resource to work correctly
+
 
 @export var mainCamera: Camera3D 
 

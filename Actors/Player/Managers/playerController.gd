@@ -30,11 +30,6 @@ func _ready() -> void:
 	
 	#playerMultiplayerSync.setup()
 
-func _process(_delta: float) -> void:
-	if !is_multiplayer_authority(): return
-	ui.tick()
-	
-
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
 	
@@ -44,6 +39,7 @@ func _physics_process(delta: float) -> void:
 	visionManager.tick(delta)
 	weaponManager.tick()
 	playerMultiplayerSync.tick()
+	ui.tick()
 	
 
 func _instantiate_UI() -> void:
@@ -53,8 +49,9 @@ func _instantiate_UI() -> void:
 	$PlayerUI.add_child(ui)
 
 @rpc("any_peer", "call_local", "unreliable")
-func _handle_multiplayer_flashlight_update(nameID : String, newMode : bool) -> void:
-	var player: Player = MultiplayerManager.get_player_from_name(nameID)
+func _handle_multiplayer_flashlight_update(newMode : bool) -> void:	
+	var playerId: int = multiplayer.get_remote_sender_id()
+	var player: Player = MultiplayerManager.get_player_from_name(str(playerId))
 	if !player: return
 	player.flashLight.visible = newMode
 

@@ -1,4 +1,7 @@
 class_name PlayerMultiplayerSynchroniser extends Node
+##Syncs properties required for player functionality aswell as handling as to whether they should be synced eg if they have changed since last frame. 
+##It will sync Position, Rotation and Flashlight
+
 
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_player_joined)

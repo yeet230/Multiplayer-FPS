@@ -1,4 +1,7 @@
 class_name PlayerMovementController extends Node
+##This node handles all movment actions conducted within the game for the player to move.
+##It will need to have the player property set correctly and its tick(delta : float) function called otherwise it will not work
+
 
 @export_category("Ground Movement Settings")
 @export var runSpd: float = 9.0 ##How fast the player can move when the runKey is pressed

@@ -1,4 +1,6 @@
 class_name VisionManager extends Node3D
+##Handles the movment of the camera aswell as handling effects such as headbob.
+##It also handles flashlight positioning, and weaponManager posirion and rotation
 
 const CROUCH_TRANSLATE: float = .7 ##How much to change the players height by
 const HEADBOB_MOVE_AMOUNT: float = .06

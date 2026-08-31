@@ -1,4 +1,7 @@
 class_name PlayerInptHandler extends Node
+##Handles all user input required for the player to interact with the world.
+##It will also update other player managers/handlers accordingly 
+
 
 @export var player: Player = get_parent()
 

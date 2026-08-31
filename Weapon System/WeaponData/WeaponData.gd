@@ -1,5 +1,7 @@
 class_name WeaponData extends Resource
-##Key data used by the Server. Do not change otherwise you will be kicked from the lobby
+##Key data used by the Server. 
+##Do not change otherwise you 
+##will be kicked from the lobby
 
 @export_category("Data") 
 @export var damage: float
