@@ -35,7 +35,7 @@ var usedUsernames: Array[String] = [
 
 func _ready() -> void:
 	weaponsCount = Globals.weaponList.size() - 1
-	multiplayer.peer_connected.connect(_handle_player_joining)
+	#multiplayer.peer_connected.connect(_handle_player_joining)
 
 
 #region Server/Client Setup
@@ -334,8 +334,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	var newWeaponID: Globals.WeaponID = Globals.weaponList[playerWeaponlevel]
 	
 	give_weapon.rpc_id(senderID, 0)
-	
-	print("Registered player ", senderID, " as ", username)
+	_update_sharedPlayerData.rpc(sharedPlayerData)
+	print("Registered player ", senderID, " as ", username, " Sent sharedPlayerData: ", sharedPlayerData)
 
 
 ## Client -> Server:
