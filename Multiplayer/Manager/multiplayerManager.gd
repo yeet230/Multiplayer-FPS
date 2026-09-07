@@ -365,9 +365,8 @@ func server_verify_chat(text: String) -> void:
 #endregion
 
 func _player_disconnect(id : int) -> void:
-	print(sharedPlayerData)
 	sharedPlayerData.erase(id)
-	print(sharedPlayerData)
+	_update_sharedPlayerData.rpc(sharedPlayerData)
 
 #region Client Side Network Functions
 
