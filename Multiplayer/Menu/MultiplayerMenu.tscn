@@ -105,6 +105,7 @@ theme_override_constants/separation = 34
 [node name="UsernameInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
 unique_name_in_owner = true
 layout_mode = 2
+max_length = 24
 
 [node name="Username" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/UsernameInput" unique_id=1744654856]
 layout_mode = 0

@@ -25,7 +25,8 @@ var commandStarter: String ##A Randomly generated string that will be outputted 
 
 # peer_id -> player data
 var serverOnlyPlayerData: Dictionary[int, Dictionary] = {}
-var sharedPlayerData: Dictionary[int, Dictionary] = {} ##Data that will be broadcasted to all types of peers such as killcount, deaths and username
+var sharedPlayerData: Dictionary[int, Dictionary] = {
+} ##Data that will be broadcasted to all types of peers such as killcount, deaths and username
 ##Currently in debug Process
 var usedUsernames: Array[String] = [ 
 	"",
@@ -35,6 +36,7 @@ var usedUsernames: Array[String] = [
 
 func _ready() -> void:
 	weaponsCount = Globals.weaponList.size() - 1
+	multiplayer.peer_disconnected.connect(_player_disconnect)
 	#multiplayer.peer_connected.connect(_handle_player_joining)
 
 
@@ -103,11 +105,15 @@ func _update_player_deaths(who : int) -> void:
 func _random_username_gen() -> String:
 	var nameStarter: Array[String] = [
 		"The Great ",
-	
+		"Schitzo",
+		"Schitzophrenic",
 	]
 	
 	var nameEnds: Array[String] = [
 		"Tweaker",
+		"Schitzo",
+		"Schitzophrenic",
+		"Slime out yo barber"
 		
 	]
 	
@@ -357,6 +363,11 @@ func server_verify_chat(text: String) -> void:
 	_server_send_chat.rpc(username, chat)
 
 #endregion
+
+func _player_disconnect(id : int) -> void:
+	print(sharedPlayerData)
+	sharedPlayerData.erase(id)
+	print(sharedPlayerData)
 
 #region Client Side Network Functions
 
