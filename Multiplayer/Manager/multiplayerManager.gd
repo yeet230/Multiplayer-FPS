@@ -18,7 +18,11 @@ enum PlayerData {
 	DEATHS,
 	KILLS,
 	WARNINGS,
+	SCORE,
+	ASSISTS,
 }
+
+var usernameMaxLength: int = 4
 
 var weaponsCount: int
 var commandStarter: String ##A Randomly generated string that will be outputted by the server during debugging to allow for quick Actions
@@ -26,11 +30,14 @@ var commandStarter: String ##A Randomly generated string that will be outputted 
 # peer_id -> player data
 var serverOnlyPlayerData: Dictionary[int, Dictionary] = {}
 var sharedPlayerData: Dictionary[int, Dictionary] = {
-} ##Data that will be broadcasted to all types of peers such as killcount, deaths and username
+} 
+##Data that will be broadcasted to all types of peers such as killcount, deaths and username
 ##Currently in debug Process
 var usedUsernames: Array[String] = [ 
-	"",
-	"Tweaker",
+	"nigger",
+	"nigga",
+	" ",
+	
 ]
 
 
@@ -38,6 +45,7 @@ func _ready() -> void:
 	weaponsCount = Globals.weaponList.size() - 1
 	multiplayer.peer_disconnected.connect(_player_disconnect)
 	#multiplayer.peer_connected.connect(_handle_player_joining)
+	
 
 
 #region Server/Client Setup
@@ -92,7 +100,8 @@ func _create_player_data(who : int, username : String) -> void:
 		PlayerData.USERNAME : username,
 		PlayerData.KILLS : 0,
 		PlayerData.DEATHS : 0,
-		
+		PlayerData.ASSISTS : 0,
+		PlayerData.SCORE : 0
 	}
 
 func _update_player_kills(who : int) -> void:
@@ -105,8 +114,8 @@ func _update_player_deaths(who : int) -> void:
 func _random_username_gen() -> String:
 	var nameStarter: Array[String] = [
 		"The Great ",
-		"Schitzo",
-		"Schitzophrenic",
+		"Schitzo ",
+		"Schitzophrenic ",
 	]
 	
 	var nameEnds: Array[String] = [
@@ -325,9 +334,13 @@ func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> voi
 func server_register_player(playerHealth: float, username: String = "") -> void:
 	if !multiplayer.is_server(): return
 	
-	var senderID := multiplayer.get_remote_sender_id()
+	var senderID: int = multiplayer.get_remote_sender_id()
+	var usernameLength: int = username.length()
 	
+	username.strip_edges()
 	username = Batman.profanity_check_string(username)
+	username = username.substr(0, min(usernameLength, usernameMaxLength))
+	
 	
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()
@@ -365,8 +378,15 @@ func server_verify_chat(text: String) -> void:
 #endregion
 
 func _player_disconnect(id : int) -> void:
+	if !multiplayer.is_server(): return
+	var disconnectedUsername: String = Tools.get_username(id)
+	
+	usedUsernames.erase("disconnectedUsername")
 	sharedPlayerData.erase(id)
+	serverOnlyPlayerData.erase(id)
+	
 	_update_sharedPlayerData.rpc(sharedPlayerData)
+	print("Player disconnected succsefully")
 
 #region Client Side Network Functions
 
@@ -416,9 +436,10 @@ func give_weapon(what: Globals.WeaponID) -> void:
 	var player: Player = Globals.clientPlayer
 	player.weaponManager._equip_new_weapon(what)
 
+
 # Server -> Clients
 @rpc("authority", "call_local", "reliable")
-func _update_sharedPlayerData(newData : Variant, key : int = 0) -> void:
+func _update_sharedPlayerData(newData : Variant) -> void:
 	if multiplayer.is_server(): return
 	
 	sharedPlayerData = newData

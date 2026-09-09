@@ -28,7 +28,6 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_peer_connected_sync)
 	Globals.clientPlayer = self
 	
-	#playerMultiplayerSync.setup()
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return

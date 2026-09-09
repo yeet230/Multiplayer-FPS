@@ -31,4 +31,4 @@ func client_receive_ping(original_timestamp: int) -> void:
 	var now = Time.get_ticks_msec()
 	current_ping = now - original_timestamp
 	ping_updated.emit(current_ping)
-	print("[TELEMETRY] Current Ping: %d ms" % current_ping)
+	#print("[TELEMETRY] Current Ping: %d ms" % current_ping)

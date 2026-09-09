@@ -34,6 +34,12 @@ func get_weapon(who : int) -> Globals.WeaponID:
 	var weaponId: Globals.WeaponID = Globals.weaponList[weaponLevel]
 	return weaponId
 
+func get_username(who : int) -> String:
+	var usernamePlace: int = MultiplayerManager.PlayerData.USERNAME
+	var username: String = MultiplayerManager.serverOnlyPlayerData[who][usernamePlace]
+	return username
+
+
 func create_command_starter() -> String:
 	var possibleChars: Array[String] = ["-", "/", "*", "_", "+", "#", "!", "%", "c"]
 	var returnVal: String = ""
