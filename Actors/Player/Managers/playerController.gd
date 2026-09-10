@@ -56,10 +56,10 @@ func _handle_multiplayer_flashlight_update(newMode : bool) -> void:
 
 func handle_flashlight() -> void:
 	flashLight.visible = !flashLight.visible #Set the new flashlight state
-	_handle_multiplayer_flashlight_update.rpc(name, flashLight.visible) #update other players of the action
+	_handle_multiplayer_flashlight_update.rpc(flashLight.visible) #update other players of the action
 
 func _peer_connected_sync(id: int) -> void:
-	_handle_multiplayer_flashlight_update.rpc_id(id, name, flashLight.visible)
+	_handle_multiplayer_flashlight_update.rpc_id(id, flashLight.visible)
 
 func get_camera_position() -> Vector3:
 	var returnPos: Vector3 = mainCam.global_position

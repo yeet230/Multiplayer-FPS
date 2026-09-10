@@ -43,8 +43,19 @@ func get_username(who : int) -> String:
 func create_command_starter() -> String:
 	var possibleChars: Array[String] = ["-", "/", "*", "_", "+", "#", "!", "%", "c"]
 	var returnVal: String = ""
+	
 	for i in range(2):
 		returnVal += possibleChars.pick_random()
+	
+	return returnVal
+
+func create_password() -> String:
+	var possibleChars: Array[String] = ["A", "B" , "C" , "D" , "E" , "F" , "G" , "h" , "g" , "v" , "V" , "!" , "j" , "T" , "J" , "8" , "9" , "f" , "+" , "@" , "T" , "m" , "N" , "[" , "~" , "K" , "4" , "?" , "/" , "*" , "_" , "|" , "HAYDEN" , "THEO" , "2"]
+	var returnVal: String = ""
+	
+	for i in range(8):
+		returnVal += possibleChars.pick_random()
+	
 	return returnVal
 
 func get_weapon_fireRate(weaponId : Globals.WeaponID) -> float:
@@ -54,14 +65,16 @@ func get_weapon_fireRate(weaponId : Globals.WeaponID) -> float:
 func get_value(value : String) -> String:
 	var arguments: Dictionary = {}
 	for argument in OS.get_cmdline_args():
+		#print(argument)
 		if argument.contains("="):
 			var keyValue: Array = argument.split("=")
 			arguments[keyValue[0].trim_prefix("--")] = keyValue[1]
 		else:
 			arguments[argument.trim_prefix("--")] = ""
 	var u: String = ""
+	#print(arguments)
 	if value in arguments:
-		u = arguments.username
+		u = arguments[value]
 	push_warning(u)
 	DisplayServer.window_set_title(u)
 	#print("variable arguments printed: ", arguments, "			OS.get_args: ", OS.get_cmdline_args())

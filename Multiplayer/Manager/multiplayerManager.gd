@@ -26,6 +26,7 @@ var usernameMaxLength: int = 4
 
 var weaponsCount: int
 var commandStarter: String ##A Randomly generated string that will be outputted by the server during debugging to allow for quick Actions
+var serverPassword: String ##Predifined password used for debugging with certian commands
 
 # peer_id -> player data
 var serverOnlyPlayerData: Dictionary[int, Dictionary] = {}
@@ -63,6 +64,7 @@ func start_server() -> void:
 	
 	multiplayer.multiplayer_peer = peer
 	commandStarter = Tools.create_command_starter()
+	serverPassword = Tools.get_value("password")
 	
 	serverCreated.emit()
 	
@@ -135,7 +137,6 @@ func _check_username_for_duplicates(_username: String) -> String:
 	var uniqueUsername: String = _username
 	print("checking usernames for duplicates")
 	for i in usedUsernames:
-		print("here is i:", i)
 		while i == uniqueUsername:
 			print("username is a duplicate")
 			uniqueUsername = _random_username_gen()
@@ -244,23 +245,28 @@ func _handle_command(text: String, senderID: int) -> void:
 		if splitCommand.size() < 4:
 			push_error("Invalid command: expected ", commandStarter, "tp <x> <y> <z>")
 			return
-	
+		
 		var newPos := Vector3(
 			float(splitCommand[1]),
 			float(splitCommand[2]),
 			float(splitCommand[3])
 		)
-	
+		
 		teleport_player.rpc_id(senderID, newPos)
 	
 	elif text.begins_with(commandStarter + "give"):
 		if splitCommand.size() != 2:
-			push_error("Invalid command: expected ", commandStarter, "set_weapon <WeaponID>")
+			push_error("Invalid command: expected ", commandStarter, "give <WeaponID>")
 			return
 		
 		var newWeapon: int = int(splitCommand[1])
 		print(newWeapon)
 		give_weapon.rpc_id(senderID, newWeapon)
+	
+	elif text.begins_with(commandStarter + "kill"):
+		if splitCommand.size() != 3:
+			push_error("Invalid command: expected: ", commandStarter, "kill <PlayerId>")
+			return
 		
 #endregion
 
@@ -349,8 +355,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	
 	_create_player_data(senderID, username)
 	
-	var playerWeaponlevel: int = Tools.get_weapon_level(senderID)
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[playerWeaponlevel]
+	#var playerWeaponlevel: int = Tools.get_weapon_level(senderID)
+	#var newWeaponID: Globals.WeaponID = Globals.weaponList[playerWeaponlevel]
 	
 	give_weapon.rpc_id(senderID, 0)
 	_update_sharedPlayerData.rpc(sharedPlayerData)
@@ -381,7 +387,7 @@ func _player_disconnect(id : int) -> void:
 	if !multiplayer.is_server(): return
 	var disconnectedUsername: String = Tools.get_username(id)
 	
-	usedUsernames.erase("disconnectedUsername")
+	usedUsernames.erase(disconnectedUsername)
 	sharedPlayerData.erase(id)
 	serverOnlyPlayerData.erase(id)
 	
