@@ -8,18 +8,18 @@ func string_to_bool(string : String) -> bool:
 	return string.strip_edges().to_lower() == "true"
 
 #region WeaponData related
-func get_weapon_damage(weaponId : Globals.WeaponID) -> float:
+func get_weapon_damage(weaponId : WeaponData.WeaponID) -> float:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.damage
 
-func set_weapon_ammo(weaponID : Globals.WeaponID, newAmmoCount : int) -> void:
+func set_weapon_ammo(weaponID : WeaponData.WeaponID, newAmmoCount : int) -> void:
 	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
 
-func get_weapon_ammo(weaponId : Globals.WeaponID) -> int:
+func get_weapon_ammo(weaponId : WeaponData.WeaponID) -> int:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.loadedCount
 
-func get_weapon_data(weaponId : Globals.WeaponID) -> WeaponData:
+func get_weapon_data(weaponId : WeaponData.WeaponID) -> WeaponData:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData
 #endregion
@@ -29,9 +29,9 @@ func get_weapon_level(who: int) -> int:
 	var weaponLevel: int = MultiplayerManager.serverOnlyPlayerData[who][level]
 	return weaponLevel
 
-func get_weapon(who : int) -> Globals.WeaponID:
+func get_weapon(who : int) -> WeaponData.WeaponID:
 	var weaponLevel: int = get_weapon_level(who)
-	var weaponId: Globals.WeaponID = Globals.weaponList[weaponLevel]
+	var weaponId: WeaponData.WeaponID = Globals.weaponList[weaponLevel]
 	return weaponId
 
 func get_username(who : int) -> String:
@@ -58,7 +58,7 @@ func create_password() -> String:
 	
 	return returnVal
 
-func get_weapon_fireRate(weaponId : Globals.WeaponID) -> float:
+func get_weapon_fireRate(weaponId : WeaponData.WeaponID) -> float:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.fireRate
 

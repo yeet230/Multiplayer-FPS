@@ -1,9 +1,9 @@
-extends Node
-class_name LatencyTracker
+class_name LatencyTracker extends Node
 
 signal ping_updated(current_ping_ms: int)
 
 @export var ping_interval: float = 1.0
+@export var pingLabel: Label
 var current_ping: float = 0
 var ping_timer: Timer
 

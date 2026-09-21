@@ -23,7 +23,9 @@ var isBackPressed: bool = false
 @onready var idLabel: Label = $DebugElements/Labels/Left/ID
 @onready var activeWeaponLabel: Label = $DebugElements/Labels/Left/ActiveWeapon
 @onready var fpsLabel: Label = $DebugElements/Labels/Left/FPSLabel
+@onready var pingLabel: Label = $DebugElements/Labels/Left/Ping
 @onready var noAmmoLabel: Label = $DebugElements/Labels/NoAmmo
+
 
 
 @onready var chatInput: LineEdit = $ChatElements/ChatConsole/ChatInput
@@ -54,6 +56,8 @@ func _update_hud() -> void:
 	_update_dash()
 	_update_position()
 	_update_speed()
+	_update_ping()
+	
 	if player.weaponManager.weaponData: ##Checks to make sure that the data exist's before reading from it. will crash otherwise
 		_update_weapon_equipped()
 		_update_bullet_count()
@@ -82,7 +86,11 @@ func _process(_delta: float) -> void:
 #endregion
 
 
-#region Label Update Functions 
+#region Label Update Functions
+func _update_ping() -> void:
+	pingLabel.text = Globals.ping
+
+
 func _update_weapon_equipped() -> void:
 	var weaponName: String = player.weaponManager.weaponName
 	
