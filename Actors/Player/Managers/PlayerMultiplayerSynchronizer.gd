@@ -20,7 +20,7 @@ func _ready() -> void:
 	#prevLightState = localPlayer.flashLight.visible
 
 func tick() -> void:
-	#var id: String = localPlayer.name
+	var id: String = localPlayer.name
 	var data : Dictionary
 	
 	if prevPos != localPlayer.global_position:
