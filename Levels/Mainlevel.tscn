@@ -69,5 +69,6 @@ mesh = SubResource("ArrayMesh_7unof")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CSGBakedMeshInstance3D/StaticBody3D" unique_id=1042233291]
 shape = SubResource("ConcavePolygonShape3D_7unof")
 
-[node name="Node" type="Node" parent="." unique_id=933349647]
+[node name="PingTracker" type="Node" parent="." unique_id=2026761205 node_paths=PackedStringArray("pingLabel")]
 script = ExtResource("4_i4ldu")
+pingLabel = NodePath("")

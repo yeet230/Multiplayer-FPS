@@ -23,7 +23,7 @@ var weaponData: WeaponData
 
 var fireMode: ShootingType
 var reloadType: ReloadStyle
-var weaponId: Globals.WeaponID
+var weaponId: WeaponData.WeaponID
 var weaponName: String
 
 var maxRange: float = 100.0
@@ -56,7 +56,7 @@ func _ready() -> void:
 	shootTimer.timeout.connect(_on_shoot_timer_timeout)
 
 
-func _equip_new_weapon(newWeapon: Globals.WeaponID) -> void:
+func _equip_new_weapon(newWeapon: WeaponData.WeaponID) -> void:
 	weaponData = Tools.get_weapon_data(newWeapon)
 	load_weapon_data()
 

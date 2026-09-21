@@ -140,6 +140,10 @@ text = "Weapon:"
 layout_mode = 2
 text = "FPS: "
 
+[node name="Ping" type="Label" parent="DebugElements/Labels/Left" unique_id=1430986521]
+layout_mode = 2
+text = "Ping: "
+
 [node name="RightLabels" type="VBoxContainer" parent="DebugElements/Labels" unique_id=1465379598]
 anchors_preset = 1
 anchor_left = 1.0

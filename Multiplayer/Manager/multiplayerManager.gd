@@ -180,7 +180,7 @@ func server_upgrade_weapon(playerId: int) -> void:
 		return
 	
 	serverOnlyPlayerData[playerId][PlayerData.WEAPON_LEVEL] += 1
-	var newWeaponID: Globals.WeaponID = Tools.get_weapon(playerId)
+	var newWeaponID: WeaponData.WeaponID = Tools.get_weapon(playerId)
 	#_apply_settings_to_player.rpc_id(playerId, playerId, newWeaponID)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
@@ -194,7 +194,7 @@ func server_downgrade_weapon(playerId: int) -> void:
 	
 	serverOnlyPlayerData[playerId][PlayerData.WEAPON_LEVEL] -= 1
 	
-	var newWeaponID: Globals.WeaponID = Tools.get_weapon(playerId)
+	var newWeaponID: WeaponData.WeaponID = Tools.get_weapon(playerId)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
 
@@ -275,7 +275,7 @@ func _handle_command(text: String, senderID: int) -> void:
 
 #region Server Side Network Functions
 
-func _handle_server_fire(who : int, weapon : Globals.WeaponID) -> Dictionary:
+func _handle_server_fire(who : int, weapon : WeaponData.WeaponID) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
 	var from: Vector3 = player.get_camera_position()
 	var dist: float = Tools.get_weapon_damage(weapon)
@@ -296,7 +296,7 @@ func _handle_server_fire(who : int, weapon : Globals.WeaponID) -> Dictionary:
 ## Client -> Server:
 ##is called when the player locally hits another player it will confirm the hit, apply damage, call other funtions if it is a kill
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> void:
+func server_handle_hit(weapon : WeaponData.WeaponID, damagedPlayer : String) -> void:
 	
 	if !multiplayer.is_server(): return
 	
@@ -438,7 +438,7 @@ func teleport_player(newPos: Vector3) -> void:
 
 # Server -> Target Client
 @rpc("authority", "call_remote", "reliable")
-func give_weapon(what: Globals.WeaponID) -> void:
+func give_weapon(what: WeaponData.WeaponID) -> void:
 	var player: Player = Globals.clientPlayer
 	player.weaponManager._equip_new_weapon(what)
 
