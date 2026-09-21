@@ -1,6 +1,5 @@
 extends Node
 
-
 func get_player_canShoot(playerId : int) -> bool:
 	if !multiplayer.is_server(): return false 
 	
@@ -25,3 +24,13 @@ func profanity_check_string(text: String) -> String:
 		result = "I am a racist"
 	
 	return result
+
+##Will return weather the player should be kicked or not
+func check_player_health(health : float) -> bool:
+	if !multiplayer.is_server(): 
+		var errorStr: String = str(Globals.ERRORS.find_key(0))
+		push_error(errorStr, ": ", Globals.ERR_SERVER_ONLY_ACCESS)
+		return false
+	if int(health) != 100:
+		return true
+	return false

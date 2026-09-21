@@ -4,7 +4,7 @@ class_name LatencyTracker
 signal ping_updated(current_ping_ms: int)
 
 @export var ping_interval: float = 1.0
-var current_ping: int = 0
+var current_ping: float = 0
 var ping_timer: Timer
 
 func _ready() -> void:
@@ -16,7 +16,7 @@ func _ready() -> void:
 		add_child(ping_timer)
 
 func _send_ping() -> void:
-	var sentTime = Time.get_ticks_msec()
+	var sentTime = Time.get_ticks_msec() / 1000.0
 	server_echo_ping.rpc_id(1, sentTime)
 
 @rpc("any_peer", "call_remote", "unreliable")
@@ -28,7 +28,7 @@ func server_echo_ping(client_time: int) -> void:
 
 @rpc("authority", "call_remote", "unreliable")
 func client_receive_ping(original_timestamp: int) -> void:
-	var now = Time.get_ticks_msec()
+	var now = Time.get_ticks_msec() / 1000.0
 	current_ping = now - original_timestamp
 	ping_updated.emit(current_ping)
-	#print("[TELEMETRY] Current Ping: %d ms" % current_ping)
+	print("[TELEMETRY] Current Ping: %.3f ms" % current_ping)

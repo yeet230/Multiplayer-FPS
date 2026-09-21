@@ -143,6 +143,7 @@ func _handle_chat() -> void:
 		MultiplayerManager.server_verify_chat.rpc_id(1, chat)
 		chatInput.clear()
 
+
 func _handle_chat_toggle() -> void:
 	chatInput.visible = !chatInputVisible
 	chatInputVisible = chatInput.visible

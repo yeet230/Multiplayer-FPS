@@ -311,10 +311,7 @@ func server_handle_hit(weapon : Globals.WeaponID, damagedPlayer : String) -> voi
 	
 	if !Batman.get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
-	print("Damage Player >:l")
 	
-	
-	print(serverOnlyPlayerData)
 	print("Damage: ", verifiedDamage)
 	
 	newHealth = curPlayerHealth - (verifiedDamage * damageMulti)
@@ -343,10 +340,14 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	var senderID: int = multiplayer.get_remote_sender_id()
 	var usernameLength: int = username.length()
 	
-	username.strip_edges()
-	username = Batman.profanity_check_string(username)
-	username = username.substr(0, min(usernameLength, usernameMaxLength))
 	
+	if Batman.check_player_health(playerHealth):
+		multiplayer.multiplayer_peer.disconnect_peer(senderID)
+		return
+	
+	username = Batman.profanity_check_string(username)
+	username.strip_edges()
+	username = username.substr(0, min(usernameLength, usernameMaxLength))
 	
 	if username.is_empty() or username.begins_with(" "):
 		username = _random_username_gen()

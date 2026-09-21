@@ -16,8 +16,6 @@ enum WeaponID {
 	THE_JACOB_SPECIAL = -3,
 	G502_MOUSE = -100,
 	THE_7900_GRE = -101
-	
-	
 }
 
 enum PLAYERSTATE {
@@ -26,6 +24,13 @@ enum PLAYERSTATE {
 	ALIVE,
 	DEBUG,
 	SPECTATE
+}
+
+##Contains the keys to all custom errors that will be thrown: check ReadMe for key details
+enum ERRORS {
+	ERR_SERVER_ONLY_ACCESS = 0,
+	ERR_CLIENT_ONLY_ACCESS = 1,
+	ERR_CAN_NOT_CONNECT_TO_SERVER = 2
 }
 
 var weaponDictionary : Dictionary[WeaponID, WeaponData] = {

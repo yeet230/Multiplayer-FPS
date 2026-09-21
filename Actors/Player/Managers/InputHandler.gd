@@ -30,6 +30,8 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		elif event.is_action_pressed("flash light"):
 			player.handle_flashlight()
+			Batman.check_player_health(10)
+
 			
 
 func tick() -> void:

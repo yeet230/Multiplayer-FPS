@@ -89,7 +89,7 @@ func tick() -> void:
 
 func _player_trigger_pressed() -> void:
 	isTriggerHeld = true
-	
+
 	# Interrupt shell-by-shell reload if we have at least one shell loaded.
 	if isReloading and loadedCount > 0:
 		cancel_reload()
