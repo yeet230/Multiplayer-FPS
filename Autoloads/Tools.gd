@@ -1,0 +1,81 @@
+extends Node
+
+func random_player_spawn() -> Vector3:
+	var randomLocation = randi_range(0, Globals.spawnLocations.size() - 1)
+	return Globals.spawnLocations[randomLocation]
+
+func string_to_bool(string : String) -> bool:
+	return string.strip_edges().to_lower() == "true"
+
+#region WeaponData related
+func get_weapon_damage(weaponId : WeaponData.WeaponID) -> float:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData.damage
+
+func set_weapon_ammo(weaponID : WeaponData.WeaponID, newAmmoCount : int) -> void:
+	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
+
+func get_weapon_ammo(weaponId : WeaponData.WeaponID) -> int:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData.loadedCount
+
+func get_weapon_data(weaponId : WeaponData.WeaponID) -> WeaponData:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData
+#endregion
+
+func get_weapon_level(who: int) -> int:
+	var level: int = MultiplayerManager.PlayerData.WEAPON_LEVEL
+	var weaponLevel: int = MultiplayerManager.serverOnlyPlayerData[who][level]
+	return weaponLevel
+
+func get_weapon(who : int) -> WeaponData.WeaponID:
+	var weaponLevel: int = get_weapon_level(who)
+	var weaponId: WeaponData.WeaponID = Globals.weaponList[weaponLevel]
+	return weaponId
+
+func get_username(who : int) -> String:
+	var usernamePlace: int = MultiplayerManager.PlayerData.USERNAME
+	var username: String = MultiplayerManager.serverOnlyPlayerData[who][usernamePlace]
+	return username
+
+
+func create_command_starter() -> String:
+	var possibleChars: Array[String] = ["-", "/", "*", "_", "+", "#", "!", "%", "c"]
+	var returnVal: String = ""
+	
+	for i in range(2):
+		returnVal += possibleChars.pick_random()
+	
+	return returnVal
+
+func create_password() -> String:
+	var possibleChars: Array[String] = ["A", "B" , "C" , "D" , "E" , "F" , "G" , "h" , "g" , "v" , "V" , "!" , "j" , "T" , "J" , "8" , "9" , "f" , "+" , "@" , "T" , "m" , "N" , "[" , "~" , "K" , "4" , "?" , "/" , "*" , "_" , "|" , "HAYDEN" , "THEO" , "2"]
+	var returnVal: String = ""
+	
+	for i in range(8):
+		returnVal += possibleChars.pick_random()
+	
+	return returnVal
+
+func get_weapon_fireRate(weaponId : WeaponData.WeaponID) -> float:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData.fireRate
+
+func get_value(value : String) -> String:
+	var arguments: Dictionary = {}
+	for argument in OS.get_cmdline_args():
+		#print(argument)
+		if argument.contains("="):
+			var keyValue: Array = argument.split("=")
+			arguments[keyValue[0].trim_prefix("--")] = keyValue[1]
+		else:
+			arguments[argument.trim_prefix("--")] = ""
+	var u: String = ""
+	#print(arguments)
+	if value in arguments:
+		u = arguments[value]
+	push_warning(u)
+	DisplayServer.window_set_title(u)
+	#print("variable arguments printed: ", arguments, "			OS.get_args: ", OS.get_cmdline_args())
+	return u
