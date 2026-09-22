@@ -56,7 +56,6 @@ func _update_hud() -> void:
 	_update_dash()
 	_update_position()
 	_update_speed()
-	_update_ping()
 	
 	if player.weaponManager.weaponData: ##Checks to make sure that the data exist's before reading from it. will crash otherwise
 		_update_weapon_equipped()
@@ -66,6 +65,8 @@ func _update_hud() -> void:
 #region Built in function Overides
 func _ready() -> void:
 	if !is_multiplayer_authority(): return
+	
+	Globals.ping_update.connect(_update_ping)
 	idLabel.text = str(get_parent().multiplayer.get_unique_id())
 	
 	MultiplayerManager.ChatRecived.connect(_update_chatlog)
@@ -87,8 +88,8 @@ func _process(_delta: float) -> void:
 
 
 #region Label Update Functions
-func _update_ping() -> void:
-	pingLabel.text = Globals.ping
+func _update_ping(ping : String) -> void:
+	pingLabel.text = ping
 
 
 func _update_weapon_equipped() -> void:

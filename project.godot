@@ -17,10 +17,11 @@ config/icon="res://Other/icon.svg"
 
 [autoload]
 
-MultiplayerManager="*uid://bicdpd65gba0u"
+Enum="*uid://y01o7tjkxv56"
 Globals="*uid://cj6lu36ygvjl4"
-Tools="*uid://d4jy3rgp3n50r"
 Batman="*uid://ho03o26cwyv3"
+MultiplayerManager="*uid://bicdpd65gba0u"
+Tools="*uid://d4jy3rgp3n50r"
 
 [dotnet]
 

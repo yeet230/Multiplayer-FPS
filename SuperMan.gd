@@ -14,7 +14,7 @@ func flag_player(who : int) -> void:
 	#if 
 
 
-func verify_damage(dmg : float, weaponID : Globals.WeaponID) -> float:
+func verify_damage(dmg : float, weaponID : Enum.WeaponID) -> float:
 	return dmg if Tools.get_weapon_damage(weaponID) == dmg else 0.0
 
 func profanity_check_string(text: String) -> String:
@@ -28,8 +28,8 @@ func profanity_check_string(text: String) -> String:
 ##Will return weather the player should be kicked or not
 func check_player_health(health : float) -> bool:
 	if !multiplayer.is_server(): 
-		var errorStr: String = str(Globals.ERRORS.find_key(0))
-		push_error(errorStr, ": ", Globals.ERR_SERVER_ONLY_ACCESS)
+		var errorStr: String = str(Enum.ERRORS.find_key(0))
+		push_error(errorStr, ": ", Enum.ERR_SERVER_ONLY_ACCESS)
 		return false
 	if int(health) != 100:
 		return true

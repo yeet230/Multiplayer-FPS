@@ -116,14 +116,17 @@ func _random_username_gen() -> String:
 		"The Great ",
 		"Schitzo ",
 		"Schitzophrenic ",
+		"SCP-",
+		"Sweet and Sour ",
 	]
 	
 	var nameEnds: Array[String] = [
 		"Tweaker",
 		"Schitzo",
 		"Schitzophrenic",
-		"Slime out yo barber"
-		
+		"Barber",
+		"Calculator",
+		"Calendar"
 	]
 	
 	var genUsername: String = nameStarter.pick_random() + nameEnds.pick_random()
@@ -135,7 +138,6 @@ func _check_username_for_duplicates(_username: String) -> String:
 	var uniqueUsername: String = _username
 	print("checking usernames for duplicates")
 	for i in usedUsernames:
-		print("here is i:", i)
 		while i == uniqueUsername:
 			print("username is a duplicate")
 			uniqueUsername = _random_username_gen()
@@ -179,7 +181,7 @@ func server_upgrade_weapon(playerId: int) -> void:
 		return
 	
 	serverOnlyPlayerData[playerId][PlayerData.WEAPON_LEVEL] += 1
-	var newWeaponID: WeaponData.WeaponID = Tools.get_weapon(playerId)
+	var newWeaponID: Enum.WeaponID = Tools.get_weapon(playerId)
 	#_apply_settings_to_player.rpc_id(playerId, playerId, newWeaponID)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
@@ -193,7 +195,7 @@ func server_downgrade_weapon(playerId: int) -> void:
 	
 	serverOnlyPlayerData[playerId][PlayerData.WEAPON_LEVEL] -= 1
 	
-	var newWeaponID: WeaponData.WeaponID = Tools.get_weapon(playerId)
+	var newWeaponID: Enum.WeaponID = Tools.get_weapon(playerId)
 	give_weapon.rpc_id(playerId, newWeaponID)
 
 
@@ -269,7 +271,7 @@ func _handle_command(text: String, senderID: int) -> void:
 
 #region Server Side Network Functions
 
-func _handle_server_fire(who : int, weapon : WeaponData.WeaponID) -> Dictionary:
+func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
 	var from: Vector3 = player.get_camera_position()
 	var dist: float = Tools.get_weapon_damage(weapon)
@@ -290,7 +292,7 @@ func _handle_server_fire(who : int, weapon : WeaponData.WeaponID) -> Dictionary:
 ## Client -> Server:
 ##is called when the player locally hits another player it will confirm the hit, apply damage, call other funtions if it is a kill
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func server_handle_hit(weapon : WeaponData.WeaponID, damagedPlayer : String) -> void:
+func server_handle_hit(weapon : Enum.WeaponID, damagedPlayer : String) -> void:
 	
 	if !multiplayer.is_server(): return
 	
@@ -351,7 +353,7 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	_create_player_data(senderID, username)
 	
 	var playerWeaponlevel: int = Tools.get_weapon_level(senderID)
-	var newWeaponID: Globals.WeaponID = Globals.weaponList[playerWeaponlevel]
+	var newWeaponID: Enum.WeaponID = Globals.weaponList[playerWeaponlevel]
 	
 	give_weapon.rpc_id(senderID, 0)
 	_update_sharedPlayerData.rpc(sharedPlayerData)
@@ -413,7 +415,7 @@ func server_push_kill(newHealth : float) -> void:
 # Server -> Target Client
 @rpc("authority", "call_remote", "unreliable_ordered")
 func update_player_client_health(newHealth: float) -> void:
-	var damagedPlayer := Globals.clientPlayer
+	var damagedPlayer: Player = Globals.clientPlayer
 	
 	damagedPlayer.curHealth = newHealth
 
@@ -427,13 +429,13 @@ func update_debug_mode(newVal: bool) -> void:
 # Server -> Client
 @rpc("authority", "call_remote", "reliable")
 func teleport_player(newPos: Vector3) -> void:
-	var player := Globals.clientPlayer
+	var player: Player = Globals.clientPlayer
 	player.position = newPos
 
 
 # Server -> Target Client
 @rpc("authority", "call_remote", "reliable")
-func give_weapon(what: WeaponData.WeaponID) -> void:
+func give_weapon(what: Enum.WeaponID) -> void:
 	var player: Player = Globals.clientPlayer
 	player.weaponManager._equip_new_weapon(what)
 

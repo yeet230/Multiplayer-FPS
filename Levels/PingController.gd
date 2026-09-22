@@ -1,7 +1,5 @@
 class_name LatencyTracker extends Node
 
-signal ping_updated(current_ping_ms: int)
-
 @export var ping_interval: float = 1.0
 @export var pingLabel: Label
 var current_ping: float = 0
@@ -30,5 +28,5 @@ func server_echo_ping(client_time: int) -> void:
 func client_receive_ping(original_timestamp: int) -> void:
 	var now = Time.get_ticks_msec() / 1000.0
 	current_ping = now - original_timestamp
-	ping_updated.emit(current_ping)
-	print("[TELEMETRY] Current Ping: %.3f ms" % current_ping)
+	var pingStr: String = "[TELEMETRY] Current Ping: %.3f ms" % current_ping
+	Globals.ping_update.emit(pingStr)
