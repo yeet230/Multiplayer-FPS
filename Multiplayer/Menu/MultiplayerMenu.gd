@@ -10,12 +10,12 @@ func _ready() -> void:
 	_auto_mode_set()
 	#print(IP.get_local_addresses())
 
-func _input(event: InputEvent) -> void:
-	if event.is_action("ballTest"):
-		print("Returning to MainMenu")
-		mainMenu.show()
-		playMenu.hide()
-		settingsMenu.hide()
+#func _input(event: InputEvent) -> void:
+	#if event.is_action("ballTest"):
+		#print("Returning to MainMenu")
+		#mainMenu.show()
+		#playMenu.hide()
+		#settingsMenu.hide()
 
 func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):

@@ -209,6 +209,27 @@ offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HitMarker" type="Label" parent="HudElements" unique_id=365766785]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -41.99997
+offset_right = 54.0
+offset_bottom = 35.00003
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.7853982
+theme_override_colors/font_color = Color(0.4033752, 0.0017683419, 4.813075e-08, 1)
+theme_override_font_sizes/font_size = 48
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Crosshair" type="TextureRect" parent="HudElements" unique_id=760536231]
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 1

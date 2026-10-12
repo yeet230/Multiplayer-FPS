@@ -28,5 +28,5 @@ func server_echo_ping(client_time: int) -> void:
 func client_receive_ping(original_timestamp: int) -> void:
 	var now = Time.get_ticks_msec() / 1000.0
 	current_ping = now - original_timestamp
-	var pingStr: String = "[TELEMETRY] Current Ping: %.3f ms" % current_ping
+	var pingStr: String = "Current Ping: %.3f ms" % current_ping
 	Globals.ping_update.emit(pingStr)

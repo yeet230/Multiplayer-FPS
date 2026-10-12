@@ -67,7 +67,6 @@ func load_weapon_data() -> void:
 	magSize = weaponData.magSize
 	weaponName = weaponData.weaponName
 	weaponId = weaponData.weaponID
-
 	fireMode = weaponData.fireMode
 	reloadType = weaponData.reloadType
 	maxRange = weaponData.shootDistance
@@ -89,7 +88,7 @@ func tick() -> void:
 
 func _player_trigger_pressed() -> void:
 	isTriggerHeld = true
-
+	
 	# Interrupt shell-by-shell reload if we have at least one shell loaded.
 	if isReloading and loadedCount > 0:
 		cancel_reload()
@@ -114,7 +113,6 @@ func try_fire() -> void:
 		ShootingType.BURST_FIRE:
 			burstShotsRemaining = projectilesPerShot
 			fire_burst_shot()
-		
 		ShootingType.SHOTGUN_FIRE:
 			fire_shotgun()
 
@@ -127,10 +125,10 @@ func fire_single_shot() -> void:
 
 func fire_shotgun() -> void:
 	loadedCount -= 1
-
+	
 	for i in range(projectilesPerShot):
 		perform_hitscan()
-
+	
 	begin_fire_cooldown()
 
 
@@ -211,6 +209,7 @@ func perform_hitscan() -> float:
 	
 	if collider is Player:
 		MultiplayerManager.server_handle_hit.rpc_id(1, weaponId, collider.name)
+		Globals.player_hit.emit()
 		return 1
 	
 	if bulletHitScanRayCast.is_colliding():

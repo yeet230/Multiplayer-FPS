@@ -40,6 +40,8 @@ var isBackPressed: bool = false
 @onready var killsVBox: VBoxContainer = $ScoreBoardBG/GridContainer/KillsVBox
 @onready var deathsVBox: VBoxContainer = $ScoreBoardBG/GridContainer/DeathsVBox
 
+@onready var hitMarker: Label = $HudElements/HitMarker
+
 
 func tick() -> void:
 	if isBackPressed and chatInput.visible:
@@ -67,6 +69,7 @@ func _ready() -> void:
 	if !is_multiplayer_authority(): return
 	
 	Globals.ping_update.connect(_update_ping)
+	Globals.player_hit.connect(_player_hit)
 	idLabel.text = str(get_parent().multiplayer.get_unique_id())
 	
 	MultiplayerManager.ChatRecived.connect(_update_chatlog)
@@ -86,6 +89,12 @@ func _process(_delta: float) -> void:
 
 #endregion
 
+
+
+func _player_hit() -> void:
+	hitMarker.visible = true
+	await get_tree().create_timer(.05).timeout
+	hitMarker.visible = false
 
 #region Label Update Functions
 func _update_ping(ping : String) -> void:
@@ -232,3 +241,7 @@ func _recreate_table_names() -> void:
 	deathsVBox.add_child(deathLabel)
 
 #endregion
+
+
+func handle_game_over(won : bool, winningUsername: String) -> void:
+	print(winningUsername, " Has won the Match")

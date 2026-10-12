@@ -20,9 +20,10 @@ enum PlayerData {
 	WARNINGS,
 	SCORE,
 	ASSISTS,
+	ID
 }
 
-var usernameMaxLength: int = 4
+var usernameMaxLength: int = 16
 
 var weaponsCount: int
 var commandStarter: String ##A Randomly generated string that will be outputted by the server during debugging to allow for quick Actions
@@ -42,7 +43,7 @@ var usedUsernames: Array[String] = [
 
 
 func _ready() -> void:
-	weaponsCount = Globals.weaponList.size() - 1
+	weaponsCount =  2 #Globals.weaponList.size() - 1
 	multiplayer.peer_disconnected.connect(_player_disconnect)
 	#multiplayer.peer_connected.connect(_handle_player_joining)
 	
@@ -169,6 +170,13 @@ func get_player_from_name(nameID: String) -> Player:
 #endregion
 
 #region Server Only Logic
+@rpc("authority", "call_remote", "reliable")
+func game_over(winningPlayerData : Dictionary) -> void:
+	var winningPlayerId: int =  winningPlayerData[PlayerData.ID]
+	var won: bool = winningPlayerId == multiplayer.get_unique_id()
+	var winningUsername = winningPlayerData[PlayerData.USERNAME]
+	
+	Globals.clientPlayer.ui.handle_game_over(won, winningUsername)
 
 func server_upgrade_weapon(playerId: int) -> void:
 	print("Upgrading Player weapon: ", playerId)
@@ -178,6 +186,13 @@ func server_upgrade_weapon(playerId: int) -> void:
 	
 	if Tools.get_weapon_level(playerId) >= weaponsCount:
 		print("Last Weapon Reached by: ", playerId)
+		var winningPlayerData: Dictionary = {
+			PlayerData.USERNAME : serverOnlyPlayerData[playerId][PlayerData.USERNAME],
+			PlayerData.ID : playerId,
+		}
+		
+		game_over.rpc(winningPlayerData)
+		
 		return
 	
 	serverOnlyPlayerData[playerId][PlayerData.WEAPON_LEVEL] += 1
@@ -384,7 +399,7 @@ func _player_disconnect(id : int) -> void:
 	if !multiplayer.is_server(): return
 	var disconnectedUsername: String = Tools.get_username(id)
 	
-	usedUsernames.erase("disconnectedUsername")
+	usedUsernames.erase(disconnectedUsername)
 	sharedPlayerData.erase(id)
 	serverOnlyPlayerData.erase(id)
 	

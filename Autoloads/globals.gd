@@ -1,5 +1,7 @@
 extends Node
+
 signal ping_update(ping : String)
+signal player_hit()
 
 var ping: String = "Ping: N/A"
 
@@ -22,8 +24,6 @@ func _ready() -> void:
 	Enum.WeaponID.THE_JACOB_SPECIAL : preload("res://Weapon System/WeaponData/Debug/TheJacobSpecial.tres"),
 	Enum.WeaponID.G502_MOUSE : preload("res://Weapon System/WeaponData/Other/G502.tres")
 }
-
-
 
 var weaponList: Array[Enum.WeaponID] = [
 	Enum.WeaponID.USG_57,
