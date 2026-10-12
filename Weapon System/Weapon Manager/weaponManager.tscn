@@ -10,5 +10,7 @@ target_position = Vector3(0, 7.61, 0)
 collision_mask = 7
 
 [node name="ReloadTimer" type="Timer" parent="." unique_id=2083097846]
+one_shot = true
 
 [node name="ShootTimer" type="Timer" parent="." unique_id=1721696132]
+one_shot = true

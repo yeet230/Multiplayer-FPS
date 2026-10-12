@@ -36,19 +36,18 @@ var bulletDamage: float = 10.0
 var reloadSpeed: float = 1.0
 var spread: float = 0.0
 
-var canFire := true
-var isReloading := false
-var isTriggerHeld := false
-var burstShotsRemaining := 0
+var canFire: bool = true
+var isReloading: bool = false
+var isTriggerHeld: bool = false
+var burstShotsRemaining: int = 0
 
-var isReloadPressed := false
-var isShootPressed := false
-var isShootReleased := false
+var isReloadPressed: bool = false
+var isShootPressed: bool = false
+var isShootReleased: bool = false
 
 @onready var bulletHitScanRayCast: RayCast3D = $BulletHitScanRay
 @onready var reloadTimer: Timer = $ReloadTimer
 @onready var shootTimer: Timer = $ShootTimer
-
 
 
 func _ready() -> void:
@@ -57,6 +56,7 @@ func _ready() -> void:
 
 
 func _equip_new_weapon(newWeapon: Enum.WeaponID) -> void:
+	isShootPressed = false
 	weaponData = Tools.get_weapon_data(newWeapon)
 	load_weapon_data()
 
@@ -153,8 +153,8 @@ func _on_shoot_timer_timeout() -> void:
 	
 	match fireMode:
 		ShootingType.AUTOMATIC_FIRE:
-			if isTriggerHeld:
-				try_fire()
+			if isTriggerHeld and !isReloading:
+				fire_single_shot()
 			
 		ShootingType.BURST_FIRE:
 			if burstShotsRemaining > 0:

@@ -28,24 +28,25 @@ func _ready() -> void:
 var weaponList: Array[Enum.WeaponID] = [
 	Enum.WeaponID.USG_57,
 	Enum.WeaponID.MP5,
-	Enum.WeaponID.MACHETE,
+	#Enum.WeaponID.MACHETE,
 	Enum.WeaponID.THE_JACOB_SPECIAL,
-	Enum.WeaponID.M1014,
+	#Enum.WeaponID.M1014,
 	Enum.WeaponID.P90,
 	Enum.WeaponID.DEAGLE,
 	Enum.WeaponID.AK12,
 	Enum.WeaponID.G502_MOUSE,
 	Enum.WeaponID.FRF2,
 	Enum.WeaponID.THE_7900_GRE,
-	Enum.WeaponID.SUPER_SHORTY,
-	Enum.WeaponID.KITCHEN_KNIFE,
+	#Enum.WeaponID.SUPER_SHORTY,
+	#Enum.WeaponID.KITCHEN_KNIFE,
 ]
 
 var bannedList: Array[String] = [
 	"Server",
 	"System",
 	"Admin",
-	"theo"
+	"theo",
+	"maxwell"
 ]
 
 var weaponLevel: int = 0

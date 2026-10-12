@@ -26,7 +26,8 @@ var isBackPressed: bool = false
 @onready var pingLabel: Label = $DebugElements/Labels/Left/Ping
 @onready var noAmmoLabel: Label = $DebugElements/Labels/NoAmmo
 
-
+@onready var verdictLabel: Label = $"HudElements/Verdict"
+@onready var winningPlayerLabel: Label = $"HudElements/Verdict/WinningPlayer"
 
 @onready var chatInput: LineEdit = $ChatElements/ChatConsole/ChatInput
 @onready var chatOutput: RichTextLabel = $ChatElements/ChatConsole/ChatOutput
@@ -245,3 +246,6 @@ func _recreate_table_names() -> void:
 
 func handle_game_over(won : bool, winningUsername: String) -> void:
 	print(winningUsername, " Has won the Match")
+	verdictLabel.visible = true
+	winningPlayerLabel.text = winningUsername + " Has Won"
+	verdictLabel.text = "You Win" if won else "You Lose"

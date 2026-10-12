@@ -9,6 +9,7 @@ class_name WeaponData extends Resource
 @export var weaponName: String
 @export var weaponID: Enum.WeaponID
 
+
 @export_category("Weapon Settings")
 @export var fireMode: WeaponManager.ShootingType
 @export var reloadType: WeaponManager.ReloadStyle

@@ -43,7 +43,7 @@ var usedUsernames: Array[String] = [
 
 
 func _ready() -> void:
-	weaponsCount =  2 #Globals.weaponList.size() - 1
+	weaponsCount = Globals.weaponList.size() - 1
 	multiplayer.peer_disconnected.connect(_player_disconnect)
 	#multiplayer.peer_connected.connect(_handle_player_joining)
 	
@@ -299,7 +299,6 @@ func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	
 	if results.is_empty():
 		push_error("Result is Empty (Hit has been denied): ", results)
-	
 	
 	return results 
 
