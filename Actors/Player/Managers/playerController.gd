@@ -2,8 +2,12 @@ class_name Player extends CharacterBody3D
 
 @export var maxHealth: float = Globals.playerStartingHealth
 
-var curHealth: float = 0
+var playerEnabledLight: bool = true
+var flashLightOn: bool
+var curHealth: float = 100
 var ui: PlayerUI
+
+const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
 
 @onready var playerInputHandler: PlayerInptHandler = $PlayerInptHandler
 @onready var movementController: PlayerMovementController = %PlayerMovmentController
@@ -14,25 +18,27 @@ var ui: PlayerUI
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 @onready var mainCam: Camera3D = $VisionManager/Head/MainCam
 @onready var playerMultiplayerSync: PlayerMultiplayerSynchroniser = $PlayerMultiplayerSynchroniser
+@onready var bodyMesh: MeshInstance3D = %BodyMesh
 
 func _ready() -> void:
+	bodyMesh.mesh.surface_set_material(0, NEW_STANDARD_MATERIAL_3D)
+	
 	if !is_multiplayer_authority(): return
-	
-	curHealth = maxHealth
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	var username: String = Globals.username
-	if !multiplayer.is_server():
-		MultiplayerManager.server_register_player.rpc_id(1, curHealth, username)
-	
-	_instantiate_UI()
 	multiplayer.peer_connected.connect(_peer_connected_sync)
-	Globals.clientPlayer = self
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_instantiate_UI()
+	
+	
+	flashLightOn = flashLight.visible
+	curHealth = maxHealth
+	Globals.clientPlayer = self		## Feel free to change this. The server will be fine. 😇
 	
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
 	
 	playerInputHandler.tick()
+	_handle_flashlight()
 	
 	movementController.tick(delta)
 	visionManager.tick(delta)
@@ -54,9 +60,9 @@ func _handle_multiplayer_flashlight_update(newMode : bool) -> void:
 	if !player: return
 	player.flashLight.visible = newMode
 
-func handle_flashlight() -> void:
-	flashLight.visible = !flashLight.visible #Set the new flashlight state
-	_handle_multiplayer_flashlight_update.rpc(flashLight.visible) #update other players of the action
+func _handle_flashlight() -> void:
+	flashLight.visible = true if self.velocity != Vector3.ZERO or playerEnabledLight else false #Set the flashlight state
+	flashLightOn = flashLight.visible
 
 func _peer_connected_sync(id: int) -> void:
 	_handle_multiplayer_flashlight_update.rpc_id(id, flashLight.visible)

@@ -35,7 +35,7 @@ var weaponList: Array[Enum.WeaponID] = [
 	Enum.WeaponID.DEAGLE,
 	Enum.WeaponID.AK12,
 	Enum.WeaponID.G502_MOUSE,
-	#Enum.WeaponID.FRF2,
+	Enum.WeaponID.FRF2,
 	Enum.WeaponID.THE_7900_GRE,
 	#Enum.WeaponID.SUPER_SHORTY,
 	#Enum.WeaponID.KITCHEN_KNIFE,

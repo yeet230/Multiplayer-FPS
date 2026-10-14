@@ -192,6 +192,8 @@ func _on_reload_timer_timeout() -> void:
 	loadedCount = clamp(loadedCount, 0, magSize + 1)
 #endregion
 
+
+##Performs a hitscan for the active player. this is only for visual feedback
 func perform_hitscan() -> float:
 	var accuracy: float = (100.0 - spread)
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
@@ -208,7 +210,8 @@ func perform_hitscan() -> float:
 	#print("Client HitPoint: ", bulletHitScanRayCast.get_collision_point())
 	
 	if collider is Player:
-		MultiplayerManager.server_handle_hit.rpc_id(1, weaponId, collider.name)
+		#MultiplayerManager.server_handle_hit.rpc_id(1, weaponId, collider.name)
+		MultiplayerManager.server_verify_hit.rpc_id(1)
 		Globals.player_hit.emit()
 		return 1
 	

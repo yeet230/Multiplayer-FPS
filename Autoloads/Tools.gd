@@ -12,6 +12,10 @@ func get_weapon_damage(weaponId : Enum.WeaponID) -> float:
 	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
 	return weaponData.damage
 
+func get_weapon_range(weaponId : Enum.WeaponID) -> float:
+	var weaponData: WeaponData = Globals.weaponDictionary[weaponId]
+	return weaponData.shootDistance
+
 func set_weapon_ammo(weaponID : Enum.WeaponID, newAmmoCount : int) -> void:
 	Globals.weaponDictionary[weaponID].loadedCount = newAmmoCount
 

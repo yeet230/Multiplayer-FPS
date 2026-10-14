@@ -20,7 +20,10 @@ enum PlayerData {
 	WARNINGS,
 	SCORE,
 	ASSISTS,
-	ID
+	ID,
+	LIFE_ID,
+	SHADING_MODE,
+	
 }
 
 var usernameMaxLength: int = 16
@@ -218,9 +221,12 @@ func _handle_player_death(who : int, where : Vector3) -> void:
 	if !multiplayer.is_server(): return
 	var newHealth: float = Globals.playerStartingHealth
 	
+	
 	_update_player_deaths(who)
 	server_downgrade_weapon(who)
 	set_player_health(who, newHealth)
+	set_player_canShoot(who, true)
+	
 	
 	server_push_death.rpc_id(who, newHealth, where)
 
@@ -235,6 +241,7 @@ func _handle_player_kill(who : int) -> void:
 	_update_player_kills(who)
 	server_upgrade_weapon(who)
 	set_player_health(who, newHealth)
+	set_player_canShoot(who, true)
 	
 	server_push_kill.rpc_id(who, newHealth)
 
@@ -243,8 +250,10 @@ func _handle_player_kill(who : int) -> void:
 #region Commands
 
 func _handle_command(text: String, senderID: int) -> void:
+	if !Globals.debug: return
+	
 	print("Command Found")
-	var splitCommand := text.split(" ")
+	var splitCommand: Array[String] = text.split(" ")
 	
 	if text.begins_with(commandStarter + "debug"):
 		var newVal: bool = !Globals.debug
@@ -261,13 +270,13 @@ func _handle_command(text: String, senderID: int) -> void:
 		if splitCommand.size() < 4:
 			push_error("Invalid command: expected ", commandStarter, "tp <x> <y> <z>")
 			return
-	
+		
 		var newPos := Vector3(
 			float(splitCommand[1]),
 			float(splitCommand[2]),
 			float(splitCommand[3])
 		)
-	
+		
 		teleport_player.rpc_id(senderID, newPos)
 	
 	elif text.begins_with(commandStarter + "give"):
@@ -276,8 +285,11 @@ func _handle_command(text: String, senderID: int) -> void:
 			return
 		
 		var newWeapon: int = int(splitCommand[1])
-		print(newWeapon)
+		var newWeaponLevel: int = Globals.weaponList.find(newWeapon)
+		
 		give_weapon.rpc_id(senderID, newWeapon)
+		serverOnlyPlayerData[senderID][PlayerData.WEAPON_LEVEL] = newWeaponLevel
+		
 		
 #endregion
 
@@ -289,37 +301,63 @@ func _handle_command(text: String, senderID: int) -> void:
 func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
 	var from: Vector3 = player.get_camera_position()
-	var dist: float = Tools.get_weapon_damage(weapon)
+	var dist: float = Tools.get_weapon_range(weapon)
 	var to: Vector3 = from + (-player.global_transform.basis.z * dist)
-	var query: = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
-	var spaceState: = player.get_world_3d().direct_space_state
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
+	var spaceState: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
 	var results: Dictionary = spaceState.intersect_ray(query)
-	
-	print(results, "				", spaceState)
-	
-	if results.is_empty():
-		push_error("Result is Empty (Hit has been denied): ", results)
 	
 	return results 
 
+#@rpc("any_peer", "call_remote", "unreliable_ordered")
+#func server_verify_hit() -> void:
+	#if !multiplayer.is_server(): return
+	#
+	#var senderId: int = multiplayer.get_remote_sender_id()
+	#var playerWeaponLevel: int = Tools.get_weapon_level(senderId)
+	#var hitScanResult: Dictionary = _handle_server_fire(senderId, playerWeaponLevel)
+	#
+	#print("Server has performed a hitscan: Results = ", hitScanResult)
+	#
+	#if hitScanResult["collider"] is Player:
+		#var player: Player = hitScanResult["collider"]
+		#print("Ouch")
+	
 
 ## Client -> Server:
 ##is called when the player locally hits another player it will confirm the hit, apply damage, call other funtions if it is a kill
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func server_handle_hit(weapon : Enum.WeaponID, damagedPlayer : String) -> void:
-	
+func server_verify_hit() -> void:
 	if !multiplayer.is_server(): return
 	
+	print("I have been called")
+	
+	
 	var senderID: int = multiplayer.get_remote_sender_id()
-	var damagedPlayerId: int = int(damagedPlayer)
+	if !Batman.get_player_canShoot(senderID): 
+		print("Player can not shoot yet: ", Batman.get_player_canShoot(senderID))
+		return
+	
+	var weapon: Enum.WeaponID = Tools.get_weapon(senderID)
+	var hitScanResults: Dictionary = _handle_server_fire(senderID, weapon)
+	if hitScanResults.is_empty(): 
+		print("Noone is being hit?")
+		return
+	
+	var shotObject: Node = hitScanResults["collider"]
+	var damagedPlayer: Player
+	
+	if shotObject is Player:
+		damagedPlayer = shotObject
+	else:
+		return
+	
+	var damagedPlayerId: int = int(damagedPlayer.name)
 	var verifiedDamage: float = Tools.get_weapon_damage(weapon)
 	var waitTime: float = Tools.get_weapon_fireRate(weapon)
 	var curPlayerHealth: float = get_player_health(damagedPlayerId)
 	var newHealth: float
 	
-	#_handle_server_fire(weapon, senderID)
-	
-	if !Batman.get_player_canShoot(senderID): return
 	set_player_canShoot(senderID, false)
 	
 	print("Damage: ", verifiedDamage)
@@ -352,6 +390,7 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	
 	
 	if Batman.check_player_health(playerHealth):
+		print("Player health is not valid")
 		multiplayer.multiplayer_peer.disconnect_peer(senderID)
 		return
 	
@@ -369,7 +408,7 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	var playerWeaponlevel: int = Tools.get_weapon_level(senderID)
 	var newWeaponID: Enum.WeaponID = Globals.weaponList[playerWeaponlevel]
 	
-	give_weapon.rpc_id(senderID, 0)
+	give_weapon.rpc_id(senderID, newWeaponID)
 	_update_sharedPlayerData.rpc(sharedPlayerData)
 	print("Registered player ", senderID, " as ", username, " Sent sharedPlayerData: ", sharedPlayerData)
 

@@ -20,6 +20,7 @@ func _ready() -> void:
 func _auto_mode_set() -> void:
 	if OS.has_feature("dedicated_server"):
 		print("Starting Dedicated Server Automaticlly")
+		push_warning("I am the server")
 		_on_host_pressed.call_deferred()
 	#else:
 		#_on_join_pressed.call_deferred()
