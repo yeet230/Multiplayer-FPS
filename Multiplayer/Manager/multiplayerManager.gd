@@ -307,21 +307,9 @@ func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	var spaceState: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
 	var results: Dictionary = spaceState.intersect_ray(query)
 	
+	print("Object Hit At Position: ", results["position"])
+	
 	return results 
-
-#@rpc("any_peer", "call_remote", "unreliable_ordered")
-#func server_verify_hit() -> void:
-	#if !multiplayer.is_server(): return
-	#
-	#var senderId: int = multiplayer.get_remote_sender_id()
-	#var playerWeaponLevel: int = Tools.get_weapon_level(senderId)
-	#var hitScanResult: Dictionary = _handle_server_fire(senderId, playerWeaponLevel)
-	#
-	#print("Server has performed a hitscan: Results = ", hitScanResult)
-	#
-	#if hitScanResult["collider"] is Player:
-		#var player: Player = hitScanResult["collider"]
-		#print("Ouch")
 	
 
 ## Client -> Server:
