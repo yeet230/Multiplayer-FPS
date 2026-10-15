@@ -17,7 +17,7 @@ const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
 @onready var flashLight: SpotLight3D = $VisionManager/Head/MainCam/MainLight
 @onready var animPlayer: AnimationPlayer = $AnimationPlayer
 @onready var mainCam: Camera3D = $VisionManager/Head/MainCam
-@onready var playerMultiplayerSync: PlayerMultiplayerSynchroniser = $PlayerMultiplayerSynchroniser
+@onready var playerNetworkHandler: PlayerNetworkHandler = $PlayerMultiplayerSynchroniser
 @onready var bodyMesh: MeshInstance3D = %BodyMesh
 
 func _ready() -> void:
@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	movementController.tick(delta)
 	visionManager.tick(delta)
 	weaponManager.tick()
-	playerMultiplayerSync.tick()
+	playerNetworkHandler.tick()
 	ui.tick()
 	
 

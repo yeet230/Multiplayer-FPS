@@ -300,12 +300,13 @@ func _handle_command(text: String, senderID: int) -> void:
 
 func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
-	var from: Vector3 = player.get_camera_position()
-	var dist: float = Tools.get_weapon_range(weapon)
-	var to: Vector3 = from + (-player.global_transform.basis.z * dist)
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
-	var spaceState: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
-	var results: Dictionary = spaceState.intersect_ray(query)
+	var results: Dictionary = player.playerNetworkHandler.server_check_hit()
+	#var from: Vector3 = player.get_camera_position()
+	#var dist: float = Tools.get_weapon_range(weapon)
+	#var to: Vector3 = from + (-player.global_transform.basis.z * dist)
+	#var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
+	#var spaceState: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
+	#var results: Dictionary = spaceState.intersect_ray(query)
 	
 	print("Object Hit At Position: ", results["position"])
 	

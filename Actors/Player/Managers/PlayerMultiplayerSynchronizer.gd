@@ -1,18 +1,19 @@
-class_name PlayerMultiplayerSynchroniser extends Node
+class_name PlayerNetworkHandler extends Node
 ##Syncs properties required for player functionality aswell as handling as to whether they should be synced eg if they have changed since last frame. 
 ##It will sync Position, Rotation and Flashlight
 
 enum DataTypes {
 	Position,
-	Rotation,
-	FlashLightState,
-	
+	Player_Body_Rotation,
+	Flashlight_State,
+	Player_Head_X_Rotation,
 }
 
 @export var localPlayer: Player = get_parent()
 
 var prevPos: Vector3 = Vector3.ZERO
-var prevRot: Vector3 = Vector3.ZERO
+var prevBodyRot: Vector3 = Vector3.ZERO
+var prevHeadXRot: float = 0
 var prevLightState: bool
 
 func _ready() -> void:
@@ -45,13 +46,17 @@ func tick() -> void:
 		data[DataTypes.Position] = localPlayer.global_position
 		prevPos = localPlayer.global_position
 	
-	if prevRot != localPlayer.rotation:
-		data[DataTypes.Rotation] = localPlayer.rotation
-		prevRot = localPlayer.rotation
+	if prevBodyRot != localPlayer.rotation:
+		data[DataTypes.Player_Body_Rotation] = localPlayer.rotation
+		prevBodyRot = localPlayer.rotation
 	
 	if prevLightState != localPlayer.flashLightOn:
-		data[DataTypes.FlashLightState] = localPlayer.flashLightOn
+		data[DataTypes.Flashlight_State] = localPlayer.flashLightOn
 		prevLightState = localPlayer.flashLightOn
+	
+	if prevHeadXRot != localPlayer.visionManager.get_camera().rotation.x:
+		data[DataTypes.Player_Head_X_Rotation] = localPlayer.visionManager.get_camera().rotation.x
+		prevLightState = localPlayer.visionManager.get_camera().rotation.x
 	
 	if !data.is_empty():
 		_update_data.rpc(data)
@@ -64,10 +69,28 @@ func _update_data(data : Dictionary) -> void:
 		match i:
 			DataTypes.Position:
 				player.global_position = data[DataTypes.Position]
-			DataTypes.Rotation:
-				player.rotation = data[DataTypes.Rotation]
-			DataTypes.FlashLightState:
-				player.flashLight.visible = data[DataTypes.FlashLightState]
+			DataTypes.Player_Body_Rotation:
+				player.rotation = data[DataTypes.Player_Body_Rotation]
+			DataTypes.Flashlight_State:
+				player.flashLight.visible = data[DataTypes.Flashlight_State]
+			DataTypes.Player_Head_X_Rotation:
+				player.visionManager.get_camera().rotation.x = data[DataTypes.Player_Head_X_Rotation]
+
+##
+func server_check_hit() -> Dictionary:
+	var playerId: int = int(localPlayer.name)
+	var weapon: int = Tools.get_weapon(playerId)
+	var from: Vector3 = localPlayer.get_camera_position()
+	var dist: float = Tools.get_weapon_range(weapon)
+	var to: Vector3 = from + (-localPlayer.global_transform.basis.z * dist)
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
+	var spaceState: PhysicsDirectSpaceState3D = localPlayer.visionManager.get_camera().get_world_3d().direct_space_state
+	var results: Dictionary = spaceState.intersect_ray(query)
+	
+	print("Object hit at position: ", results["position"])
+	
+	return results
+
 
 func _player_joined(playerId : int) -> void:
 	if multiplayer.is_server(): return
@@ -75,7 +98,7 @@ func _player_joined(playerId : int) -> void:
 	var data : Dictionary 
 	
 	data[DataTypes.Position] = localPlayer.global_position
-	data[DataTypes.Rotation] = localPlayer.rotation
-	data[DataTypes.FlashLightState] =localPlayer.flashLightOn 
+	data[DataTypes.Player_Body_Rotation] = localPlayer.rotation
+	data[DataTypes.Flashlight_State] =localPlayer.flashLightOn 
 	
 	_update_data.rpc_id(playerId, data)
