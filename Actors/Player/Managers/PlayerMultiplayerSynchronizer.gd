@@ -80,14 +80,13 @@ func _update_data(data : Dictionary) -> void:
 func server_check_hit() -> Dictionary:
 	var playerId: int = int(localPlayer.name)
 	var weapon: int = Tools.get_weapon(playerId)
+	var activeCamera: Camera3D = localPlayer.visionManager.get_camera()
 	var from: Vector3 = localPlayer.get_camera_position()
 	var dist: float = Tools.get_weapon_range(weapon)
-	var to: Vector3 = from + (-localPlayer.global_transform.basis.z * dist)
+	var to: Vector3 = from + (-activeCamera.global_transform.basis.z * dist)
 	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
-	var spaceState: PhysicsDirectSpaceState3D = localPlayer.visionManager.get_camera().get_world_3d().direct_space_state
+	var spaceState: PhysicsDirectSpaceState3D = activeCamera.get_world_3d().direct_space_state
 	var results: Dictionary = spaceState.intersect_ray(query)
-	
-	print("Object hit at position: ", results["position"])
 	
 	return results
 

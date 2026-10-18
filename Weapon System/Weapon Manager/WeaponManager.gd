@@ -205,18 +205,12 @@ func perform_hitscan() -> float:
 	
 	var collider: Node3D = bulletHitScanRayCast.get_collider()
 	
-	#print("Client From: ", global_position)
-	#print("Client To: ", targetPos)
-	#print("Client HitPoint: ", bulletHitScanRayCast.get_collision_point())
-	
 	if collider is Player:
-		#MultiplayerManager.server_handle_hit.rpc_id(1, weaponId, collider.name)
-		MultiplayerManager.server_verify_hit.rpc_id(1)
 		Globals.player_hit.emit()
 		return 1
 	
-	if bulletHitScanRayCast.is_colliding():
-		_spawn_bullet_decal()
+	MultiplayerManager.server_verify_hit.rpc_id(1)
+	
 	
 	return 0
 

@@ -104,7 +104,7 @@ func _update_ping(ping : String) -> void:
 
 func _update_weapon_equipped() -> void:
 	var weaponName: String = player.weaponManager.weaponName
-	
+	#Globals.throw_error(Enum.ERRORS.ERR_CAN_NOT_CONNECT_TO_SERVER)
 	activeWeaponLabel.text = str("Weapon: ", weaponName)
 
 func _update_dash() -> void:

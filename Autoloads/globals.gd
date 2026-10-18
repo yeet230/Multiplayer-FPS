@@ -22,7 +22,8 @@ func _ready() -> void:
 	Enum.WeaponID.PEA_SHOOTER :preload("res://Weapon System/WeaponData/Debug/Pea_Shooter.tres"),
 	Enum.WeaponID.GODS_GUM : preload("res://Weapon System/WeaponData/Debug/Gods_Gum.tres"),
 	Enum.WeaponID.THE_JACOB_SPECIAL : preload("res://Weapon System/WeaponData/Debug/TheJacobSpecial.tres"),
-	Enum.WeaponID.G502_MOUSE : preload("res://Weapon System/WeaponData/Other/G502.tres")
+	Enum.WeaponID.G502_MOUSE : preload("res://Weapon System/WeaponData/Other/G502.tres"),
+	Enum.WeaponID.THE_7900_GRE : preload("res://Weapon System/WeaponData/Other/7900GRE.tres")
 }
 
 var weaponList: Array[Enum.WeaponID] = [
@@ -77,3 +78,7 @@ var playerStartingHealth: float = 100.0
 var debug: bool = false
 
 var username: String = ""
+
+func throw_error(err : Enum.ERRORS, txt : String = "") -> void:
+	var errorStr: String = str(Enum.ERRORS.find_key(err))
+	assert(false, str(txt, "\nError Code: ", errorStr))

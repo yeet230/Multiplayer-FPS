@@ -61,7 +61,8 @@ func start_server() -> void:
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_server(SERVER_PORT)
 	
-	if err != OK:
+	if err == OK:
+		Globals.throw_error(Enum.ERRORS.ERR_FAILED_TO_CREATE_SERVER, "%s" % err)
 		push_error("Failed to create server: %s" % err)
 		return
 	
@@ -69,9 +70,6 @@ func start_server() -> void:
 	commandStarter = Tools.create_command_starter()
 	
 	serverCreated.emit()
-	
-	#damageMulti = float(Tools.get_value("damageMulti"))
-	#print(damageMulti)
 	
 	print("Server started on port ", SERVER_PORT)
 	print("Command starter: ", commandStarter)
@@ -122,6 +120,7 @@ func _random_username_gen() -> String:
 		"Schitzophrenic ",
 		"SCP-",
 		"Sweet and Sour ",
+		"Meowing ",
 	]
 	
 	var nameEnds: Array[String] = [
@@ -130,7 +129,8 @@ func _random_username_gen() -> String:
 		"Schitzophrenic",
 		"Barber",
 		"Calculator",
-		"Calendar"
+		"Calendar",
+		"Mister Maker",
 	]
 	
 	var genUsername: String = nameStarter.pick_random() + nameEnds.pick_random()
@@ -301,14 +301,6 @@ func _handle_command(text: String, senderID: int) -> void:
 func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
 	var results: Dictionary = player.playerNetworkHandler.server_check_hit()
-	#var from: Vector3 = player.get_camera_position()
-	#var dist: float = Tools.get_weapon_range(weapon)
-	#var to: Vector3 = from + (-player.global_transform.basis.z * dist)
-	#var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from, to, 2 | 1)
-	#var spaceState: PhysicsDirectSpaceState3D = player.get_world_3d().direct_space_state
-	#var results: Dictionary = spaceState.intersect_ray(query)
-	
-	print("Object Hit At Position: ", results["position"])
 	
 	return results 
 	
@@ -320,7 +312,6 @@ func server_verify_hit() -> void:
 	if !multiplayer.is_server(): return
 	
 	print("I have been called")
-	
 	
 	var senderID: int = multiplayer.get_remote_sender_id()
 	if !Batman.get_player_canShoot(senderID): 
@@ -339,6 +330,9 @@ func server_verify_hit() -> void:
 	if shotObject is Player:
 		damagedPlayer = shotObject
 	else:
+		var shotPos: Vector3 = hitScanResults["Position"]
+		var shotNorm: Vector3 = hitScanResults["Normal"]
+		spawn_bullet_decal.rpc(shotPos, shotNorm)
 		return
 	
 	var damagedPlayerId: int = int(damagedPlayer.name)
@@ -492,15 +486,14 @@ func _update_sharedPlayerData(newData : Variant) -> void:
 
 
 # Client -> Clients
-@rpc("any_peer", "call_local", "unreliable_ordered")
+@rpc("authority", "call_local", "unreliable_ordered")
 func spawn_bullet_decal(pos: Vector3, norm: Vector3) -> void:
 	if multiplayer.is_server(): return
 	
-	var decal := bulletDecalScene.instantiate() as Node3D
-	print("BulletDecal spawned ", multiplayer.get_unique_id())
-	var parent := get_tree().get_first_node_in_group("balls")
-	if parent == null:
-		return
+	var decal: Node3D = bulletDecalScene.instantiate() as Node3D
+	#print("BulletDecal spawned ", multiplayer.get_unique_id())
+	var parent: Node3D = get_tree().get_first_node_in_group("Decals")
+	if parent == null: return
 	
 	parent.add_child(decal, true)
 	

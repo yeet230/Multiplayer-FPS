@@ -49,8 +49,8 @@ import/blender/enabled=false
 
 [global_group]
 
-balls=""
 Players=""
+Decals=""
 
 [input]
 

@@ -12,7 +12,8 @@ enum PLAYERSTATE {
 enum ERRORS {
 	ERR_SERVER_ONLY_ACCESS = 0,
 	ERR_CLIENT_ONLY_ACCESS = 1,
-	ERR_CAN_NOT_CONNECT_TO_SERVER = 2
+	ERR_CAN_NOT_CONNECT_TO_SERVER = 2,
+	ERR_FAILED_TO_CREATE_SERVER = 3,
 }
 
 ##Weapons in the range [b]0 - 99[/b] are Pistols, [b]100 - 199[/b] are SMG's, [b]200 - 299[/b] are Rifles, [b]300 - 399[/b] are Shotguns, [b]400 - 499[/b] are Melee
