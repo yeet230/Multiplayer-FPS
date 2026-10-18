@@ -61,9 +61,9 @@ func start_server() -> void:
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_server(SERVER_PORT)
 	
-	if err == OK:
+	if err != OK:
 		Globals.throw_error(Enum.ERRORS.ERR_FAILED_TO_CREATE_SERVER, "%s" % err)
-		push_error("Failed to create server: %s" % err)
+		#push_error("Failed to create server: %s" % err)
 		return
 	
 	multiplayer.multiplayer_peer = peer
@@ -330,8 +330,8 @@ func server_verify_hit() -> void:
 	if shotObject is Player:
 		damagedPlayer = shotObject
 	else:
-		var shotPos: Vector3 = hitScanResults["Position"]
-		var shotNorm: Vector3 = hitScanResults["Normal"]
+		var shotPos: Vector3 = hitScanResults["position"]
+		var shotNorm: Vector3 = hitScanResults["normal"]
 		spawn_bullet_decal.rpc(shotPos, shotNorm)
 		return
 	
@@ -418,6 +418,11 @@ func server_verify_chat(text: String) -> void:
 
 func _player_disconnect(id : int) -> void:
 	if !multiplayer.is_server(): return
+	#var
+	#
+	#for user in serverOnlyPlayerData:
+		#if int(user) != id:
+	print("Attempting to remove Player ", id)
 	var disconnectedUsername: String = Tools.get_username(id)
 	
 	usedUsernames.erase(disconnectedUsername)
