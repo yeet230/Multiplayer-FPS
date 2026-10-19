@@ -1,7 +1,9 @@
 extends Node
 
+@warning_ignore_start("unused_signal")
 signal ping_update(ping : String)
 signal player_hit()
+
 
 var ping: String = "Ping: N/A"
 

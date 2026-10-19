@@ -4,7 +4,7 @@ class_name Player extends CharacterBody3D
 
 var playerEnabledLight: bool = true
 var flashLightOn: bool
-var curHealth: float = 100
+var curHealth: float = Globals.playerStartingHealth
 var ui: PlayerUI
 
 const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
@@ -22,6 +22,10 @@ const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
 
 func _ready() -> void:
 	bodyMesh.mesh.surface_set_material(0, NEW_STANDARD_MATERIAL_3D)
+	if multiplayer.is_server():
+		print("I am server")
+	else:
+		print("I am client")
 	
 	if !is_multiplayer_authority(): return
 	multiplayer.peer_connected.connect(_peer_connected_sync)
@@ -32,10 +36,10 @@ func _ready() -> void:
 	flashLightOn = flashLight.visible
 	curHealth = maxHealth
 	Globals.clientPlayer = self		## Feel free to change this. The server will be fine. 😇
-	
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
+	#print("i am server" if multiplayer.is_server() else "I am client")
 	
 	playerInputHandler.tick()
 	_handle_flashlight()

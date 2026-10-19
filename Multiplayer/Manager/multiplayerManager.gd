@@ -46,6 +46,8 @@ var usedUsernames: Array[String] = [
 
 
 func _ready() -> void:
+	if !multiplayer.is_server(): return
+	
 	weaponsCount = Globals.weaponList.size() - 1
 	multiplayer.peer_disconnected.connect(_player_disconnect)
 	#multiplayer.peer_connected.connect(_handle_player_joining)
@@ -95,7 +97,7 @@ func _create_player_data(who : int, username : String) -> void:
 		PlayerData.HEALTH : 100.0,
 		PlayerData.WEAPON_LEVEL : 0,
 		PlayerData.CAN_SHOOT : true,
-		PlayerData.WARNINGS : 0
+		PlayerData.WARNINGS : 0,
 	}
 	
 	sharedPlayerData[who] = {
@@ -103,7 +105,7 @@ func _create_player_data(who : int, username : String) -> void:
 		PlayerData.KILLS : 0,
 		PlayerData.DEATHS : 0,
 		PlayerData.ASSISTS : 0,
-		PlayerData.SCORE : 0
+		PlayerData.SCORE : 0,
 	}
 
 func _update_player_kills(who : int) -> void:
@@ -298,7 +300,7 @@ func _handle_command(text: String, senderID: int) -> void:
 
 #region Server Side Network Functions
 
-func _handle_server_fire(who : int, weapon : Enum.WeaponID) -> Dictionary:
+func _handle_server_fire(who : int) -> Dictionary:
 	var player: Player = get_player_from_name(str(who))
 	var results: Dictionary = player.playerNetworkHandler.server_check_hit()
 	
@@ -319,7 +321,7 @@ func server_verify_hit() -> void:
 		return
 	
 	var weapon: Enum.WeaponID = Tools.get_weapon(senderID)
-	var hitScanResults: Dictionary = _handle_server_fire(senderID, weapon)
+	var hitScanResults: Dictionary = _handle_server_fire(senderID)
 	if hitScanResults.is_empty(): 
 		print("Noone is being hit?")
 		return
@@ -329,10 +331,12 @@ func server_verify_hit() -> void:
 	
 	if shotObject is Player:
 		damagedPlayer = shotObject
+		print("Player Found")
 	else:
 		var shotPos: Vector3 = hitScanResults["position"]
 		var shotNorm: Vector3 = hitScanResults["normal"]
 		spawn_bullet_decal.rpc(shotPos, shotNorm)
+		print("No player found spawnig bullet decal")
 		return
 	
 	var damagedPlayerId: int = int(damagedPlayer.name)
@@ -372,10 +376,6 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	var usernameLength: int = username.length()
 	
 	
-	if Batman.check_player_health(playerHealth):
-		print("Player health is not valid")
-		multiplayer.multiplayer_peer.disconnect_peer(senderID)
-		return
 	
 	username = Batman.profanity_check_string(username)
 	username.strip_edges()
@@ -393,6 +393,12 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	
 	give_weapon.rpc_id(senderID, newWeaponID)
 	_update_sharedPlayerData.rpc(sharedPlayerData)
+	
+	if Batman.check_player_health(playerHealth):
+		print("Player health is not valid")
+		multiplayer.multiplayer_peer.disconnect_peer(senderID)
+		return
+	
 	print("Registered player ", senderID, " as ", username, " Sent sharedPlayerData: ", sharedPlayerData)
 
 

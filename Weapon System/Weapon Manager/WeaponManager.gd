@@ -194,7 +194,7 @@ func _on_reload_timer_timeout() -> void:
 
 
 ##Performs a hitscan for the active player. this is only for visual feedback
-func perform_hitscan() -> float:
+func perform_hitscan() -> void:
 	var accuracy: float = (100.0 - spread)
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
 	var yAccuracy: float = randf_range(-accuracy, accuracy)
@@ -207,12 +207,8 @@ func perform_hitscan() -> float:
 	
 	if collider is Player:
 		Globals.player_hit.emit()
-		return 1
 	
 	MultiplayerManager.server_verify_hit.rpc_id(1)
-	
-	
-	return 0
 
 func _spawn_bullet_decal() -> void:
 	MultiplayerManager.spawn_bullet_decal.rpc(
