@@ -26,8 +26,8 @@ var isBackPressed: bool = false
 @onready var pingLabel: Label = $DebugElements/Labels/Left/Ping
 @onready var noAmmoLabel: Label = $DebugElements/Labels/NoAmmo
 
-@onready var verdictLabel: Label = $"HudElements/Verdict"
-@onready var winningPlayerLabel: Label = $"HudElements/Verdict/WinningPlayer"
+@onready var verdictLabel: Label = $"HudElements/Control/Verdict"
+@onready var winningPlayerLabel: Label = $"HudElements/Control/Verdict/WinningPlayer"
 
 @onready var chatInput: LineEdit = $ChatElements/ChatConsole/ChatInput
 @onready var chatOutput: RichTextLabel = $ChatElements/ChatConsole/ChatOutput
@@ -41,8 +41,9 @@ var isBackPressed: bool = false
 @onready var killsVBox: VBoxContainer = $ScoreBoardBG/GridContainer/KillsVBox
 @onready var deathsVBox: VBoxContainer = $ScoreBoardBG/GridContainer/DeathsVBox
 
-@onready var hitMarker: Label = $HudElements/HitMarker
+@onready var hitMarker: Label = $HudElements/Control/HitMarker
 
+@onready var healthBar: TextureProgressBar = $HudElements/Control/HealthBar
 
 func tick() -> void:
 	if isBackPressed and chatInput.visible:
@@ -138,6 +139,8 @@ func _update_bullet_count() -> void:
 func _update_health() -> void:
 	var playerHealth: float = player.curHealth
 	var playerMaxHealth: int = player.maxHealth
+	
+	healthBar.value = playerHealth
 	healthLabel.text = str(playerHealth, "/", playerMaxHealth)
 
 #func _update_kill_count(amnt : int) -> void:

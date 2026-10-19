@@ -43,6 +43,7 @@ func tick() -> void:
 	var data : Dictionary
 	
 	if prevPos != localPlayer.global_position:
+		
 		data[DataTypes.Position] = localPlayer.global_position
 		prevPos = localPlayer.global_position
 	
@@ -51,12 +52,14 @@ func tick() -> void:
 		prevBodyRot = localPlayer.rotation
 	
 	if prevLightState != localPlayer.flashLightOn:
+		print("Updating Flashlight State, Client side")
+		
 		data[DataTypes.Flashlight_State] = localPlayer.flashLightOn
 		prevLightState = localPlayer.flashLightOn
 	
 	if prevHeadXRot != localPlayer.visionManager.get_camera().rotation.x:
 		data[DataTypes.Player_Head_X_Rotation] = localPlayer.visionManager.get_camera().rotation.x
-		prevLightState = localPlayer.visionManager.get_camera().rotation.x
+		prevHeadXRot = localPlayer.visionManager.get_camera().rotation.x
 	
 	if !data.is_empty():
 		_update_data.rpc(data)
@@ -75,6 +78,7 @@ func _update_data(data : Dictionary) -> void:
 				player.flashLight.visible = data[DataTypes.Flashlight_State]
 			DataTypes.Player_Head_X_Rotation:
 				player.visionManager.get_camera().rotation.x = data[DataTypes.Player_Head_X_Rotation]
+
 
 ##
 func server_check_hit() -> Dictionary:

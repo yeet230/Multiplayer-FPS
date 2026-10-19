@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cihaplk2e5qom" path="res://Actors/Player/Player/playerUI.gd" id="1_qwd5t"]
 [ext_resource type="Texture2D" uid="uid://bofknxo8qvmpy" path="res://External Game Assets/2D/Crosshair.png" id="2_icp3m"]
 [ext_resource type="Theme" uid="uid://b4pga3d0o1xjs" path="res://UI.tres" id="3_ie5er"]
+[ext_resource type="Texture2D" uid="uid://7vlhb6irx1d0" path="res://Prototyping/pixil-frame-0.png" id="4_6wes0"]
+[ext_resource type="Texture2D" uid="uid://gri6liwhyuq8" path="res://Prototyping/New Piskel.png" id="4_eupuc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbetb"]
 border_width_bottom = 2
@@ -195,8 +197,10 @@ text = "No Ammo"
 label_settings = SubResource("LabelSettings_icp3m")
 horizontal_alignment = 1
 
-[node name="HudElements" type="Control" parent="." unique_id=2031115318]
-layout_mode = 1
+[node name="HudElements" type="CanvasLayer" parent="." unique_id=558969971]
+
+[node name="Control" type="Control" parent="HudElements" unique_id=1229526159]
+layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -209,7 +213,7 @@ offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HitMarker" type="Label" parent="HudElements" unique_id=365766785]
+[node name="HitMarker" type="Label" parent="HudElements/Control" unique_id=612725875]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -230,7 +234,7 @@ text = "+"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Crosshair" type="TextureRect" parent="HudElements" unique_id=760536231]
+[node name="Crosshair" type="TextureRect" parent="HudElements/Control" unique_id=1277887043]
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 1
 anchors_preset = 8
@@ -247,7 +251,7 @@ grow_vertical = 2
 texture = ExtResource("2_icp3m")
 expand_mode = 1
 
-[node name="Verdict" type="Label" parent="HudElements" unique_id=1948573012]
+[node name="Verdict" type="Label" parent="HudElements/Control" unique_id=41451570]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -261,7 +265,7 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 64
 horizontal_alignment = 1
 
-[node name="WinningPlayer" type="Label" parent="HudElements/Verdict" unique_id=1343159265]
+[node name="WinningPlayer" type="Label" parent="HudElements/Control/Verdict" unique_id=1366407129]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -275,3 +279,23 @@ offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 0
 horizontal_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="HudElements/Control" unique_id=537993661]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -29.0
+offset_right = 304.0
+offset_bottom = -4.0
+grow_vertical = 0
+value = 50.0
+nine_patch_stretch = true
+stretch_margin_left = 10
+stretch_margin_top = 10
+stretch_margin_right = 10
+stretch_margin_bottom = 10
+texture_under = ExtResource("4_eupuc")
+texture_progress = ExtResource("4_6wes0")
+tint_progress = Color(0.5267931, 1.7928704e-06, 2.8878452e-07, 1)
