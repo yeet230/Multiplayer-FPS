@@ -22,10 +22,6 @@ const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
 
 func _ready() -> void:
 	bodyMesh.mesh.surface_set_material(0, NEW_STANDARD_MATERIAL_3D)
-	if multiplayer.is_server():
-		print("I am server")
-	else:
-		print("I am client")
 	
 	if !is_multiplayer_authority(): return
 	multiplayer.peer_connected.connect(_peer_connected_sync)
@@ -39,7 +35,6 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority(): return
-	#print("i am server" if multiplayer.is_server() else "I am client")
 	
 	playerInputHandler.tick()
 	_handle_flashlight()
@@ -58,7 +53,7 @@ func _instantiate_UI() -> void:
 	$PlayerUI.add_child(ui)
 
 @rpc("any_peer", "call_local", "unreliable")
-func _handle_multiplayer_flashlight_update(newMode : bool) -> void:	
+func _handle_multiplayer_flashlight_update(newMode : bool) -> void:
 	var playerId: int = multiplayer.get_remote_sender_id()
 	var player: Player = MultiplayerManager.get_player_from_name(str(playerId))
 	if !player: return

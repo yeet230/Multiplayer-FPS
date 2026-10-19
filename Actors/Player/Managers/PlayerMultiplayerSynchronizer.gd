@@ -39,7 +39,7 @@ func _ready() -> void:
 	#prevLightState = localPlayer.flashLight.visible
 
 func tick() -> void:
-	var id: String = localPlayer.name
+	#var id: String = localPlayer.name
 	var data : Dictionary
 	
 	if prevPos != localPlayer.global_position:
@@ -98,6 +98,6 @@ func _player_joined(playerId : int) -> void:
 	
 	data[DataTypes.Position] = localPlayer.global_position
 	data[DataTypes.Player_Body_Rotation] = localPlayer.rotation
-	data[DataTypes.Flashlight_State] =localPlayer.flashLightOn 
+	data[DataTypes.Flashlight_State] = localPlayer.flashLightOn 
 	
 	_update_data.rpc_id(playerId, data)

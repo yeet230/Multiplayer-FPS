@@ -6,12 +6,14 @@
 [ext_resource type="Script" uid="uid://dabr1kj3hxkuh" path="res://Actors/Player/Managers/PlayerMultiplayerSynchronizer.gd" id="4_cm46x"]
 [ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 [ext_resource type="Script" uid="uid://c5nnf7phlxe6g" path="res://Actors/Player/Managers/InputHandler.gd" id="5_lottw"]
-[ext_resource type="Material" uid="uid://b1501ncct6v6k" path="res://Other/new_standard_material_3d.tres" id="7_ie3x2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm46x"]
+albedo_color = Color(0.49252456, 0.5097761, 0, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_xhfnw"]
-material = ExtResource("7_ie3x2")
+material = SubResource("StandardMaterial3D_cm46x")
 
 [sub_resource type="Animation" id="Animation_yqfyh"]
 resource_name = "Crouch"
@@ -110,6 +112,7 @@ metadata/_custom_type_script = "uid://dfi4sxowkt2kg"
 [node name="Head" type="Node3D" parent="VisionManager" unique_id=515021475]
 
 [node name="MainCam" type="Camera3D" parent="VisionManager/Head" unique_id=338101799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.04275179)
 
 [node name="WeaponManager" parent="VisionManager/Head/MainCam" unique_id=1351833858 instance=ExtResource("4_ie3x2")]
 
