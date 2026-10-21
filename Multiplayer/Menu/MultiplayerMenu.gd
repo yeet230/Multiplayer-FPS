@@ -2,12 +2,14 @@ extends Control
 
 @onready var usernameInput: LineEdit = %UsernameInput
 @onready var ipInput: LineEdit = %IPInput
-@onready var playMenu: TabContainer = $PlayTabContainer
-@onready var mainMenu: VBoxContainer = $MainMenu
-@onready var settingsMenu: TabContainer = $SettingsTabContainer
+@onready var playMenu: TabContainer = $UI/PlayTabContainer
+@onready var mainMenu: VBoxContainer = $UI/MainMenu
+@onready var settingsMenu: TabContainer = $UI/SettingsTabContainer
 
 func _ready() -> void:
 	_auto_mode_set()
+	multiplayer.connection_failed.connect(_failed_to_connect)
+	
 	#print(IP.get_local_addresses())
 
 #func _input(event: InputEvent) -> void:
@@ -38,7 +40,14 @@ func _on_join_pressed() -> void:
 	_destroy()
 
 func _destroy() -> void:
+	$UI.visible = false
+	$Effects.visible = false
 	visible = false
+
+func _failed_to_connect() -> void:
+	$UI.visible = true
+	$Effects.visible = true
+	visible = true
 
 func _set_player_username() -> void:
 	var username: String 

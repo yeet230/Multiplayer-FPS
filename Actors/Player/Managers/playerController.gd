@@ -4,7 +4,7 @@ class_name Player extends CharacterBody3D
 
 var playerEnabledLight: bool = true
 var flashLightOn: bool
-var curHealth: float = Globals.playerStartingHealth
+var curHealth: float = 101#Globals.playerStartingHealth
 var ui: PlayerUI
 
 const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")

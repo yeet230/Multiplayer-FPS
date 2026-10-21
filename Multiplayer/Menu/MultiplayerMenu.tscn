@@ -2,6 +2,15 @@
 
 [ext_resource type="Theme" uid="uid://d3knqsqu2fo06" path="res://Prototyping/UI/Main.tres" id="1_bkn5d"]
 [ext_resource type="Script" uid="uid://clmn0ppoyubj8" path="res://Multiplayer/Menu/MultiplayerMenu.gd" id="1_huwya"]
+[ext_resource type="Shader" uid="uid://dxmrwca122l6w" path="res://Prototyping/UI/MultiplayerMenu.gdshader" id="3_ph5o1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bovxa"]
+shader = ExtResource("3_ph5o1")
+shader_parameter/colour1 = Color(0.23137255, 0.22745098, 0.047058824, 1)
+shader_parameter/colour2 = Color(0.4506576, 0.44374865, 0.1256294, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g7fu1"]
+bg_color = Color(0.25565878, 0.2556588, 0.2556587, 1)
 
 [node name="MultiplayerMenu" type="Control" unique_id=1433022567]
 custom_minimum_size = Vector2(43.83, 58.48)
@@ -14,46 +23,48 @@ grow_vertical = 2
 theme = ExtResource("1_bkn5d")
 script = ExtResource("1_huwya")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=335171231]
-visible = false
-layout_mode = 1
+[node name="Effects" type="CanvasLayer" parent="." unique_id=273727752]
+
+[node name="BackgroundShader" type="ColorRect" parent="Effects" unique_id=335171231]
+material = SubResource("ShaderMaterial_bovxa")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.25565878, 0.25565878, 0.25565878, 1)
 
-[node name="MainMenu" type="VBoxContainer" parent="." unique_id=1811945703]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1594793924]
+layer = 53
+follow_viewport_enabled = true
+
+[node name="MainMenu" type="VBoxContainer" parent="UI" unique_id=1811945703]
 visible = false
 custom_minimum_size = Vector2(92.555, 0)
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -46.2775
+offset_left = -46.277527
 offset_top = -50.5
-offset_right = 46.2775
+offset_right = 46.277527
 offset_bottom = 50.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Play" type="Button" parent="MainMenu" unique_id=470684254]
+[node name="Play" type="Button" parent="UI/MainMenu" unique_id=470684254]
 layout_mode = 2
 text = "Play"
 
-[node name="Settings" type="Button" parent="MainMenu" unique_id=1723380005]
+[node name="Settings" type="Button" parent="UI/MainMenu" unique_id=1723380005]
 layout_mode = 2
 text = "Settings"
 
-[node name="Quit" type="Button" parent="MainMenu" unique_id=62930227]
+[node name="Quit" type="Button" parent="UI/MainMenu" unique_id=62930227]
 layout_mode = 2
 text = "Quit"
 
-[node name="PlayTabContainer" type="TabContainer" parent="." unique_id=217495007]
-layout_mode = 1
+[node name="PlayTabContainer" type="TabContainer" parent="UI" unique_id=217495007]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -65,18 +76,19 @@ offset_right = 519.30005
 offset_bottom = 289.8
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g7fu1")
 current_tab = 1
 tab_0/title = "Host Server"
 tab_1/title = "Join Server"
 tab_2/title = "Weapon Settings (Server Only)"
 
-[node name="HostServer" type="Label" parent="PlayTabContainer" unique_id=1183455683]
+[node name="HostServer" type="Label" parent="UI/PlayTabContainer" unique_id=1183455683]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 metadata/_tab_name = "Host Server"
 
-[node name="Host" type="Button" parent="PlayTabContainer/HostServer" unique_id=1287816487]
+[node name="Host" type="Button" parent="UI/PlayTabContainer/HostServer" unique_id=1287816487]
 layout_mode = 0
 offset_left = 342.15002
 offset_top = 238.6
@@ -84,12 +96,12 @@ offset_right = 455.15002
 offset_bottom = 282.6
 text = "Create Server"
 
-[node name="JoinServer" type="Label" parent="PlayTabContainer" unique_id=1791217066]
+[node name="JoinServer" type="Label" parent="UI/PlayTabContainer" unique_id=1791217066]
 layout_mode = 2
 metadata/_tab_index = 1
 metadata/_tab_name = "Join Server"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayTabContainer/JoinServer" unique_id=1802303015]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PlayTabContainer/JoinServer" unique_id=1802303015]
 layout_mode = 0
 offset_left = 380.4
 offset_top = 182.09998
@@ -97,12 +109,12 @@ offset_right = 655.4
 offset_bottom = 369.09998
 theme_override_constants/separation = 60
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayTabContainer/JoinServer/VBoxContainer" unique_id=1188559056]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PlayTabContainer/JoinServer/VBoxContainer" unique_id=1188559056]
 custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 theme_override_constants/separation = 34
 
-[node name="UsernameInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
+[node name="UsernameInput" type="LineEdit" parent="UI/PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=160701336]
 unique_name_in_owner = true
 layout_mode = 2
 max_length = 16
@@ -110,7 +122,7 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
 
-[node name="Username" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/UsernameInput" unique_id=1744654856]
+[node name="Username" type="Label" parent="UI/PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/UsernameInput" unique_id=1744654856]
 layout_mode = 0
 offset_left = 3.0
 offset_top = -24.0
@@ -119,7 +131,7 @@ offset_bottom = -1.0
 size_flags_horizontal = 4
 text = "Username:"
 
-[node name="IPInput" type="LineEdit" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=1157240537]
+[node name="IPInput" type="LineEdit" parent="UI/PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer" unique_id=1157240537]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_bkn5d")
@@ -129,7 +141,7 @@ max_length = 15
 context_menu_enabled = false
 emoji_menu_enabled = false
 
-[node name="IP" type="Label" parent="PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1855296974]
+[node name="IP" type="Label" parent="UI/PlayTabContainer/JoinServer/VBoxContainer/VBoxContainer/IPInput" unique_id=1855296974]
 layout_mode = 0
 offset_left = 2.0
 offset_top = -24.0
@@ -138,21 +150,20 @@ offset_bottom = -0.99996567
 size_flags_horizontal = 4
 text = "IP Address:"
 
-[node name="Join" type="Button" parent="PlayTabContainer/JoinServer/VBoxContainer" unique_id=916344888]
+[node name="Join" type="Button" parent="UI/PlayTabContainer/JoinServer/VBoxContainer" unique_id=916344888]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Join Server"
 
-[node name="WeaponSettings" type="Label" parent="PlayTabContainer" unique_id=1561680654]
+[node name="WeaponSettings" type="Label" parent="UI/PlayTabContainer" unique_id=1561680654]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 metadata/_tab_name = "Weapon Settings (Server Only)"
 
-[node name="SettingsTabContainer" type="TabContainer" parent="." unique_id=1299573455]
+[node name="SettingsTabContainer" type="TabContainer" parent="UI" unique_id=1299573455]
 visible = false
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -160,17 +171,17 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -519.3
 offset_top = -289.8
-offset_right = 519.3
+offset_right = 519.30005
 offset_bottom = 289.8
 grow_horizontal = 2
 grow_vertical = 2
 current_tab = 0
 
-[node name="Window" type="Label" parent="SettingsTabContainer" unique_id=539265246]
+[node name="Window" type="Label" parent="UI/SettingsTabContainer" unique_id=539265246]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="OptionButton" type="OptionButton" parent="SettingsTabContainer/Window" unique_id=1794253762]
+[node name="OptionButton" type="OptionButton" parent="UI/SettingsTabContainer/Window" unique_id=1794253762]
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 20.0
@@ -185,7 +196,7 @@ popup/item_2/id = 2
 popup/item_3/text = "Exclusive Fullscreen"
 popup/item_3/id = 3
 
-[node name="Vsync" type="Label" parent="SettingsTabContainer/Window" unique_id=2051179172]
+[node name="Vsync" type="Label" parent="UI/SettingsTabContainer/Window" unique_id=2051179172]
 layout_mode = 0
 offset_left = 9.299988
 offset_top = 39.799988
@@ -193,7 +204,7 @@ offset_right = 62.299988
 offset_bottom = 62.799988
 text = "Vsync: "
 
-[node name="CheckButton" type="CheckButton" parent="SettingsTabContainer/Window/Vsync" unique_id=194683480]
+[node name="CheckButton" type="CheckButton" parent="UI/SettingsTabContainer/Window/Vsync" unique_id=194683480]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -206,19 +217,19 @@ offset_bottom = 12.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Controls" type="Label" parent="SettingsTabContainer" unique_id=1310895910]
+[node name="Controls" type="Label" parent="UI/SettingsTabContainer" unique_id=1310895910]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Label" type="Label" parent="SettingsTabContainer" unique_id=446324625]
+[node name="Label" type="Label" parent="UI/SettingsTabContainer" unique_id=446324625]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[connection signal="pressed" from="MainMenu/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="MainMenu/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="MainMenu/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
-[connection signal="item_selected" from="SettingsTabContainer/Window/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="UI/MainMenu/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="UI/MainMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/MainMenu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="UI/PlayTabContainer/HostServer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="UI/PlayTabContainer/JoinServer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="item_selected" from="UI/SettingsTabContainer/Window/OptionButton" to="." method="_on_option_button_item_selected"]

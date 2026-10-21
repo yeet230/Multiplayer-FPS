@@ -6,7 +6,7 @@ signal SharedDataUpdated(newData : Dictionary) ##Is emmitted fo any script that 
 
 var damageMulti: float = 1.0 ##How much the server should Multiply Damage by
 
-const SERVER_PORT: int = 39285 ##Servers Port
+const SERVER_PORT: int = 39285 ##Servers Port - Change it if you want
 const bulletDecalScene := preload("uid://6gbftdo4m7nj")
 
 ##A reference for all types of PlayerData that can exist
@@ -23,7 +23,6 @@ enum PlayerData {
 	ID,
 	LIFE_ID,
 	SHADING_MODE,
-	
 }
 
 var usernameMaxLength: int = 16
