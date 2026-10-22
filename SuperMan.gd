@@ -31,6 +31,6 @@ func check_player_health(health : float) -> bool:
 		var errorStr: String = str(Enum.ERRORS.find_key(0))
 		push_error(errorStr, ": ", Enum.ERR_SERVER_ONLY_ACCESS)
 		return false
-	if int(health) != 100:
+	if int(health) != Globals.playerStartingHealth:
 		return true
 	return false

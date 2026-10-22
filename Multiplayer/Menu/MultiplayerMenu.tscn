@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://d3knqsqu2fo06" path="res://Prototyping/UI/Main.tres" id="1_bkn5d"]
 [ext_resource type="Script" uid="uid://clmn0ppoyubj8" path="res://Multiplayer/Menu/MultiplayerMenu.gd" id="1_huwya"]
+[ext_resource type="Script" uid="uid://24xcicvsipe4" path="res://Multiplayer/Menu/CanvasLayerSync.gd" id="3_bovxa"]
 [ext_resource type="Shader" uid="uid://dxmrwca122l6w" path="res://Prototyping/UI/MultiplayerMenu.gdshader" id="3_ph5o1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bovxa"]
@@ -23,7 +24,9 @@ grow_vertical = 2
 theme = ExtResource("1_bkn5d")
 script = ExtResource("1_huwya")
 
-[node name="Effects" type="CanvasLayer" parent="." unique_id=273727752]
+[node name="Effects" type="CanvasLayer" parent="." unique_id=273727752 node_paths=PackedStringArray("mainNode")]
+script = ExtResource("3_bovxa")
+mainNode = NodePath("..")
 
 [node name="BackgroundShader" type="ColorRect" parent="Effects" unique_id=335171231]
 material = SubResource("ShaderMaterial_bovxa")
@@ -33,9 +36,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=1594793924]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1594793924 node_paths=PackedStringArray("mainNode")]
 layer = 53
 follow_viewport_enabled = true
+script = ExtResource("3_bovxa")
+mainNode = NodePath("..")
 
 [node name="MainMenu" type="VBoxContainer" parent="UI" unique_id=1811945703]
 visible = false
@@ -227,6 +232,8 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
+[connection signal="visibility_changed" from="." to="Effects" method="_on_multiplayer_menu_visibility_changed"]
+[connection signal="visibility_changed" from="." to="UI" method="_on_multiplayer_menu_visibility_changed"]
 [connection signal="pressed" from="UI/MainMenu/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Quit" to="." method="_on_quit_pressed"]

@@ -32,7 +32,6 @@ var isBackPressed: bool = false
 @onready var chatInput: LineEdit = $ChatElements/ChatConsole/ChatInput
 @onready var chatOutput: RichTextLabel = $ChatElements/ChatConsole/ChatOutput
 
-#@onready var GridSorted: GridContainer = $ScoreBoardBG/CentredBG/GridContainer
 @onready var usernameLabelParent: VBoxContainer = $ScoreBoardBG/GridContainer/UsernameVBox
 @onready var killsLabelParent: VBoxContainer = $ScoreBoardBG/GridContainer/KillsVBox
 @onready var deathsLabelParent: VBoxContainer = $ScoreBoardBG/GridContainer/DeathsVBox
@@ -91,8 +90,6 @@ func _process(_delta: float) -> void:
 
 #endregion
 
-
-
 func _player_hit() -> void:
 	hitMarker.visible = true
 	await get_tree().create_timer(.05).timeout
@@ -142,11 +139,6 @@ func _update_health() -> void:
 	
 	healthBar.value = playerHealth
 	healthLabel.text = str(playerHealth, "/", playerMaxHealth)
-
-#func _update_kill_count(amnt : int) -> void:
-	#Globals.killCount += amnt
-	#killCountLabel.text = str("Kill Count: ", Globals.killCount)
-
 
 #endregion
 
@@ -211,9 +203,7 @@ func _handle_table_update(newData: Dictionary) -> void:
 	for child in deathsVBox.get_children():
 		child.queue_free()
 	
-	#recreate the Guide Labels
 	_recreate_table_names()
-	
 	
 	# Create scoreboard entries
 	for playerId in newData:
