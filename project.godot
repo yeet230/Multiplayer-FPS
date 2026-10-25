@@ -23,6 +23,10 @@ Batman="*uid://ho03o26cwyv3"
 MultiplayerManager="*uid://bicdpd65gba0u"
 Tools="*uid://d4jy3rgp3n50r"
 
+[display]
+
+window/size/mode=4
+
 [dotnet]
 
 project/assembly_name="Multiplayer-FPS"
@@ -145,6 +149,8 @@ dash={
 common/physics_ticks_per_second=120
 common/max_physics_steps_per_frame=16
 3d/physics_engine="Jolt Physics"
+3d/default_gravity=9.799999999999995
+common/physics_interpolation=true
 
 [rendering]
 

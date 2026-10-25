@@ -4,7 +4,7 @@ class_name Player extends CharacterBody3D
 
 var playerEnabledLight: bool = true
 var flashLightOn: bool
-var curHealth: float = 101#Globals.playerStartingHealth
+var curHealth: float = 100#Globals.playerStartingHealth
 var ui: PlayerUI
 
 const NEW_STANDARD_MATERIAL_3D = preload("uid://b1501ncct6v6k")
@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	visionManager.tick(delta)
 	weaponManager.tick()
 	playerNetworkHandler.tick()
-	ui.tick()
+	ui.tick(delta)
 	
 
 func _instantiate_UI() -> void:

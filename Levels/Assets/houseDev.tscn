@@ -53,13 +53,13 @@ operation = 2
 size = Vector3(2.5, 3, 1)
 
 [node name="Wall9" type="CSGBox3D" parent="." unique_id=967439526]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 100, 2.5, 10)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 35, 2.5, 10)
 use_collision = true
 collision_mask = 0
 size = Vector3(8, 5, 0.25)
 
 [node name="Wall10" type="CSGBox3D" parent="." unique_id=1344126044]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -100, 2.5, 10)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.5, 2.5, 10)
 use_collision = true
 collision_mask = 0
 size = Vector3(8, 5, 0.25)
@@ -254,3 +254,11 @@ size = Vector3(7, 5, 0.25)
 [node name="CSGBox3D9" type="CSGBox3D" parent="." unique_id=1369399323]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 10, 24.5)
 size = Vector3(14, 0.01, 37)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="." unique_id=845986544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 5, -10)
+size = Vector3(10, 10, 6)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="." unique_id=1898995973]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.5, 5, -4)
+size = Vector3(13, 10, 4)

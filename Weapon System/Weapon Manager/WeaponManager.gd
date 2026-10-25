@@ -195,7 +195,8 @@ func _on_reload_timer_timeout() -> void:
 
 ##Performs a hitscan for the active player. this is only for visual feedback
 func perform_hitscan() -> void:
-	var accuracy: float = (100.0 - spread)
+	#var accuracy: float = (100.0 - spread)
+	var accuracy: float = 0
 	var xAccuracy: float = randf_range(-accuracy, accuracy)
 	var yAccuracy: float = randf_range(-accuracy, accuracy)
 	var targetPos: Vector3 = Vector3(xAccuracy, yAccuracy, -maxRange)

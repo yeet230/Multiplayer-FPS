@@ -17,7 +17,7 @@ class_name PlayerMovementController extends Node
 @export var airCap: float = 7.85 ##Helps cap the speed so moving in a diagnoal line does not goes stupidly fast
 
 @export_category("Dash Settings")
-@export var maxDashCount: int = 3  ##How many times the Player can dash after leaving contact with the floor.
+@export var maxDashCount: int = 0  ##How many times the Player can dash after leaving contact with the floor.
 @export var dashMulti: float = 1.5  ##The multiplier of runSpd to get the dash Spd.
 
 var wishDir: Vector3 = Vector3.ZERO

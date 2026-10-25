@@ -8,7 +8,9 @@ extends Control
 
 func _ready() -> void:
 	_auto_mode_set()
-	multiplayer.connection_failed.connect(_failed_to_connect)
+	multiplayer.connection_failed.connect(_show_ui)
+	multiplayer.server_disconnected.connect(_server_disconnected)
+	
 	
 	#print(IP.get_local_addresses())
 
@@ -29,7 +31,7 @@ func _auto_mode_set() -> void:
 
 func _on_host_pressed() -> void:
 	MultiplayerManager.start_server()
-	_destroy()
+	_hide_ui()
 
 func _on_join_pressed() -> void:
 	#var num = Globals.get_weapon_damage(0)
@@ -37,17 +39,20 @@ func _on_join_pressed() -> void:
 	_set_player_username()
 	
 	MultiplayerManager.join_server(ip)
-	_destroy()
+	_hide_ui()
 
-func _destroy() -> void:
-	$UI.visible = false
-	$Effects.visible = false
+func _hide_ui() -> void:
+	#$UI.visible = false
+	#$Effects.visible = false
 	visible = false
 
-func _failed_to_connect() -> void:
-	$UI.visible = true
-	$Effects.visible = true
+func _show_ui() -> void:
+	#$UI.visible = true
+	#$Effects.visible = true
 	visible = true
+
+func _server_disconnected() -> void:
+	_show_ui()
 
 func _set_player_username() -> void:
 	var username: String 

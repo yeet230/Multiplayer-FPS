@@ -373,7 +373,6 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 	var usernameLength: int = username.length()
 	
 	
-	
 	username = Batman.profanity_check_string(username)
 	username.strip_edges()
 	username = username.substr(0, min(usernameLength, usernameMaxLength))
