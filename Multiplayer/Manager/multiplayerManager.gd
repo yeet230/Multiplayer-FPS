@@ -251,7 +251,7 @@ func _handle_player_kill(who : int) -> void:
 #region Commands
 
 func _handle_command(text: String, senderID: int) -> void:
-	if !Globals.debug: return
+	#if !Globals.debug: return
 	
 	print("Command Found")
 	var splitCommand: Array[String] = text.split(" ")
@@ -272,7 +272,7 @@ func _handle_command(text: String, senderID: int) -> void:
 			push_error("Invalid command: expected ", commandStarter, "tp <x> <y> <z>")
 			return
 		
-		var newPos := Vector3(
+		var newPos: Vector3 = Vector3(
 			float(splitCommand[1]),
 			float(splitCommand[2]),
 			float(splitCommand[3])
@@ -290,8 +290,6 @@ func _handle_command(text: String, senderID: int) -> void:
 		
 		give_weapon.rpc_id(senderID, newWeapon)
 		serverOnlyPlayerData[senderID][PlayerData.WEAPON_LEVEL] = newWeaponLevel
-		
-		
 #endregion
 
 
