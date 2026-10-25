@@ -43,7 +43,7 @@ func _physics_process(delta: float) -> void:
 	visionManager.tick(delta)
 	weaponManager.tick()
 	playerNetworkHandler.tick()
-	ui.tick()
+	ui.tick(delta)
 	
 
 func _instantiate_UI() -> void:

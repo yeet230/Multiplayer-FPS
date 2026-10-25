@@ -20,3 +20,7 @@ How to Use:
 
 -Ideas
 	- make the joining system better byu making user's join then handle any other data required such as username and loadout/perks
+
+
+-Needs Refining
+	[] - [Damage Viginette found at](Actors/Player/Player/playerUI.gd)

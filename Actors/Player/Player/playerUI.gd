@@ -12,6 +12,10 @@ var chatInputVisible: bool
 var toggleChat: bool = false
 var isEnterPressed: bool = false
 var isBackPressed: bool = false
+var vigintteFade: bool = false
+
+var prevHealth: float = Globals.playerStartingHealth
+var strengthCalculated: float = 0
 
 @onready var player: = get_parent().get_parent()
 
@@ -42,9 +46,10 @@ var isBackPressed: bool = false
 
 @onready var hitMarker: Label = $HudElements/Control/HitMarker
 
-@onready var healthBar: TextureProgressBar = $HudElements/Control/HealthBar
+@onready var healthBar: TextureProgressBar = $HudElements/HealthUi/HealthBar
+@onready var damageVigentte: ColorRect = $Overlays/DamageVigentte
 
-func tick() -> void:
+func tick(delta : float) -> void:
 	if isBackPressed and chatInput.visible:
 		_handle_chat_toggle()
 	elif isEnterPressed:
@@ -52,13 +57,15 @@ func tick() -> void:
 	elif toggleChat and !chatInput.is_editing():
 		_handle_chat_toggle()
 	
-	_update_hud()
+	_update_hud(delta)
 
-func _update_hud() -> void:
-	_update_health()
+func _update_hud(delta : float) -> void:
+	_update_health(delta)
 	_update_dash()
 	_update_position()
 	_update_speed()
+	
+	fpsLabel.text = str("FPS: ", Engine.get_frames_per_second())
 	
 	if player.weaponManager.weaponData: ##Checks to make sure that the data exist's before reading from it. will crash otherwise
 		_update_weapon_equipped()
@@ -83,10 +90,6 @@ func _gui(event: InputEvent) -> void:
 	if event:
 		get_viewport().set_input_as_handled()
 	print(event)
-
-func _process(_delta: float) -> void:
-	if !is_multiplayer_authority(): return
-	fpsLabel.text = str("FPS: ", Engine.get_frames_per_second())
 
 #endregion
 
@@ -133,14 +136,29 @@ func _update_bullet_count() -> void:
 	ammoCountLabel.text = str("Ammo: ", loadedCount, "/", magSize)
 	noAmmoLabel.visible = false if loadedCount > 0 else true
 
-func _update_health() -> void:
+
+func _update_health(delta: float) -> void:
 	var playerHealth: float = player.curHealth
 	var playerMaxHealth: int = player.maxHealth
+	
+	_handle_damage_vignette(playerHealth, delta)
 	
 	healthBar.value = playerHealth
 	healthLabel.text = str(playerHealth, "/", playerMaxHealth)
 
-#endregion
+func _handle_damage_vignette(playerHealth : float, delta : float) -> void:
+	if prevHealth != playerHealth:
+		_apply_damage_vignette()
+		prevHealth = playerHealth
+	elif strengthCalculated > 0.0:
+		strengthCalculated = move_toward(strengthCalculated, 0.0, 0.5 * delta)
+	
+	damageVigentte.material.set_shader_parameter("strength", strengthCalculated)
+
+func _apply_damage_vignette() -> void:
+	var rawHealthDiff: float = prevHealth - player.curHealth
+	strengthCalculated = rawHealthDiff / (Globals.playerStartingHealth / 1.2)
+	strengthCalculated = clampf(strengthCalculated, 0.0, 1.0)
 
 
 #region Chat Functioons
