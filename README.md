@@ -8,12 +8,10 @@ How to Use:
 	change the light to instead be an omni light that does not cause shadows from the player model
 
 
-
-
 -ERRORS
-	0 = ERR_SERVER_ONLY_ACCESS: 	This error will be thrown when a client runs code that is meant to be server only
+	0 = ERR_SERVER_ONLY_ACCESS: 	Error thrown when a client tries to run server side only logic
 	1 = ERR_CLIENT_ONLY_CODE:   	Similar to ERR_SERVER_ONLY_ACCESS but is intended to protect client only code rather than server only code.
-	2 = ERR_CAN_NOT_CONNECT_TO_SERVER: Error thrown when a client can not connect to a server likly because of invalid setup or user input when joining a game.
+	2 = ERR_CAN_NOT_CONNECT_TO_SERVER: Error thrown when a client can not connect to a server liklesy because of invalid setup or user input when joining a game.
 
 
 
@@ -23,4 +21,6 @@ How to Use:
 
 
 -Needs Refining
-	[] - [Damage Viginette found at](Actors/Player/Player/playerUI.gd)
+	[] - The damage damage vigintte needs revising as some weapons are to bright and others are not so much. [The file that controls this is called playerUI.gd](Actors/Player/Player/playerUI.gd)
+	[] - The player controller needs to be refined such as movment and the controllers aswell. 
+	[] - The command system should be updated to make adding new commands easier aswell as  

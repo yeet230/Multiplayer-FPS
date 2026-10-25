@@ -23,6 +23,10 @@ Batman="*uid://ho03o26cwyv3"
 MultiplayerManager="*uid://bicdpd65gba0u"
 Tools="*uid://d4jy3rgp3n50r"
 
+[display]
+
+window/size/mode=4
+
 [dotnet]
 
 project/assembly_name="Multiplayer-FPS"
