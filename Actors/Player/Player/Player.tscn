@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dabr1kj3hxkuh" path="res://Actors/Player/Managers/PlayerMultiplayerSynchronizer.gd" id="4_cm46x"]
 [ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 [ext_resource type="Script" uid="uid://c5nnf7phlxe6g" path="res://Actors/Player/Managers/InputHandler.gd" id="5_lottw"]
+[ext_resource type="Script" uid="uid://brwhg2wn1gpfr" path="res://Actors/Player/Player/randomImage.gd" id="7_ie3x2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
@@ -153,3 +154,9 @@ unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_l6vkj")
 
 [node name="PlayerUI" type="CanvasLayer" parent="." unique_id=295392316]
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=117902077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5472558, 0.50166035)
+shaded = true
+script = ExtResource("7_ie3x2")
+max_size_meters = 0.5

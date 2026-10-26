@@ -134,7 +134,6 @@ func fire_shotgun() -> void:
 
 func fire_burst_shot() -> void:
 	if burstShotsRemaining <= 0: return
-	if loadedCount <= 0: return
 	
 	loadedCount -= 1
 	burstShotsRemaining -= 1
@@ -150,6 +149,9 @@ func begin_fire_cooldown() -> void:
 
 func _on_shoot_timer_timeout() -> void:
 	canFire = true
+	
+	if loadedCount <= 0: return
+
 	
 	match fireMode:
 		ShootingType.AUTOMATIC_FIRE:

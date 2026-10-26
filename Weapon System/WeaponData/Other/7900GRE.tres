@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_f78ve")
-damage = 10.0
+damage = 15.0
 ammo = 151
 weaponName = "7900 GRE"
 weaponID = -101

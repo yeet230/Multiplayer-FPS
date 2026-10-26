@@ -4,7 +4,7 @@ signal serverCreated ##Signal that is emtted when the server succsefully starts
 signal ChatRecived(text: String) ##Handlesthe broadcasting of the server verified chats back to the UI
 signal SharedDataUpdated(newData : Dictionary) ##Is emmitted fo any script that may need this data
 
-var damageMulti: float = 1.0 ##How much the server should Multiply Damage by
+const damageMulti: float = 1.0 ##How much the server should Multiply Damage by
 
 const SERVER_PORT: int = 39285 ##Servers Port - Change it if you want
 const bulletDecalScene := preload("uid://6gbftdo4m7nj")
@@ -59,8 +59,8 @@ func _handle_player_joining(peerID : int) -> void:
 	_update_sharedPlayerData.rpc_id(peerID, sharedPlayerData)
 
 func start_server() -> void:
-	var peer := ENetMultiplayerPeer.new()
-	var err := peer.create_server(SERVER_PORT)
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	var err: Error = peer.create_server(SERVER_PORT)
 	
 	if err != OK:
 		Globals.throw_error(Enum.ERRORS.ERR_FAILED_TO_CREATE_SERVER, "%s" % err)
@@ -254,7 +254,7 @@ func _handle_command(text: String, senderID: int) -> void:
 	#if !Globals.debug: return
 	
 	print("Command Found")
-	var splitCommand: Array[String] = text.split(" ")
+	var splitCommand: PackedStringArray = text.split(" ")
 	
 	if text.begins_with(commandStarter + "debug"):
 		var newVal: bool = !Globals.debug
@@ -290,6 +290,11 @@ func _handle_command(text: String, senderID: int) -> void:
 		
 		give_weapon.rpc_id(senderID, newWeapon)
 		serverOnlyPlayerData[senderID][PlayerData.WEAPON_LEVEL] = newWeaponLevel
+	
+	elif text.begins_with(commandStarter + "testSpawns"):
+		for place in Globals.spawnLocations:
+			teleport_player.rpc_id(senderID, place)
+			await get_tree().create_timer(2.5).timeout
 #endregion
 
 

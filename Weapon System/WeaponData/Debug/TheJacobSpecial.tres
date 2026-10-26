@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_5yyjd")
-damage = 1.0
+damage = 2.0
 ammo = 100
 weaponName = "The Jacob Special"
 weaponID = -3

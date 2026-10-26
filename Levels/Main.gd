@@ -12,7 +12,7 @@ func _spawn_level() -> void:
 	%LevelContainer.add_child(MAINLEVEL.instantiate())
 	
 	if multiplayer.is_server(): return
-	assert(false, "idk just wanna see what hapopens")
+	#assert(false, "idk just wanna see what hapopens")
 
 func _destroy_level() -> void:
 	for child in %LevelContainer.get_children():
