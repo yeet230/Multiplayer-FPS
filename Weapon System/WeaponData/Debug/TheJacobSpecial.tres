@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_5yyjd")
 damage = 2.0
-ammo = 100
+ammo = 251
 weaponName = "The Jacob Special"
 weaponID = -3
 fireMode = 2
@@ -14,5 +14,5 @@ reloadSpeed = 4.0
 fireRate = 0.001
 bulletSpread = 100.0
 projectilesPerShot = 1
-magSize = 10000
+magSize = 250
 metadata/_custom_type_script = "uid://mpnyivmmeex8"
