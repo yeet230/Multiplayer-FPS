@@ -84,6 +84,7 @@ func join_server(ip: String) -> void:
 		return
 	
 	multiplayer.multiplayer_peer = peer
+	print(get_node("/root/Game"))
 
 #endregion
 

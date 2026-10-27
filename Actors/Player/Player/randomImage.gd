@@ -7,16 +7,21 @@ extends Sprite3D
 @export var max_size_meters: float = 2.0:
 	set(value):
 		max_size_meters = value
-		_clamp_size()
+		_ready()
 
 func _ready() -> void:
 	var images: Array = [
+		preload("res://secrets/IMG_20260212_103444_495.jpg"),
 		preload("res://secrets/IMG_20260408_222429_344.jpg"),
-		preload("uid://cslseqpp24on6"),
+		preload("res://secrets/IMG_20260815_162023_008.jpg"),
+		preload("res://secrets/IMG_20260819_194716_500.jpg"),
 		preload("res://secrets/IMG_20260828_133646_424.jpg"),
+		preload("res://secrets/IMG_20260917_060749_228.jpg"),
 		preload("res://secrets/Screenshot_20260517_213134_Instagram.jpg"),
+		preload("res://secrets/Snapchat-431630032.jpg"),
 		preload("res://secrets/Snapchat-459407843.jpg"),
 		preload("res://secrets/Snapchat-546684059.jpg"),
+		preload("res://secrets/Snapchat-1766340598.jpg"),
 	]
 	
 	texture = images.pick_random()
