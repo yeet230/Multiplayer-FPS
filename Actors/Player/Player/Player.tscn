@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dabr1kj3hxkuh" path="res://Actors/Player/Managers/PlayerMultiplayerSynchronizer.gd" id="4_cm46x"]
 [ext_resource type="PackedScene" uid="uid://cuxbiwagi387h" path="res://Weapon System/Weapon Manager/weaponManager.tscn" id="4_ie3x2"]
 [ext_resource type="Script" uid="uid://c5nnf7phlxe6g" path="res://Actors/Player/Managers/InputHandler.gd" id="5_lottw"]
-[ext_resource type="Texture2D" uid="uid://rfagslkoqi6y" path="res://secrets/IMG_20260212_103444_495.jpg" id="7_04hxq"]
+[ext_resource type="Texture2D" uid="uid://5mjkjs517axv" path="res://secrets/Snapchat-1766340598.jpg" id="7_04hxq"]
 [ext_resource type="Script" uid="uid://brwhg2wn1gpfr" path="res://Actors/Player/Player/randomImage.gd" id="7_ie3x2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
@@ -157,7 +157,7 @@ libraries/ = SubResource("AnimationLibrary_l6vkj")
 [node name="PlayerUI" type="CanvasLayer" parent="." unique_id=295392316]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=117902077]
-transform = Transform3D(0.032051284, 0, 0, 0, 0.032051284, 0, 0, 0, 0.032051284, 0, 1.5472558, 0.50166035)
+transform = Transform3D(0.0390625, 0, 0, 0, 0.0390625, 0, 0, 0, 0.0390625, 0, 1.5472558, 0.50166035)
 shaded = true
 texture = ExtResource("7_04hxq")
 script = ExtResource("7_ie3x2")
