@@ -151,13 +151,12 @@ func _on_shoot_timer_timeout() -> void:
 	canFire = true
 	
 	if loadedCount <= 0: return
-
+	
 	
 	match fireMode:
 		ShootingType.AUTOMATIC_FIRE:
 			if isTriggerHeld and !isReloading:
 				fire_single_shot()
-			
 		ShootingType.BURST_FIRE:
 			if burstShotsRemaining > 0:
 				fire_burst_shot()

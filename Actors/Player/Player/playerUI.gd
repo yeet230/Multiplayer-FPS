@@ -17,7 +17,7 @@ var vigintteFade: bool = false
 var prevHealth: float = Globals.playerStartingHealth
 var strengthCalculated: float = 0
 
-@onready var player: = get_parent().get_parent()
+@onready var player: Player = get_parent().get_parent()
 
 @onready var spdLabel: Label = $DebugElements/Labels/RightLabels/Speed
 @onready var posLabel: Label = $DebugElements/Labels/RightLabels/Position
