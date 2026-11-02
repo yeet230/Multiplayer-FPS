@@ -353,7 +353,6 @@ func server_verify_hit() -> void:
 	print("Damage: ", verifiedDamage)
 	
 	newHealth = curPlayerHealth - (verifiedDamage * damageMulti)
-	set_player_health(damagedPlayerId, newHealth)
 	
 	if newHealth <= 0:
 		print("Player: ", damagedPlayerId, " To: ", senderID)
@@ -363,6 +362,8 @@ func server_verify_hit() -> void:
 		_update_sharedPlayerData.rpc(sharedPlayerData)
 	else:
 		update_player_client_health.rpc_id(damagedPlayerId, newHealth)
+		set_player_health(damagedPlayerId, newHealth)
+		
 	
 	await get_tree().create_timer(waitTime).timeout
 	
@@ -402,6 +403,8 @@ func server_register_player(playerHealth: float, username: String = "") -> void:
 		return
 	
 	print("Registered player ", senderID, " as ", username, " Sent sharedPlayerData: ", sharedPlayerData)
+	
+	var player: Player = get_player_from_name(str(senderID))
 
 
 ## Client -> Server:

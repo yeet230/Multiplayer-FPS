@@ -27,7 +27,8 @@ func _ready() -> void:
 	texture = images.pick_random()
 	
 	# Re-clamp whenever the texture changes at runtime
-	texture_changed.connect(_clamp_size)
+	if !texture_changed.is_connected(_clamp_size):
+		texture_changed.connect(_clamp_size)
 	_clamp_size()
 
 func _clamp_size() -> void:
